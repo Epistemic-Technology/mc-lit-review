@@ -1,0 +1,90 @@
+# Analysis-stage settings (everything after gathering). Part of the config hash like the other files.
+# See docs/plan.md for the stages these configure.
+
+subset:
+  # Rules applied in order; counts at each step are recorded for the PRISMA figure.
+  languages: [en]              # posts whose language is one of these, or NULL (undetected)
+  min_date: "2024-01-01"       # same as settings.cutoff_date; repeated here so the analysis config is self-contained
+  body_status: [ok]            # bodies we can code; paywalled previews are flagged, not coded
+  min_body_chars: 400          # shorter bodies are usually stubs or link posts
+  exclude_hosts_file: exclusions.yaml
+
+coding:
+  # State sent to engines: title, subtitle, body. Body is cut to this many characters (~4 chars/token)
+  # so state plus the full question set fits Jev's 32k-token budget with margin.
+  body_max_chars: 100000
+  max_consecutive_errors: 20   # a run stops after this many failures in a row (and at once on auth/billing errors)
+  jev:
+    model: "jev-1.13.0"        # pinned; jev-latest is an alias and moves
+    base_url: "https://api.typesafe.ai"
+    repeats: 3                 # identical requests with permuted option order; probabilities averaged
+    seed: 20260929             # for the option-order permutations
+    concurrency: 8
+    timeout_seconds: 60
+    price_per_mtok_input: 0.042
+  claude:
+    # Decision 2 in docs/plan.md. Decided 2026-09-29: run through the Claude Code CLI on the user's
+    # subscription (transport: cli). transport: api uses the Anthropic SDK and needs API credit; only
+    # that transport supports --batch. Both record engine='claude' so agreement figures pool them.
+    transport: cli
+    cli: claude
+    model: "claude-opus-5-5"   # the CLI also accepts aliases like "opus"; the pinned id is recorded from modelUsage
+    effort: medium             # classification task; raise if evidence quotes come back thin
+    concurrency: 2             # subscription usage windows, not API rate limits, are the constraint
+    timeout_seconds: 600
+    rate_limit_wait_seconds: 300
+    rate_limit_retries: 96     # 96 x 5 min = 8 h: outlasts a 5-hour usage window; the CLI's reset time is used when reported
+    # api transport only:
+    max_tokens: 8000
+    fallbacks: true            # server-side refusal fallback (see engines/claude.py)
+    # Only posts Jev rates central/substantial (by summed probability) go to the frontier model.
+    # 0.25 for the first pass (4,107 posts). Lowered to 0.05 on 2026-10-06 after the human relevance
+    # sample showed 4 of 12 relevant posts had Jev mass 0.013-0.083; adds ~1,750 posts.
+    relevance_min_prob: 0.05
+
+gold:
+  seed: 20260929
+  samples:
+    relevance:                 # human relevance check from title/subtitle/lead
+      n: 100
+      population: subset
+      constructs: [relevance, ai_not_minds]
+    stance:                    # human verification of frontier codes + quotes
+      n: 40
+      population: relevant     # requires code_final.relevance in (central, substantial)
+      constructs: [current_conscious, potential_conscious, current_cognition, moral_worth_current]
+    publications:
+      n: 30
+      population: publications_relevant
+  # Strata for the post samples: discovery channel class x year x engagement band.
+  strata:
+    channel: {phase1: [brave, substack_posts], citation: [cited_by, coupling]}
+    engagement_bands: [0, 10, 100]   # reaction_count thresholds -> 4 bands
+
+# ---------------------------------------------------------------- stage 5: structure
+embeddings:
+  # Open model, run locally (CPU). Long essays are split into chunks, embedded, mean-pooled and normalised.
+  model: "BAAI/bge-small-en-v1.5"
+  chunk_chars: 2000
+  max_chunks: 12
+  batch_size: 32
+  population: relevant        # relevant | subset
+
+topics:
+  umap: {n_neighbors: 15, min_dist: 0.1, n_components_cluster: 10, seed: 20260929}
+  # eom on this corpus collapsed to 2 clusters (one connected manifold); leaf selection returns the fine
+  # structure. Tune min_cluster_size for the number of topics the post can carry (roughly 15-30).
+  hdbscan: {min_cluster_size: 20, min_samples: 5, cluster_selection_method: leaf, cluster_selection_epsilon: 0.0}
+  top_terms: 12
+  exemplars: 8
+
+network:
+  population: subset          # nodes: all analysis-subset posts; `relevant` restricts to the relevant set
+  drop_intra_publication: true
+  leiden_resolution: 1.0
+  backbone_alpha: 0.05        # disparity filter significance for publication-level edges
+  layout: fr                  # igraph layout for the stored positions (fr | drl)
+
+# Per-construct confidence thresholds for accepting Jev's code without the frontier pass.
+# Filled by `mcreview thresholds` from the agreement/coverage curves; empty means "always cascade".
+thresholds: {}

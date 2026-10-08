@@ -1,0 +1,50 @@
+---
+title: Overview
+---
+
+# Machine minds on Substack
+
+What Substack writers say about whether AI systems think, feel, or matter morally. A systematic reading of the platform: every post we could find on the topic from January 2024 onward, coded by machine with human spot checks. Posts are linked, never reproduced.
+
+```js
+import {statRow, vlChart, GROUP_LABELS} from "./components/charts.js";
+const summary = await FileAttachment("./data/summary.json").json();
+const stanceSpec = await FileAttachment("./charts/stance_landscape.vl.json").json();
+const whoSpec = await FileAttachment("./charts/who_writes.vl.json").json();
+```
+
+```js
+display(statRow([
+  ["Relevant posts", summary.posts_relevant.toLocaleString(), `of ${summary.prisma.jev_coded.toLocaleString()} screened`],
+  ["Publications", summary.publications_relevant.toLocaleString(), "with at least one relevant post"],
+  ["Period", `${summary.date_range[0].slice(0, 7)} to ${summary.date_range[1].slice(0, 7)}`, "post dates"],
+  ["Essays", `${Math.round(100 * summary.by_genre.essay / summary.posts_relevant)}%`, "the rest: roundups, transcripts, fiction, podcasts"]
+]));
+```
+
+## What writers say
+
+```js
+display(await vlChart(stanceSpec, {width: Math.min(width, 760) - 300}));
+```
+
+<div class="caption">Each bar is one claim from the codebook. Shares are of posts whose author addresses the claim in their own voice; posts that only report others' positions, or never raise the claim, are excluded. Hover for counts. <a href="./positions">Filter by publication type, genre and more →</a></div>
+
+## Who writes about it
+
+```js
+display(await vlChart(whoSpec, {width: Math.min(width, 700) - 220}));
+```
+
+<div class="caption">Publication types were coded from each publication's name, tagline, author bio and post titles. Nine fine categories are collapsed to five for display; see <a href="./methods">Methods</a>.</div>
+
+## Where to go
+
+- **[Positions](./positions)**: the stance chart with filters, and how positions differ by who is writing.
+- **[Arguments and sources](./arguments)**: which arguments appear, which get traction, what gets cited, who gets named.
+- **[Topic map](./topics)**: the relevant posts laid out by similarity, with labelled clusters.
+- **[Citation network](./network)**: which publications cite which.
+- **[Over time](./timeline)**: how the mix of positions has shifted by quarter.
+- **[Browse posts](./posts)**: every relevant post with its codes, filterable and downloadable.
+- **[Publications](./publications)**: one page per publication, with its posts and how it sits in the discourse.
+- **[Methods](./methods)**: how the corpus was built and coded, and how well the coding holds up.

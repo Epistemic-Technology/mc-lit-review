@@ -1,0 +1,53 @@
+---
+title: Publication
+---
+
+```js
+import {stanceDiverging, stanceTable, statRow, GROUP_LABELS, STANCE_LABELS, GENRE_LABELS, ARG_LABELS} from "../components/charts.js";
+const slice = await FileAttachment(`../data/pub/${observable.params.id}.json`).json();
+const pub = slice.publication, node = slice.node;
+const mine = slice.posts.slice().sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+```
+
+```js
+display(html`<h1>${pub.name || pub.host}</h1>
+<p class="caption"><a href="https://${pub.host}" target="_blank" rel="noopener">${pub.host}</a>${pub.author ? ` · ${pub.author}` : ""}${pub.tagline ? ` · ${pub.tagline}` : ""}</p>`);
+```
+
+```js
+display(statRow([
+  ["Relevant posts", String(pub.relevant_posts ?? 0), pub.posts_in_window ? `of ${pub.posts_in_window.toLocaleString()} posts since 2024 (${Math.round(100 * pub.relevant_share)}%)` : ""],
+  ["Publication type", GROUP_LABELS[pub.group] || "untyped", pub.community ? `fine label: ${pub.community}` : ""],
+  ["Cited by", String(node?.in_pubs ?? 0), "other publications, on relevant posts"],
+  ["Cites", String(node?.out_pubs ?? 0), "other publications"],
+  ["Main topic", pub.top_cluster || "", ""]
+]));
+```
+
+## Positions taken here
+
+```js
+display(mine.length >= 3 ? stanceDiverging(stanceTable(mine), {width: Math.min(width, 860)}) : html`<p class="caption">Too few posts for a stance profile; see the table below.</p>`);
+```
+
+## Relevant posts
+
+```js
+display(Inputs.table(mine.map((p) => ({date: p.date, title: p.title, genre: GENRE_LABELS[p.genre] || p.genre, conscious: STANCE_LABELS[p.stance.current_conscious] || "", moral: STANCE_LABELS[p.stance.moral_worth_current] || "", arguments: p.arguments.map((a) => ARG_LABELS[a] || a).join("; "), topic: p.cluster_label || "", reactions: p.reactions, url: p.url})), {
+  columns: ["date", "title", "genre", "conscious", "moral", "topic", "arguments", "reactions"],
+  header: {date: "Date", title: "Post", genre: "Genre", conscious: "Conscious now?", moral: "Moral worth now?", topic: "Topic", arguments: "Arguments", reactions: "Reactions"},
+  width: {title: 300, arguments: 260, topic: 200}, select: false, rows: 30,
+  format: {title: (v, i, d) => html`<a href="${d[i].url}" target="_blank" rel="noopener">${v}</a>`}
+}));
+```
+
+## Cited by and cites
+
+```js
+display(html`<div class="grid grid-cols-2">
+  <div><h3>Cited by</h3>${slice.cited_by.length ? html`<ul>${slice.cited_by.slice(0, 25).map((e) => html`<li><a href="./${e.id}">${e.name}</a> <span class="caption">(${e.weight})</span></li>`)}</ul>` : html`<p class="caption">No incoming links from other publications' relevant posts.</p>`}</div>
+  <div><h3>Cites</h3>${slice.cites.length ? html`<ul>${slice.cites.slice(0, 25).map((e) => html`<li><a href="./${e.id}">${e.name}</a> <span class="caption">(${e.weight})</span></li>`)}</ul>` : html`<p class="caption">No outgoing links to other publications.</p>`}</div>
+</div>`);
+```
+
+<div class="caption">Codes are machine-assigned (Claude, with a Jev first pass) and spot-checked by a human; see <a href="../methods">Methods</a>. If a code for one of your posts looks wrong, the post is linked above so a reader can judge.</div>

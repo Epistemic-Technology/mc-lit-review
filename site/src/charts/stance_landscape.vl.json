@@ -1,0 +1,1099 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "data": {
+    "name": "data-ec4449c1d0989916a3076ee6fd09f68b"
+  },
+  "datasets": {
+    "data-ec4449c1d0989916a3076ee6fd09f68b": [
+      {
+        "addressing": 1803,
+        "asserts_share": 0.1403216860787576,
+        "count": 687,
+        "denies_share": 0.3810316139767055,
+        "facet": null,
+        "item": "Current LLMs are conscious",
+        "n": 1803,
+        "option": "denies",
+        "share": 0.3810316139767055,
+        "x0": -0.6203549639489739,
+        "x1": -0.23932334997226845
+      },
+      {
+        "addressing": 1803,
+        "asserts_share": 0.1403216860787576,
+        "count": 456,
+        "denies_share": 0.3810316139767055,
+        "facet": null,
+        "item": "Current LLMs are conscious",
+        "n": 1803,
+        "option": "agnostic",
+        "share": 0.2529118136439268,
+        "x0": -0.23932334997226845,
+        "x1": 0.013588463671658335
+      },
+      {
+        "addressing": 1803,
+        "asserts_share": 0.1403216860787576,
+        "count": 407,
+        "denies_share": 0.3810316139767055,
+        "facet": null,
+        "item": "Current LLMs are conscious",
+        "n": 1803,
+        "option": "discusses",
+        "share": 0.2257348863006101,
+        "x0": 0.013588463671658335,
+        "x1": 0.23932334997226842
+      },
+      {
+        "addressing": 1803,
+        "asserts_share": 0.1403216860787576,
+        "count": 253,
+        "denies_share": 0.3810316139767055,
+        "facet": null,
+        "item": "Current LLMs are conscious",
+        "n": 1803,
+        "option": "asserts",
+        "share": 0.1403216860787576,
+        "x0": 0.23932334997226842,
+        "x1": 0.37964503605102606
+      },
+      {
+        "addressing": 1422,
+        "asserts_share": 0.35724331926863573,
+        "count": 181,
+        "denies_share": 0.12728551336146274,
+        "facet": null,
+        "item": "AI could be conscious in principle",
+        "n": 1422,
+        "option": "denies",
+        "share": 0.12728551336146274,
+        "x0": -0.3850210970464135,
+        "x1": -0.25773558368495075
+      },
+      {
+        "addressing": 1422,
+        "asserts_share": 0.35724331926863573,
+        "count": 272,
+        "denies_share": 0.12728551336146274,
+        "facet": null,
+        "item": "AI could be conscious in principle",
+        "n": 1422,
+        "option": "agnostic",
+        "share": 0.19127988748241911,
+        "x0": -0.25773558368495075,
+        "x1": -0.06645569620253164
+      },
+      {
+        "addressing": 1422,
+        "asserts_share": 0.35724331926863573,
+        "count": 461,
+        "denies_share": 0.12728551336146274,
+        "facet": null,
+        "item": "AI could be conscious in principle",
+        "n": 1422,
+        "option": "discusses",
+        "share": 0.3241912798874824,
+        "x0": -0.06645569620253164,
+        "x1": 0.25773558368495075
+      },
+      {
+        "addressing": 1422,
+        "asserts_share": 0.35724331926863573,
+        "count": 508,
+        "denies_share": 0.12728551336146274,
+        "facet": null,
+        "item": "AI could be conscious in principle",
+        "n": 1422,
+        "option": "asserts",
+        "share": 0.35724331926863573,
+        "x0": 0.25773558368495075,
+        "x1": 0.6149789029535865
+      },
+      {
+        "addressing": 1416,
+        "asserts_share": 0.4194915254237288,
+        "count": 446,
+        "denies_share": 0.3149717514124294,
+        "facet": null,
+        "item": "Current LLMs genuinely think",
+        "n": 1416,
+        "option": "denies",
+        "share": 0.3149717514124294,
+        "x0": -0.4477401129943503,
+        "x1": -0.1327683615819209
+      },
+      {
+        "addressing": 1416,
+        "asserts_share": 0.4194915254237288,
+        "count": 31,
+        "denies_share": 0.3149717514124294,
+        "facet": null,
+        "item": "Current LLMs genuinely think",
+        "n": 1416,
+        "option": "agnostic",
+        "share": 0.021892655367231638,
+        "x0": -0.1327683615819209,
+        "x1": -0.11087570621468926
+      },
+      {
+        "addressing": 1416,
+        "asserts_share": 0.4194915254237288,
+        "count": 345,
+        "denies_share": 0.3149717514124294,
+        "facet": null,
+        "item": "Current LLMs genuinely think",
+        "n": 1416,
+        "option": "discusses",
+        "share": 0.24364406779661016,
+        "x0": -0.11087570621468926,
+        "x1": 0.1327683615819209
+      },
+      {
+        "addressing": 1416,
+        "asserts_share": 0.4194915254237288,
+        "count": 594,
+        "denies_share": 0.3149717514124294,
+        "facet": null,
+        "item": "Current LLMs genuinely think",
+        "n": 1416,
+        "option": "asserts",
+        "share": 0.4194915254237288,
+        "x0": 0.1327683615819209,
+        "x1": 0.5522598870056497
+      },
+      {
+        "addressing": 767,
+        "asserts_share": 0.6166883963494133,
+        "count": 95,
+        "denies_share": 0.12385919165580182,
+        "facet": null,
+        "item": "AI could genuinely think",
+        "n": 767,
+        "option": "denies",
+        "share": 0.12385919165580182,
+        "x0": -0.25358539765319427,
+        "x1": -0.12972620599739243
+      },
+      {
+        "addressing": 767,
+        "asserts_share": 0.6166883963494133,
+        "count": 29,
+        "denies_share": 0.12385919165580182,
+        "facet": null,
+        "item": "AI could genuinely think",
+        "n": 767,
+        "option": "agnostic",
+        "share": 0.03780964797913951,
+        "x0": -0.12972620599739243,
+        "x1": -0.09191655801825292
+      },
+      {
+        "addressing": 767,
+        "asserts_share": 0.6166883963494133,
+        "count": 170,
+        "denies_share": 0.12385919165580182,
+        "facet": null,
+        "item": "AI could genuinely think",
+        "n": 767,
+        "option": "discusses",
+        "share": 0.22164276401564537,
+        "x0": -0.09191655801825292,
+        "x1": 0.12972620599739243
+      },
+      {
+        "addressing": 767,
+        "asserts_share": 0.6166883963494133,
+        "count": 473,
+        "denies_share": 0.12385919165580182,
+        "facet": null,
+        "item": "AI could genuinely think",
+        "n": 767,
+        "option": "asserts",
+        "share": 0.6166883963494133,
+        "x0": 0.12972620599739243,
+        "x1": 0.7464146023468057
+      },
+      {
+        "addressing": 743,
+        "asserts_share": 0.2180349932705249,
+        "count": 357,
+        "denies_share": 0.48048452220726784,
+        "facet": null,
+        "item": "LLMs genuinely understand",
+        "n": 743,
+        "option": "denies",
+        "share": 0.48048452220726784,
+        "x0": -0.6312247644683715,
+        "x1": -0.15074024226110366
+      },
+      {
+        "addressing": 743,
+        "asserts_share": 0.2180349932705249,
+        "count": 28,
+        "denies_share": 0.48048452220726784,
+        "facet": null,
+        "item": "LLMs genuinely understand",
+        "n": 743,
+        "option": "agnostic",
+        "share": 0.03768506056527591,
+        "x0": -0.15074024226110366,
+        "x1": -0.11305518169582776
+      },
+      {
+        "addressing": 743,
+        "asserts_share": 0.2180349932705249,
+        "count": 196,
+        "denies_share": 0.48048452220726784,
+        "facet": null,
+        "item": "LLMs genuinely understand",
+        "n": 743,
+        "option": "discusses",
+        "share": 0.26379542395693134,
+        "x0": -0.11305518169582776,
+        "x1": 0.15074024226110358
+      },
+      {
+        "addressing": 743,
+        "asserts_share": 0.2180349932705249,
+        "count": 162,
+        "denies_share": 0.48048452220726784,
+        "facet": null,
+        "item": "LLMs genuinely understand",
+        "n": 743,
+        "option": "asserts",
+        "share": 0.2180349932705249,
+        "x0": 0.15074024226110358,
+        "x1": 0.3687752355316285
+      },
+      {
+        "addressing": 259,
+        "asserts_share": 0.3204633204633205,
+        "count": 104,
+        "denies_share": 0.4015444015444015,
+        "facet": null,
+        "item": "LLMs have beliefs or knowledge",
+        "n": 259,
+        "option": "denies",
+        "share": 0.4015444015444015,
+        "x0": -0.5405405405405406,
+        "x1": -0.13899613899613905
+      },
+      {
+        "addressing": 259,
+        "asserts_share": 0.3204633204633205,
+        "count": 8,
+        "denies_share": 0.4015444015444015,
+        "facet": null,
+        "item": "LLMs have beliefs or knowledge",
+        "n": 259,
+        "option": "agnostic",
+        "share": 0.03088803088803089,
+        "x0": -0.13899613899613905,
+        "x1": -0.10810810810810817
+      },
+      {
+        "addressing": 259,
+        "asserts_share": 0.3204633204633205,
+        "count": 64,
+        "denies_share": 0.4015444015444015,
+        "facet": null,
+        "item": "LLMs have beliefs or knowledge",
+        "n": 259,
+        "option": "discusses",
+        "share": 0.2471042471042471,
+        "x0": -0.10810810810810817,
+        "x1": 0.13899613899613894
+      },
+      {
+        "addressing": 259,
+        "asserts_share": 0.3204633204633205,
+        "count": 83,
+        "denies_share": 0.4015444015444015,
+        "facet": null,
+        "item": "LLMs have beliefs or knowledge",
+        "n": 259,
+        "option": "asserts",
+        "share": 0.3204633204633205,
+        "x0": 0.13899613899613894,
+        "x1": 0.45945945945945943
+      },
+      {
+        "addressing": 1060,
+        "asserts_share": 0.19622641509433963,
+        "count": 402,
+        "denies_share": 0.37924528301886795,
+        "facet": null,
+        "item": "LLMs have emotions or can suffer",
+        "n": 1060,
+        "option": "denies",
+        "share": 0.37924528301886795,
+        "x0": -0.5915094339622642,
+        "x1": -0.21226415094339623
+      },
+      {
+        "addressing": 1060,
+        "asserts_share": 0.19622641509433963,
+        "count": 131,
+        "denies_share": 0.37924528301886795,
+        "facet": null,
+        "item": "LLMs have emotions or can suffer",
+        "n": 1060,
+        "option": "agnostic",
+        "share": 0.12358490566037736,
+        "x0": -0.21226415094339623,
+        "x1": -0.08867924528301888
+      },
+      {
+        "addressing": 1060,
+        "asserts_share": 0.19622641509433963,
+        "count": 319,
+        "denies_share": 0.37924528301886795,
+        "facet": null,
+        "item": "LLMs have emotions or can suffer",
+        "n": 1060,
+        "option": "discusses",
+        "share": 0.3009433962264151,
+        "x0": -0.08867924528301888,
+        "x1": 0.2122641509433962
+      },
+      {
+        "addressing": 1060,
+        "asserts_share": 0.19622641509433963,
+        "count": 208,
+        "denies_share": 0.37924528301886795,
+        "facet": null,
+        "item": "LLMs have emotions or can suffer",
+        "n": 1060,
+        "option": "asserts",
+        "share": 0.19622641509433963,
+        "x0": 0.2122641509433962,
+        "x1": 0.4084905660377358
+      },
+      {
+        "addressing": 1167,
+        "asserts_share": 0.32476435304198803,
+        "count": 409,
+        "denies_share": 0.350471293916024,
+        "facet": null,
+        "item": "LLMs have goals or agency of their own",
+        "n": 1167,
+        "option": "denies",
+        "share": 0.350471293916024,
+        "x0": -0.512853470437018,
+        "x1": -0.16238217652099401
+      },
+      {
+        "addressing": 1167,
+        "asserts_share": 0.32476435304198803,
+        "count": 38,
+        "denies_share": 0.350471293916024,
+        "facet": null,
+        "item": "LLMs have goals or agency of their own",
+        "n": 1167,
+        "option": "agnostic",
+        "share": 0.032562125107112254,
+        "x0": -0.16238217652099401,
+        "x1": -0.12982005141388175
+      },
+      {
+        "addressing": 1167,
+        "asserts_share": 0.32476435304198803,
+        "count": 341,
+        "denies_share": 0.350471293916024,
+        "facet": null,
+        "item": "LLMs have goals or agency of their own",
+        "n": 1167,
+        "option": "discusses",
+        "share": 0.29220222793487577,
+        "x0": -0.12982005141388175,
+        "x1": 0.16238217652099401
+      },
+      {
+        "addressing": 1167,
+        "asserts_share": 0.32476435304198803,
+        "count": 379,
+        "denies_share": 0.350471293916024,
+        "facet": null,
+        "item": "LLMs have goals or agency of their own",
+        "n": 1167,
+        "option": "asserts",
+        "share": 0.32476435304198803,
+        "x0": 0.16238217652099401,
+        "x1": 0.48714652956298204
+      },
+      {
+        "addressing": 753,
+        "asserts_share": 0.23240371845949534,
+        "count": 123,
+        "denies_share": 0.16334661354581673,
+        "facet": null,
+        "item": "Current LLMs have moral worth",
+        "n": 753,
+        "option": "denies",
+        "share": 0.16334661354581673,
+        "x0": -0.4654714475431607,
+        "x1": -0.302124833997344
+      },
+      {
+        "addressing": 753,
+        "asserts_share": 0.23240371845949534,
+        "count": 158,
+        "denies_share": 0.16334661354581673,
+        "facet": null,
+        "item": "Current LLMs have moral worth",
+        "n": 753,
+        "option": "agnostic",
+        "share": 0.2098273572377158,
+        "x0": -0.302124833997344,
+        "x1": -0.09229747675962821
+      },
+      {
+        "addressing": 753,
+        "asserts_share": 0.23240371845949534,
+        "count": 297,
+        "denies_share": 0.16334661354581673,
+        "facet": null,
+        "item": "Current LLMs have moral worth",
+        "n": 753,
+        "option": "discusses",
+        "share": 0.3944223107569721,
+        "x0": -0.09229747675962821,
+        "x1": 0.3021248339973439
+      },
+      {
+        "addressing": 753,
+        "asserts_share": 0.23240371845949534,
+        "count": 175,
+        "denies_share": 0.16334661354581673,
+        "facet": null,
+        "item": "Current LLMs have moral worth",
+        "n": 753,
+        "option": "asserts",
+        "share": 0.23240371845949534,
+        "x0": 0.3021248339973439,
+        "x1": 0.5345285524568393
+      },
+      {
+        "addressing": 653,
+        "asserts_share": 0.5987748851454824,
+        "count": 34,
+        "denies_share": 0.05206738131699847,
+        "facet": null,
+        "item": "Future AI could have moral worth",
+        "n": 653,
+        "option": "denies",
+        "share": 0.05206738131699847,
+        "x0": -0.22664624808575803,
+        "x1": -0.17457886676875956
+      },
+      {
+        "addressing": 653,
+        "asserts_share": 0.5987748851454824,
+        "count": 11,
+        "denies_share": 0.05206738131699847,
+        "facet": null,
+        "item": "Future AI could have moral worth",
+        "n": 653,
+        "option": "agnostic",
+        "share": 0.016845329249617153,
+        "x0": -0.17457886676875956,
+        "x1": -0.1577335375191424
+      },
+      {
+        "addressing": 653,
+        "asserts_share": 0.5987748851454824,
+        "count": 217,
+        "denies_share": 0.05206738131699847,
+        "facet": null,
+        "item": "Future AI could have moral worth",
+        "n": 653,
+        "option": "discusses",
+        "share": 0.332312404287902,
+        "x0": -0.1577335375191424,
+        "x1": 0.17457886676875958
+      },
+      {
+        "addressing": 653,
+        "asserts_share": 0.5987748851454824,
+        "count": 391,
+        "denies_share": 0.05206738131699847,
+        "facet": null,
+        "item": "Future AI could have moral worth",
+        "n": 653,
+        "option": "asserts",
+        "share": 0.5987748851454824,
+        "x0": 0.17457886676875958,
+        "x1": 0.7733537519142419
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.4247619047619048,
+        "count": 143,
+        "denies_share": 0.2723809523809524,
+        "facet": null,
+        "item": "Current architectures are insufficient",
+        "n": 525,
+        "option": "denies",
+        "share": 0.2723809523809524,
+        "x0": -0.4238095238095238,
+        "x1": -0.1514285714285714
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.4247619047619048,
+        "count": 19,
+        "denies_share": 0.2723809523809524,
+        "facet": null,
+        "item": "Current architectures are insufficient",
+        "n": 525,
+        "option": "agnostic",
+        "share": 0.03619047619047619,
+        "x0": -0.1514285714285714,
+        "x1": -0.11523809523809522
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.4247619047619048,
+        "count": 140,
+        "denies_share": 0.2723809523809524,
+        "facet": null,
+        "item": "Current architectures are insufficient",
+        "n": 525,
+        "option": "discusses",
+        "share": 0.26666666666666666,
+        "x0": -0.11523809523809522,
+        "x1": 0.15142857142857144
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.4247619047619048,
+        "count": 223,
+        "denies_share": 0.2723809523809524,
+        "facet": null,
+        "item": "Current architectures are insufficient",
+        "n": 525,
+        "option": "asserts",
+        "share": 0.4247619047619048,
+        "x0": 0.15142857142857144,
+        "x1": 0.5761904761904763
+      },
+      {
+        "addressing": 872,
+        "asserts_share": 0.6525229357798165,
+        "count": 76,
+        "denies_share": 0.0871559633027523,
+        "facet": null,
+        "item": "We cannot know whether AI is conscious",
+        "n": 872,
+        "option": "denies",
+        "share": 0.0871559633027523,
+        "x0": -0.2173165137614679,
+        "x1": -0.1301605504587156
+      },
+      {
+        "addressing": 872,
+        "asserts_share": 0.6525229357798165,
+        "count": 4,
+        "denies_share": 0.0871559633027523,
+        "facet": null,
+        "item": "We cannot know whether AI is conscious",
+        "n": 872,
+        "option": "agnostic",
+        "share": 0.0045871559633027525,
+        "x0": -0.1301605504587156,
+        "x1": -0.12557339449541285
+      },
+      {
+        "addressing": 872,
+        "asserts_share": 0.6525229357798165,
+        "count": 223,
+        "denies_share": 0.0871559633027523,
+        "facet": null,
+        "item": "We cannot know whether AI is conscious",
+        "n": 872,
+        "option": "discusses",
+        "share": 0.25573394495412843,
+        "x0": -0.12557339449541285,
+        "x1": 0.13016055045871558
+      },
+      {
+        "addressing": 872,
+        "asserts_share": 0.6525229357798165,
+        "count": 569,
+        "denies_share": 0.0871559633027523,
+        "facet": null,
+        "item": "We cannot know whether AI is conscious",
+        "n": 872,
+        "option": "asserts",
+        "share": 0.6525229357798165,
+        "x0": 0.13016055045871558,
+        "x1": 0.782683486238532
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.6457142857142857,
+        "count": 45,
+        "denies_share": 0.08571428571428572,
+        "facet": null,
+        "item": "Act with precaution regardless",
+        "n": 525,
+        "option": "denies",
+        "share": 0.08571428571428572,
+        "x0": -0.22,
+        "x1": -0.13428571428571429
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.6457142857142857,
+        "count": 0,
+        "denies_share": 0.08571428571428572,
+        "facet": null,
+        "item": "Act with precaution regardless",
+        "n": 525,
+        "option": "agnostic",
+        "share": 0.0,
+        "x0": -0.13428571428571429,
+        "x1": -0.13428571428571429
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.6457142857142857,
+        "count": 141,
+        "denies_share": 0.08571428571428572,
+        "facet": null,
+        "item": "Act with precaution regardless",
+        "n": 525,
+        "option": "discusses",
+        "share": 0.26857142857142857,
+        "x0": -0.13428571428571429,
+        "x1": 0.13428571428571429
+      },
+      {
+        "addressing": 525,
+        "asserts_share": 0.6457142857142857,
+        "count": 339,
+        "denies_share": 0.08571428571428572,
+        "facet": null,
+        "item": "Act with precaution regardless",
+        "n": 525,
+        "option": "asserts",
+        "share": 0.6457142857142857,
+        "x0": 0.13428571428571429,
+        "x1": 0.78
+      },
+      {
+        "addressing": 744,
+        "asserts_share": 0.4018817204301075,
+        "count": 334,
+        "denies_share": 0.4489247311827957,
+        "facet": null,
+        "item": "AI consciousness talk is hype",
+        "n": 744,
+        "option": "denies",
+        "share": 0.4489247311827957,
+        "x0": -0.5235215053763441,
+        "x1": -0.07459677419354843
+      },
+      {
+        "addressing": 744,
+        "asserts_share": 0.4018817204301075,
+        "count": 0,
+        "denies_share": 0.4489247311827957,
+        "facet": null,
+        "item": "AI consciousness talk is hype",
+        "n": 744,
+        "option": "agnostic",
+        "share": 0.0,
+        "x0": -0.07459677419354843,
+        "x1": -0.07459677419354843
+      },
+      {
+        "addressing": 744,
+        "asserts_share": 0.4018817204301075,
+        "count": 111,
+        "denies_share": 0.4489247311827957,
+        "facet": null,
+        "item": "AI consciousness talk is hype",
+        "n": 744,
+        "option": "discusses",
+        "share": 0.14919354838709678,
+        "x0": -0.07459677419354843,
+        "x1": 0.07459677419354835
+      },
+      {
+        "addressing": 744,
+        "asserts_share": 0.4018817204301075,
+        "count": 299,
+        "denies_share": 0.4489247311827957,
+        "facet": null,
+        "item": "AI consciousness talk is hype",
+        "n": 744,
+        "option": "asserts",
+        "share": 0.4018817204301075,
+        "x0": 0.07459677419354835,
+        "x1": 0.4764784946236559
+      }
+    ]
+  },
+  "height": 364,
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "field": "option",
+          "legend": {
+            "labelExpr": "{\"denies\": \"Denies\", \"agnostic\": \"Agnostic\", \"discusses\": \"Discusses, no position\", \"asserts\": \"Asserts\"}[datum.label]",
+            "title": "Author's position"
+          },
+          "scale": {
+            "domain": [
+              "denies",
+              "agnostic",
+              "discusses",
+              "asserts"
+            ],
+            "range": [
+              "#e34948",
+              "#898781",
+              "#c3c2b7",
+              "#2a78d6"
+            ]
+          },
+          "type": "nominal"
+        },
+        "stroke": {
+          "value": "#fcfcfb"
+        },
+        "strokeWidth": {
+          "value": 2
+        },
+        "tooltip": [
+          {
+            "field": "item",
+            "title": "Claim",
+            "type": "nominal"
+          },
+          {
+            "field": "option",
+            "title": "Position",
+            "type": "nominal"
+          },
+          {
+            "field": "count",
+            "title": "Posts",
+            "type": "quantitative"
+          },
+          {
+            "field": "share",
+            "format": ".0%",
+            "title": "Share",
+            "type": "quantitative"
+          },
+          {
+            "field": "addressing",
+            "title": "Posts addressing",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "format": "%",
+            "grid": true,
+            "labelExpr": "abs(datum.value) == 1 ? format(abs(datum.value), '.0%') : format(abs(datum.value), '.0%')",
+            "values": [
+              -1,
+              -0.75,
+              -0.5,
+              -0.25,
+              0,
+              0.25,
+              0.5,
+              0.75,
+              1
+            ]
+          },
+          "field": "x0",
+          "scale": {
+            "domain": [
+              -1,
+              1
+            ]
+          },
+          "title": "Share of posts addressing the claim",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x1"
+        },
+        "y": {
+          "axis": {
+            "labelLimit": 260
+          },
+          "field": "item",
+          "sort": [
+            "We cannot know whether AI is conscious",
+            "Act with precaution regardless",
+            "AI could genuinely think",
+            "Future AI could have moral worth",
+            "Current architectures are insufficient",
+            "Current LLMs genuinely think",
+            "AI consciousness talk is hype",
+            "AI could be conscious in principle",
+            "LLMs have goals or agency of their own",
+            "LLMs have beliefs or knowledge",
+            "Current LLMs have moral worth",
+            "LLMs genuinely understand",
+            "LLMs have emotions or can suffer",
+            "Current LLMs are conscious"
+          ],
+          "title": null,
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "cornerRadiusEnd": 0,
+        "height": 18,
+        "type": "bar"
+      }
+    },
+    {
+      "encoding": {
+        "x": {
+          "datum": 0
+        }
+      },
+      "mark": {
+        "color": "#c3c2b7",
+        "strokeWidth": 1,
+        "type": "rule"
+      }
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "denies_share",
+          "format": ".0%",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "x0",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "item",
+          "sort": [
+            "We cannot know whether AI is conscious",
+            "Act with precaution regardless",
+            "AI could genuinely think",
+            "Future AI could have moral worth",
+            "Current architectures are insufficient",
+            "Current LLMs genuinely think",
+            "AI consciousness talk is hype",
+            "AI could be conscious in principle",
+            "LLMs have goals or agency of their own",
+            "LLMs have beliefs or knowledge",
+            "Current LLMs have moral worth",
+            "LLMs genuinely understand",
+            "LLMs have emotions or can suffer",
+            "Current LLMs are conscious"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "right",
+        "color": "#52514e",
+        "dx": -6,
+        "fontSize": 11,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.option === 'denies')"
+        }
+      ]
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "asserts_share",
+          "format": ".0%",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "x1",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "item",
+          "sort": [
+            "We cannot know whether AI is conscious",
+            "Act with precaution regardless",
+            "AI could genuinely think",
+            "Future AI could have moral worth",
+            "Current architectures are insufficient",
+            "Current LLMs genuinely think",
+            "AI consciousness talk is hype",
+            "AI could be conscious in principle",
+            "LLMs have goals or agency of their own",
+            "LLMs have beliefs or knowledge",
+            "Current LLMs have moral worth",
+            "LLMs genuinely understand",
+            "LLMs have emotions or can suffer",
+            "Current LLMs are conscious"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "left",
+        "color": "#52514e",
+        "dx": 6,
+        "fontSize": 11,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.option === 'asserts')"
+        }
+      ]
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "addressing",
+          "format": ",d",
+          "type": "quantitative"
+        },
+        "x": {
+          "value": 644
+        },
+        "y": {
+          "field": "item",
+          "sort": [
+            "We cannot know whether AI is conscious",
+            "Act with precaution regardless",
+            "AI could genuinely think",
+            "Future AI could have moral worth",
+            "Current architectures are insufficient",
+            "Current LLMs genuinely think",
+            "AI consciousness talk is hype",
+            "AI could be conscious in principle",
+            "LLMs have goals or agency of their own",
+            "LLMs have beliefs or knowledge",
+            "Current LLMs have moral worth",
+            "LLMs genuinely understand",
+            "LLMs have emotions or can suffer",
+            "Current LLMs are conscious"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "left",
+        "color": "#898781",
+        "fontSize": 10,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.option === 'asserts')"
+        }
+      ]
+    }
+  ],
+  "title": {
+    "subtitle": "Authors' own positions in 2,803 relevant posts, as a share of posts that address each claim. Right-hand figure: posts addressing it.",
+    "text": "What Substack writers say about machine minds"
+  },
+  "width": 600
+}

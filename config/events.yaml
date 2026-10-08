@@ -1,0 +1,6 @@
+# Dated anchors drawn on the time charts (docs/plan.md stage 7, section F). Only events with a verifiable
+# date; add more as they are checked. `short` is the on-chart label.
+events:
+  - {date: "2024-11-04", short: "Taking AI Welfare Seriously", note: "Long, Sebo et al. report on AI moral patienthood (arXiv 2411.00986)"}
+  - {date: "2025-04-24", short: "Anthropic model welfare programme", note: "Anthropic announces a research programme on model welfare"}
+  - {date: "2026-05-15", short: "Encyclical Magnifica Humanitas", note: "Pope Leo XIV's encyclical on AI and human dignity"}

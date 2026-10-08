@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coder</title>
+<style>
+  :root { --bg:#fafafa; --fg:#1a1a1a; --muted:#666; --card:#fff; --line:#ddd; --accent:#2f6fdb; --ok:#2a8a4a; --bad:#c0392b; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#141414; --fg:#eee; --muted:#aaa; --card:#1e1e1e; --line:#333; } }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; }
+  header { display:flex; gap:16px; align-items:center; padding:10px 16px; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:2 }
+  header input[type=file] { font-size:13px }
+  .progress { color:var(--muted); font-size:13px }
+  main { display:grid; grid-template-columns: minmax(0,1fr) 380px; gap:16px; padding:16px; max-width:1400px; margin:0 auto }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr } }
+  .doc { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:16px 20px; }
+  .doc h2 { margin:0 0 4px; font-size:20px } .doc .sub { color:var(--muted); margin:0 0 12px }
+  .doc .meta { font-size:13px; color:var(--muted); margin-bottom:12px }
+  .doc .text { white-space:pre-wrap; max-height:70vh; overflow:auto; border-top:1px solid var(--line); padding-top:12px }
+  .doc .text mark { background:#ffe58a; color:#000 }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 16px; position:sticky; top:64px; max-height:calc(100vh - 80px); overflow:auto }
+  .construct { border-top:1px solid var(--line); padding:10px 0 }
+  .construct:first-child { border-top:0 }
+  .construct .name { font-weight:600; font-size:14px }
+  .construct .q { font-size:13px; color:var(--muted); margin:2px 0 6px }
+  .construct .shown { font-size:13px; margin:4px 0; padding:6px 8px; background:var(--bg); border-radius:6px }
+  .construct .shown q { display:block; color:var(--muted); font-style:italic; margin-top:2px }
+  .opts { display:flex; flex-wrap:wrap; gap:6px }
+  .opts button { font:13px system-ui; padding:4px 8px; border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:6px; cursor:pointer }
+  .opts button.sel { border-color:var(--accent); background:var(--accent); color:#fff }
+  .opts button kbd { opacity:.6; margin-right:4px; font-size:11px }
+  .accept { display:flex; gap:6px; margin-top:4px }
+  .accept button { flex:1 }
+  .accept .ok.sel { background:var(--ok); border-color:var(--ok); color:#fff } .accept .bad.sel { background:var(--bad); border-color:var(--bad); color:#fff }
+  textarea.note { width:100%; font:13px system-ui; margin-top:6px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--fg); padding:6px }
+  nav { display:flex; gap:8px; margin-top:12px }
+  nav button, header button { font:13px system-ui; padding:6px 10px; border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:6px; cursor:pointer }
+  .help { font-size:12px; color:var(--muted); margin-top:8px }
+  .empty { padding:40px; color:var(--muted); text-align:center }
+</style>
+</head>
+<body>
+<header>
+  <select id="pick" style="display:none; font:14px system-ui; padding:4px"><option value="">Choose a sample…</option></select>
+  <input type="file" id="file" accept="application/json">
+  <span class="progress" id="progress">Load a sample JSON exported by <code>mcreview gold-export &lt;name&gt;</code>.</span>
+  <label class="progress" style="display:none" id="onlydis-label"><input type="checkbox" id="onlydis"> only disagreements / uncoded</label>
+  <span style="flex:1"></span>
+  <span class="progress" id="saved"></span>
+  <button id="download">Download decisions</button>
+</header>
+<main>
+  <section class="doc" id="doc"><div class="empty">No sample loaded.</div></section>
+  <aside class="panel" id="panel"></aside>
+</main>
+<script>
+// Local, offline verification tool. Decisions are kept in localStorage per sample and downloaded as JSON
+// for `mcreview gold-import`. Output shape: {sample_id: {construct: {value, decision, shown_value, shown_evidence, note, seconds, coded_at}}}
+let data = null, idx = 0, decisions = {}, tOpen = 0, server = false, saveTimer = null;
+const $ = s => document.querySelector(s);
+const key = () => 'coder:' + data.sample + ':' + data.codebook_version;
+const save = () => {
+  try { localStorage.setItem(key(), JSON.stringify({idx, decisions})); } catch (e) {}
+  if (server) { clearTimeout(saveTimer); saveTimer = setTimeout(pushToServer, 400); }
+};
+const load = () => { try { const s = JSON.parse(localStorage.getItem(key()) || 'null'); if (s) { idx = s.idx || 0; decisions = s.decisions || {}; } } catch (e) {} };
+async function pushToServer() {
+  try {
+    const r = await fetch('/api/decisions/' + data.sample, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(decisions)});
+    const j = await r.json(); $('#saved').textContent = `saved to server (${j.items} items)`;
+  } catch (e) { $('#saved').textContent = 'server save failed'; }
+}
+async function openSample(name) {
+  const r = await fetch('/data/' + name + '.json'); data = await r.json(); idx = 0; decisions = {}; load();
+  try { const srv = await (await fetch('/api/decisions/' + name)).json();   // server copy wins when it has more
+    if (Object.keys(srv).length >= Object.keys(decisions).length) decisions = srv; } catch (e) {}
+  render();
+}
+// When served by serve.py, offer the samples on the server instead of a local file picker.
+fetch('/api/samples').then(r => r.ok ? r.json() : Promise.reject()).then(list => {
+  server = true; const sel = $('#pick');
+  for (const s of list) { const o = document.createElement('option'); o.value = s.name; o.textContent = s.name + (s.decisions ? ' (in progress)' : ''); sel.appendChild(o); }
+  sel.style.display = ''; $('#file').style.display = 'none';
+  sel.addEventListener('change', e => { if (e.target.value) openSample(e.target.value); e.target.blur(); });
+}).catch(() => {});
+
+$('#file').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  data = JSON.parse(await f.text()); idx = 0; decisions = {}; load(); render();
+  e.target.blur();   // keys must go to the document, not the file input
+});
+$('#download').addEventListener('click', () => {
+  if (!data) return;
+  const blob = new Blob([JSON.stringify(decisions, null, 1)], {type: 'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${data.sample}-decisions.json`; a.click();
+});
+
+function esc(s) { return (s || '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function highlight(text, quotes) {
+  let html = esc(text);
+  for (const q of quotes.filter(Boolean)) { const e = esc(q.trim()); if (e.length > 12 && html.includes(e)) html = html.split(e).join('<mark>' + e + '</mark>'); }
+  return html;
+}
+function itemDecisions(item) { return decisions[item.sample_id] || (decisions[item.sample_id] = {}); }
+function done(item) { const d = decisions[item.sample_id] || {}; return data.constructs.every(c => d[c.name] && d[c.name].value); }
+// An item "needs attention" when any construct is uncoded or the human value differs from the engine's current code.
+function needsAttention(item) {
+  const d = decisions[item.sample_id] || {};
+  return data.constructs.some(c => { const h = d[c.name] && d[c.name].value; const e = (item.codes || {})[c.name]; return !h || (e && e.value !== h); });
+}
+function visibleIndices() { const only = $('#onlydis').checked; return data.items.map((it, i) => i).filter(i => !only || needsAttention(data.items[i])); }
+$('#onlydis').addEventListener('change', () => { const v = visibleIndices(); if (v.length && !v.includes(idx)) idx = v[0]; render(); });
+
+function render() {
+  if (!data || !data.items.length) return;
+  idx = Math.max(0, Math.min(idx, data.items.length - 1));
+  const item = data.items[idx]; tOpen = performance.now();
+  const n = data.items.filter(done).length, att = data.items.filter(needsAttention).length;
+  $('#onlydis-label').style.display = '';
+  $('#progress').textContent = `${data.sample} · item ${idx + 1} of ${data.items.length} · ${n} complete · ${att} need attention · v${data.codebook_version}`;
+  const quotes = Object.values(item.codes || {}).map(c => c.evidence);
+  const doc = $('#doc');
+  if (item.entity_type === 'post') {
+    doc.innerHTML = `<h2>${esc(item.title)}</h2><p class="sub">${esc(item.subtitle)}</p>
+      <div class="meta">${esc((item.date || '').slice(0, 10))} · <a href="${esc(item.url)}" target="_blank" rel="noopener">open post</a> · stratum ${esc(item.stratum)}</div>
+      <div class="text" id="text">${highlight(item.body || item.lead, quotes)}</div>`;
+  } else {
+    doc.innerHTML = `<h2>${esc(item.name)}</h2><p class="sub">${esc(item.tagline)}</p>
+      <div class="meta">${esc(item.host)} · ${esc(item.author)}</div>
+      <div class="text"><b>Bios</b>\n${esc((item.author_bios || []).join('\n\n'))}\n\n<b>Post titles</b>\n${esc((item.post_titles || []).join('\n'))}</div>`;
+  }
+  const d = itemDecisions(item);
+  $('#panel').innerHTML = data.constructs.map((c, ci) => {
+    const shown = (item.codes || {})[c.name];
+    const cur = d[c.name] || {};
+    const opts = Object.entries(c.options).map(([o, what], oi) =>
+      `<button data-c="${c.name}" data-v="${o}" class="${cur.value === o ? 'sel' : ''}" title="${esc(what)}"><kbd>${oi + 1}</kbd>${o}</button>`).join('');
+    const acc = shown ? `<div class="accept">
+        <button class="ok ${cur.decision === 'accept' ? 'sel' : ''}" data-c="${c.name}" data-d="accept" data-v="${esc(shown.value)}"><kbd>a</kbd>accept ${esc(shown.value)}</button>
+        <button class="bad ${cur.decision === 'reject' ? 'sel' : ''}" data-c="${c.name}" data-d="reject"><kbd>r</kbd>reject</button></div>` : '';
+    return `<div class="construct" data-ci="${ci}"><div class="name">${c.name}</div><div class="q">${esc(c.claim || c.instructions)}</div>
+      ${shown ? `<div class="shown">${esc(shown.source)}: <b>${esc(shown.value)}</b>${shown.evidence ? `<q>${esc(shown.evidence)}</q>` : ''}</div>` : ''}
+      ${acc}<div class="opts">${opts}</div>
+      <textarea class="note" rows="1" placeholder="note" data-c="${c.name}">${esc(cur.note || '')}</textarea></div>`;
+  }).join('') + `<nav><button id="prev">← prev (p)</button><button id="next">next (n) →</button></nav>
+    <div class="help">Keys: 1-9 choose option for the focused construct (Tab / Shift-Tab to move), a accept shown code, r reject, n/p navigate. ${server ? 'Decisions autosave to the server; import with <code>mcreview gold-import analysis/coder/data/' + esc(data.sample) + '-decisions.json</code>.' : 'Decisions autosave in this browser; download when done.'}</div>`;
+  $('#panel').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'prev') return go(-1); if (b.id === 'next') return go(1);
+    const c = b.dataset.c; if (!c) return;
+    const shown = (item.codes || {})[c] || {};
+    const rec = d[c] || (d[c] = {});
+    rec.seconds = Math.round((performance.now() - tOpen) / 100) / 10; rec.coded_at = new Date().toISOString();
+    rec.shown_value = shown.value || null; rec.shown_evidence = shown.evidence || null;
+    if (b.dataset.d === 'accept') { rec.decision = 'accept'; rec.value = shown.value; }
+    else if (b.dataset.d === 'reject') { rec.decision = 'reject'; rec.value = null; }
+    else { rec.value = b.dataset.v; rec.decision = shown.value ? (shown.value === rec.value ? 'accept' : 'fix') : 'coded'; }
+    save(); render(); focusConstruct(+b.closest('.construct').dataset.ci);
+  };
+  $('#panel').oninput = e => { if (e.target.classList.contains('note')) { (d[e.target.dataset.c] || (d[e.target.dataset.c] = {})).note = e.target.value; save(); } };
+  focusConstruct(0);
+}
+let focused = 0;
+function focusConstruct(i) { focused = i; document.querySelectorAll('.construct').forEach((el, j) => el.style.outline = j === i ? '2px solid var(--accent)' : 'none'); }
+function go(delta) {
+  const v = visibleIndices(); if (!v.length) return;
+  const pos = v.indexOf(idx); idx = v[Math.max(0, Math.min(v.length - 1, (pos < 0 ? 0 : pos) + delta))];
+  save(); render(); window.scrollTo(0, 0);
+}
+document.addEventListener('keydown', e => {
+  if (!data || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || (e.target.tagName === 'INPUT' && e.target.type !== 'file')) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') e.target.blur();
+  const item = data.items[idx], c = data.constructs[focused]; if (!c) return;
+  const el = document.querySelectorAll('.construct')[focused];
+  if (e.key === 'n') go(1); else if (e.key === 'p') go(-1);
+  else if (e.key === 'Tab') { e.preventDefault(); focusConstruct((focused + (e.shiftKey ? -1 : 1) + data.constructs.length) % data.constructs.length); }
+  else if (/^[1-9]$/.test(e.key)) { const b = el.querySelectorAll('.opts button')[+e.key - 1]; if (b) b.click(); }
+  else if (e.key === 'a') { const b = el.querySelector('.accept .ok'); if (b) b.click(); }
+  else if (e.key === 'r') { const b = el.querySelector('.accept .bad'); if (b) b.click(); }
+});
+</script>
+</body>
+</html>

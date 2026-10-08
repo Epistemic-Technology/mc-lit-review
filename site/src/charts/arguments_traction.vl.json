@@ -1,0 +1,510 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "concat": {
+      "spacing": 24
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "datasets": {
+    "data-13398ab0a07e8bbd08d61e367b6a8f62": [
+      {
+        "x": 1.0
+      }
+    ],
+    "data-d3d5d8666ba8347a25715dc35a28b05f": [
+      {
+        "cited": 0.0852,
+        "label": "Chinese room",
+        "n": 317,
+        "share": 0.1131,
+        "traction": 0.84
+      },
+      {
+        "cited": 0.1319,
+        "label": "Stochastic parrot / next-token",
+        "n": 652,
+        "share": 0.2326,
+        "traction": 0.9
+      },
+      {
+        "cited": 0.104,
+        "label": "Hard problem",
+        "n": 471,
+        "share": 0.168,
+        "traction": 0.86
+      },
+      {
+        "cited": 0.1513,
+        "label": "Other minds / behavioural evidence",
+        "n": 727,
+        "share": 0.2594,
+        "traction": 0.87
+      },
+      {
+        "cited": 0.2441,
+        "label": "Self-reports unreliable",
+        "n": 381,
+        "share": 0.1359,
+        "traction": 0.97
+      },
+      {
+        "cited": 0.1384,
+        "label": "Functionalism / substrate independence",
+        "n": 809,
+        "share": 0.2886,
+        "traction": 0.89
+      },
+      {
+        "cited": 0.1378,
+        "label": "Biology or embodiment required",
+        "n": 595,
+        "share": 0.2123,
+        "traction": 0.85
+      },
+      {
+        "cited": 0.1689,
+        "label": "Theory-based indicators",
+        "n": 444,
+        "share": 0.1584,
+        "traction": 0.85
+      },
+      {
+        "cited": 0.12,
+        "label": "Emergence from scale",
+        "n": 475,
+        "share": 0.1695,
+        "traction": 0.92
+      },
+      {
+        "cited": 0.1474,
+        "label": "Anthropomorphism warning",
+        "n": 760,
+        "share": 0.2711,
+        "traction": 0.84
+      },
+      {
+        "cited": 0.2276,
+        "label": "Precaution / moral circle",
+        "n": 457,
+        "share": 0.163,
+        "traction": 0.88
+      },
+      {
+        "cited": 0.1441,
+        "label": "Mimicry of training data",
+        "n": 444,
+        "share": 0.1584,
+        "traction": 0.85
+      },
+      {
+        "cited": 0.1308,
+        "label": "Panpsychism or illusionism",
+        "n": 237,
+        "share": 0.0846,
+        "traction": 0.9
+      }
+    ]
+  },
+  "hconcat": [
+    {
+      "data": {
+        "name": "data-d3d5d8666ba8347a25715dc35a28b05f"
+      },
+      "height": 234,
+      "layer": [
+        {
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "label",
+                "title": "Argument",
+                "type": "nominal"
+              },
+              {
+                "field": "n",
+                "title": "Posts",
+                "type": "quantitative"
+              },
+              {
+                "field": "share",
+                "format": ".0%",
+                "title": "Share",
+                "type": "quantitative"
+              },
+              {
+                "field": "traction",
+                "format": ".2f",
+                "title": "Median over-performance",
+                "type": "quantitative"
+              },
+              {
+                "field": "cited",
+                "format": ".0%",
+                "title": "Share cited by another publication",
+                "type": "quantitative"
+              }
+            ],
+            "x": {
+              "axis": {
+                "format": "%",
+                "grid": true,
+                "tickCount": 4
+              },
+              "field": "share",
+              "title": "Share of relevant posts",
+              "type": "quantitative"
+            },
+            "y": {
+              "axis": {
+                "labelLimit": 280
+              },
+              "field": "label",
+              "sort": [
+                "Functionalism / substrate independence",
+                "Anthropomorphism warning",
+                "Other minds / behavioural evidence",
+                "Stochastic parrot / next-token",
+                "Biology or embodiment required",
+                "Emergence from scale",
+                "Hard problem",
+                "Precaution / moral circle",
+                "Theory-based indicators",
+                "Mimicry of training data",
+                "Self-reports unreliable",
+                "Chinese room",
+                "Panpsychism or illusionism"
+              ],
+              "title": null,
+              "type": "nominal"
+            }
+          },
+          "mark": {
+            "color": "#2a78d6",
+            "height": 14,
+            "type": "bar"
+          }
+        },
+        {
+          "encoding": {
+            "text": {
+              "field": "share",
+              "format": ".0%",
+              "type": "quantitative"
+            },
+            "x": {
+              "field": "share",
+              "type": "quantitative"
+            },
+            "y": {
+              "axis": {
+                "labelLimit": 280
+              },
+              "field": "label",
+              "sort": [
+                "Functionalism / substrate independence",
+                "Anthropomorphism warning",
+                "Other minds / behavioural evidence",
+                "Stochastic parrot / next-token",
+                "Biology or embodiment required",
+                "Emergence from scale",
+                "Hard problem",
+                "Precaution / moral circle",
+                "Theory-based indicators",
+                "Mimicry of training data",
+                "Self-reports unreliable",
+                "Chinese room",
+                "Panpsychism or illusionism"
+              ],
+              "title": null,
+              "type": "nominal"
+            }
+          },
+          "mark": {
+            "align": "left",
+            "color": "#52514e",
+            "dx": 5,
+            "fontSize": 11,
+            "type": "text"
+          }
+        }
+      ],
+      "title": {
+        "color": "#52514e",
+        "fontSize": 13,
+        "fontWeight": 600,
+        "text": "How often it appears"
+      },
+      "width": 250
+    },
+    {
+      "height": 234,
+      "layer": [
+        {
+          "data": {
+            "name": "data-13398ab0a07e8bbd08d61e367b6a8f62"
+          },
+          "encoding": {
+            "x": {
+              "field": "x",
+              "type": "quantitative"
+            }
+          },
+          "mark": {
+            "color": "#c3c2b7",
+            "strokeWidth": 1,
+            "type": "rule"
+          }
+        },
+        {
+          "data": {
+            "name": "data-d3d5d8666ba8347a25715dc35a28b05f"
+          },
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "label",
+                "title": "Argument",
+                "type": "nominal"
+              },
+              {
+                "field": "n",
+                "title": "Posts",
+                "type": "quantitative"
+              },
+              {
+                "field": "share",
+                "format": ".0%",
+                "title": "Share",
+                "type": "quantitative"
+              },
+              {
+                "field": "traction",
+                "format": ".2f",
+                "title": "Median over-performance",
+                "type": "quantitative"
+              },
+              {
+                "field": "cited",
+                "format": ".0%",
+                "title": "Share cited by another publication",
+                "type": "quantitative"
+              }
+            ],
+            "x": {
+              "axis": {
+                "format": ".2f",
+                "grid": true,
+                "tickCount": 4
+              },
+              "field": "traction",
+              "scale": {
+                "domain": [
+                  0.7,
+                  1.1
+                ],
+                "zero": false
+              },
+              "title": "Median reactions vs the publication's typical post",
+              "type": "quantitative"
+            },
+            "y": {
+              "axis": null,
+              "field": "label",
+              "sort": [
+                "Functionalism / substrate independence",
+                "Anthropomorphism warning",
+                "Other minds / behavioural evidence",
+                "Stochastic parrot / next-token",
+                "Biology or embodiment required",
+                "Emergence from scale",
+                "Hard problem",
+                "Precaution / moral circle",
+                "Theory-based indicators",
+                "Mimicry of training data",
+                "Self-reports unreliable",
+                "Chinese room",
+                "Panpsychism or illusionism"
+              ],
+              "title": null,
+              "type": "nominal"
+            }
+          },
+          "mark": {
+            "color": "#2a78d6",
+            "size": 80,
+            "stroke": "#fcfcfb",
+            "strokeWidth": 2,
+            "type": "point"
+          }
+        },
+        {
+          "data": {
+            "name": "data-d3d5d8666ba8347a25715dc35a28b05f"
+          },
+          "encoding": {
+            "text": {
+              "field": "traction",
+              "format": ".2f",
+              "type": "quantitative"
+            },
+            "x": {
+              "field": "traction",
+              "type": "quantitative"
+            },
+            "y": {
+              "axis": null,
+              "field": "label",
+              "sort": [
+                "Functionalism / substrate independence",
+                "Anthropomorphism warning",
+                "Other minds / behavioural evidence",
+                "Stochastic parrot / next-token",
+                "Biology or embodiment required",
+                "Emergence from scale",
+                "Hard problem",
+                "Precaution / moral circle",
+                "Theory-based indicators",
+                "Mimicry of training data",
+                "Self-reports unreliable",
+                "Chinese room",
+                "Panpsychism or illusionism"
+              ],
+              "type": "nominal"
+            }
+          },
+          "mark": {
+            "align": "left",
+            "color": "#52514e",
+            "dx": 9,
+            "fontSize": 11,
+            "type": "text"
+          }
+        },
+        {
+          "data": {
+            "name": "data-13398ab0a07e8bbd08d61e367b6a8f62"
+          },
+          "encoding": {
+            "text": {
+              "value": "typical post = 1.0"
+            },
+            "x": {
+              "field": "x",
+              "type": "quantitative"
+            },
+            "y": {
+              "value": -2
+            }
+          },
+          "mark": {
+            "align": "left",
+            "baseline": "top",
+            "color": "#898781",
+            "dx": 4,
+            "fontSize": 10,
+            "type": "text"
+          }
+        }
+      ],
+      "title": {
+        "color": "#52514e",
+        "fontSize": 13,
+        "fontWeight": 600,
+        "text": "How it performs"
+      },
+      "width": 220
+    }
+  ],
+  "spacing": 24,
+  "title": {
+    "subtitle": "Argument types coded per post. Right: median reactions of posts using the argument, relative to each publication's own posts in the period (1.0 = a typical post).",
+    "text": "Which arguments are common, and which get traction"
+  }
+}

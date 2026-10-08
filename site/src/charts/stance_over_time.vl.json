@@ -1,0 +1,544 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "datasets": {
+    "data-3c0d2f760122048b67608267f7572481": [
+      {
+        "count": 23,
+        "date": "2025-02-15T00:00:00",
+        "n": 38,
+        "option": "denies",
+        "quarter": "2025Q1",
+        "share": 0.6052631578947368
+      },
+      {
+        "count": 1,
+        "date": "2025-02-15T00:00:00",
+        "n": 38,
+        "option": "agnostic",
+        "quarter": "2025Q1",
+        "share": 0.02631578947368421
+      },
+      {
+        "count": 6,
+        "date": "2025-02-15T00:00:00",
+        "n": 38,
+        "option": "discusses",
+        "quarter": "2025Q1",
+        "share": 0.15789473684210525
+      },
+      {
+        "count": 8,
+        "date": "2025-02-15T00:00:00",
+        "n": 38,
+        "option": "asserts",
+        "quarter": "2025Q1",
+        "share": 0.21052631578947367
+      },
+      {
+        "count": 35,
+        "date": "2025-05-15T00:00:00",
+        "n": 68,
+        "option": "denies",
+        "quarter": "2025Q2",
+        "share": 0.5147058823529411
+      },
+      {
+        "count": 9,
+        "date": "2025-05-15T00:00:00",
+        "n": 68,
+        "option": "agnostic",
+        "quarter": "2025Q2",
+        "share": 0.1323529411764706
+      },
+      {
+        "count": 14,
+        "date": "2025-05-15T00:00:00",
+        "n": 68,
+        "option": "discusses",
+        "quarter": "2025Q2",
+        "share": 0.20588235294117646
+      },
+      {
+        "count": 10,
+        "date": "2025-05-15T00:00:00",
+        "n": 68,
+        "option": "asserts",
+        "quarter": "2025Q2",
+        "share": 0.14705882352941177
+      },
+      {
+        "count": 29,
+        "date": "2025-08-15T00:00:00",
+        "n": 53,
+        "option": "denies",
+        "quarter": "2025Q3",
+        "share": 0.5471698113207547
+      },
+      {
+        "count": 10,
+        "date": "2025-08-15T00:00:00",
+        "n": 53,
+        "option": "agnostic",
+        "quarter": "2025Q3",
+        "share": 0.18867924528301888
+      },
+      {
+        "count": 8,
+        "date": "2025-08-15T00:00:00",
+        "n": 53,
+        "option": "discusses",
+        "quarter": "2025Q3",
+        "share": 0.1509433962264151
+      },
+      {
+        "count": 6,
+        "date": "2025-08-15T00:00:00",
+        "n": 53,
+        "option": "asserts",
+        "quarter": "2025Q3",
+        "share": 0.11320754716981132
+      },
+      {
+        "count": 20,
+        "date": "2025-11-15T00:00:00",
+        "n": 71,
+        "option": "denies",
+        "quarter": "2025Q4",
+        "share": 0.28169014084507044
+      },
+      {
+        "count": 11,
+        "date": "2025-11-15T00:00:00",
+        "n": 71,
+        "option": "agnostic",
+        "quarter": "2025Q4",
+        "share": 0.15492957746478872
+      },
+      {
+        "count": 21,
+        "date": "2025-11-15T00:00:00",
+        "n": 71,
+        "option": "discusses",
+        "quarter": "2025Q4",
+        "share": 0.29577464788732394
+      },
+      {
+        "count": 19,
+        "date": "2025-11-15T00:00:00",
+        "n": 71,
+        "option": "asserts",
+        "quarter": "2025Q4",
+        "share": 0.2676056338028169
+      },
+      {
+        "count": 52,
+        "date": "2026-02-15T00:00:00",
+        "n": 128,
+        "option": "denies",
+        "quarter": "2026Q1",
+        "share": 0.40625
+      },
+      {
+        "count": 27,
+        "date": "2026-02-15T00:00:00",
+        "n": 128,
+        "option": "agnostic",
+        "quarter": "2026Q1",
+        "share": 0.2109375
+      },
+      {
+        "count": 32,
+        "date": "2026-02-15T00:00:00",
+        "n": 128,
+        "option": "discusses",
+        "quarter": "2026Q1",
+        "share": 0.25
+      },
+      {
+        "count": 17,
+        "date": "2026-02-15T00:00:00",
+        "n": 128,
+        "option": "asserts",
+        "quarter": "2026Q1",
+        "share": 0.1328125
+      },
+      {
+        "count": 106,
+        "date": "2026-05-15T00:00:00",
+        "n": 235,
+        "option": "denies",
+        "quarter": "2026Q2",
+        "share": 0.451063829787234
+      },
+      {
+        "count": 46,
+        "date": "2026-05-15T00:00:00",
+        "n": 235,
+        "option": "agnostic",
+        "quarter": "2026Q2",
+        "share": 0.19574468085106383
+      },
+      {
+        "count": 47,
+        "date": "2026-05-15T00:00:00",
+        "n": 235,
+        "option": "discusses",
+        "quarter": "2026Q2",
+        "share": 0.2
+      },
+      {
+        "count": 36,
+        "date": "2026-05-15T00:00:00",
+        "n": 235,
+        "option": "asserts",
+        "quarter": "2026Q2",
+        "share": 0.15319148936170213
+      },
+      {
+        "count": 93,
+        "date": "2026-08-15T00:00:00",
+        "n": 294,
+        "option": "denies",
+        "quarter": "2026Q3",
+        "share": 0.3163265306122449
+      },
+      {
+        "count": 77,
+        "date": "2026-08-15T00:00:00",
+        "n": 294,
+        "option": "agnostic",
+        "quarter": "2026Q3",
+        "share": 0.2619047619047619
+      },
+      {
+        "count": 77,
+        "date": "2026-08-15T00:00:00",
+        "n": 294,
+        "option": "discusses",
+        "quarter": "2026Q3",
+        "share": 0.2619047619047619
+      },
+      {
+        "count": 47,
+        "date": "2026-08-15T00:00:00",
+        "n": 294,
+        "option": "asserts",
+        "quarter": "2026Q3",
+        "share": 0.1598639455782313
+      }
+    ],
+    "data-977fb137ea5faadf3684974e18ab895c": [
+      {
+        "date": "2025-02-15T00:00:00",
+        "n": 38,
+        "quarter": "2025Q1"
+      },
+      {
+        "date": "2025-05-15T00:00:00",
+        "n": 68,
+        "quarter": "2025Q2"
+      },
+      {
+        "date": "2025-08-15T00:00:00",
+        "n": 53,
+        "quarter": "2025Q3"
+      },
+      {
+        "date": "2025-11-15T00:00:00",
+        "n": 71,
+        "quarter": "2025Q4"
+      },
+      {
+        "date": "2026-02-15T00:00:00",
+        "n": 128,
+        "quarter": "2026Q1"
+      },
+      {
+        "date": "2026-05-15T00:00:00",
+        "n": 235,
+        "quarter": "2026Q2"
+      },
+      {
+        "date": "2026-08-15T00:00:00",
+        "n": 294,
+        "quarter": "2026Q3"
+      }
+    ],
+    "data-e22bbad7a932882ae0e619cc5a430fc6": [
+      {
+        "date": "2025-04-24T00:00:00",
+        "note": "Anthropic announces a research programme on model welfare",
+        "short": "Anthropic model welfare programme"
+      },
+      {
+        "date": "2026-05-15T00:00:00",
+        "note": "Pope Leo XIV's encyclical on AI and human dignity",
+        "short": "Encyclical Magnifica Humanitas"
+      }
+    ]
+  },
+  "height": 230,
+  "layer": [
+    {
+      "data": {
+        "name": "data-3c0d2f760122048b67608267f7572481"
+      },
+      "encoding": {
+        "color": {
+          "field": "option",
+          "legend": {
+            "labelExpr": "{\"denies\": \"Denies\", \"agnostic\": \"Agnostic\", \"discusses\": \"Discusses, no position\", \"asserts\": \"Asserts\"}[datum.label]",
+            "title": "Current LLMs are conscious"
+          },
+          "scale": {
+            "domain": [
+              "denies",
+              "agnostic",
+              "discusses",
+              "asserts"
+            ],
+            "range": [
+              "#e34948",
+              "#898781",
+              "#c3c2b7",
+              "#2a78d6"
+            ]
+          },
+          "sort": [
+            "denies",
+            "agnostic",
+            "discusses",
+            "asserts"
+          ],
+          "type": "nominal"
+        },
+        "order": {
+          "field": "option",
+          "sort": "ascending",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "quarter",
+            "title": "Quarter",
+            "type": "nominal"
+          },
+          {
+            "field": "option",
+            "title": "Position",
+            "type": "nominal"
+          },
+          {
+            "field": "count",
+            "title": "Posts",
+            "type": "quantitative"
+          },
+          {
+            "field": "share",
+            "format": ".0%",
+            "title": "Share",
+            "type": "quantitative"
+          },
+          {
+            "field": "n",
+            "title": "Posts addressing",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "format": "%b %Y",
+            "grid": false,
+            "labelAngle": 0,
+            "labelPadding": 18
+          },
+          "field": "date",
+          "title": null,
+          "type": "temporal"
+        },
+        "y": {
+          "axis": {
+            "format": "%",
+            "grid": true
+          },
+          "field": "share",
+          "stack": "normalize",
+          "title": "Share of posts addressing the claim",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "interpolate": "monotone",
+        "opacity": 0.85,
+        "stroke": "#fcfcfb",
+        "strokeWidth": 1.5,
+        "type": "area"
+      }
+    },
+    {
+      "data": {
+        "name": "data-e22bbad7a932882ae0e619cc5a430fc6"
+      },
+      "encoding": {
+        "x": {
+          "field": "date",
+          "type": "temporal"
+        }
+      },
+      "mark": {
+        "color": "#0b0b0b",
+        "opacity": 0.5,
+        "strokeWidth": 1,
+        "type": "rule"
+      }
+    },
+    {
+      "data": {
+        "name": "data-e22bbad7a932882ae0e619cc5a430fc6"
+      },
+      "encoding": {
+        "text": {
+          "field": "short",
+          "type": "nominal"
+        },
+        "x": {
+          "field": "date",
+          "type": "temporal"
+        },
+        "y": {
+          "value": 6
+        }
+      },
+      "mark": {
+        "align": "left",
+        "baseline": "top",
+        "color": "#0b0b0b",
+        "dx": 5,
+        "fontSize": 10,
+        "type": "text"
+      }
+    },
+    {
+      "data": {
+        "name": "data-977fb137ea5faadf3684974e18ab895c"
+      },
+      "encoding": {
+        "text": {
+          "field": "n",
+          "format": ",d",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "date",
+          "type": "temporal"
+        },
+        "y": {
+          "value": 238
+        }
+      },
+      "mark": {
+        "baseline": "top",
+        "color": "#898781",
+        "fontSize": 10,
+        "type": "text"
+      }
+    }
+  ],
+  "title": {
+    "subtitle": [
+      "Quarterly composition, 2025Q1 to 2026Q3, among the 1,513 relevant posts found through web search or citation.",
+      "Substack's own search is recency-skewed and excluded; quarters with fewer than 15 posts are omitted. Grey figures: posts per quarter."
+    ],
+    "text": "Stance over time, on current LLM consciousness"
+  },
+  "width": 600
+}

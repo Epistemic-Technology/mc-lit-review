@@ -1,0 +1,312 @@
+# Codebook for coding Substack posts about machine cognition / consciousness.
+# Single source of truth: `mcreview codebook render` writes docs/codebook.md from this file, and
+# both engines (Jev, Claude) build their questions from it. Every code row records `version`.
+#
+# Design rules (see docs/jev.md §3): every Choice has an explicit abstain option; option names are
+# meaningful and fixed; each option has structured criteria (what / not_for / examples); one judgment
+# per question; direct positive phrasing; no double negatives.
+
+version: "0.1.0"
+# Publication constructs are versioned separately (see codebook.py): changing them re-codes publications only.
+# 0.1.1 (2026-10-06): human check of 29 publications found Jev assigning specialist labels (academic_philosophy,
+# rationalist_ea, religion_spirituality) to general essayists; rubrics required explicit professional or
+# community signals. That overshot: Jev then put 84% of publications in culture_general and the disagreements
+# reversed direction (human specialist, Jev general), agreement unchanged at 0.66.
+# 0.1.2 (2026-10-06): middle ground. A specialist label is earned either by identity signals (bio, role) OR by
+# the publication's recurring subject matter as shown in its post titles; culture_general is for publications
+# whose titles range across unrelated topics. Publications are coded by Claude as coder of record from here.
+# 0.1.3 (2026-10-07): rubric unchanged; the publication STATE was enriched (homepage metadata for 345
+# publications, byline-author bios, up to 30 archive titles per publication from the archive-meta crawl of
+# 276,651 posts). Claude's 0.1.2 pass had coded 405 of 1,606 publications "other" for lack of information.
+publication_version: "0.1.3"
+
+# The domain, quoted verbatim in every engine's instructions.
+domain: >
+  "Machine minds" means questions about whether AI systems, and large language models (LLMs) in
+  particular, have or could have consciousness, sentience, subjective experience, feelings, genuine
+  cognition or understanding, beliefs, agency, or moral status (moral worth, welfare, rights,
+  personhood). Discussions of AI capabilities, safety, alignment, policy, business, or products
+  that never raise these questions are not about machine minds.
+
+stance_options:
+  asserts:
+    what: "The author states, in their own voice, that the claim is true or very likely true."
+    not_for: "Reporting that someone else holds the view; hedged discussion without a conclusion."
+    examples: ["I think current models are, in some minimal sense, conscious."]
+  denies:
+    what: "The author states, in their own voice, that the claim is false or very likely false."
+    not_for: "Reporting that someone else rejects the view."
+    examples: ["LLMs are not conscious and nothing about them suggests they could be."]
+  agnostic:
+    what: "The author explicitly says they do not know, that it is uncertain, or that it cannot currently be determined, and treats that uncertainty as their position."
+    not_for: "Merely raising the question and moving on; asserting or denying with hedges like 'probably'."
+    examples: ["Honestly, nobody knows, and I include myself."]
+  discusses:
+    what: "The author raises or explores the claim without stating a view, or presents arguments on both sides without concluding."
+    not_for: "A stated conclusion of any kind; passing mentions of one sentence."
+    examples: ["There are serious people on both sides; here is what each says."]
+  reports_only:
+    what: "The post describes other people's or organisations' positions on the claim (a lab, a philosopher, a news story) and the author's own view is absent."
+    not_for: "Posts where the author endorses or rejects the reported view."
+    examples: ["Anthropic now says its models may have some form of experience."]
+  not_addressed:
+    what: "The claim does not come up in the post."
+    not_for: "Anything the post touches even briefly."
+    examples: []
+
+constructs:
+  # ------------------------------------------------------------------ A. relevance gate
+  - name: relevance
+    group: relevance
+    primitive: choice
+    instructions: "How much of this post is about machine minds, as defined?"
+    options:
+      central:
+        what: "Machine minds are the post's subject. Most of the text argues about, explains, or reports on AI consciousness, cognition, experience, or moral status."
+        not_for: "Posts that mention the topic in one section of an otherwise different piece."
+        examples: ["An essay titled 'Is Claude conscious?' that argues the question throughout."]
+      substantial:
+        what: "The post has at least one sustained section (several paragraphs) on machine minds, but the post as a whole is about something else."
+        not_for: "A single paragraph or a few sentences."
+        examples: ["A weekly AI roundup with a multi-paragraph item on Anthropic's model welfare research."]
+      passing:
+        what: "Machine minds are mentioned in a sentence or two, or as an aside, and then dropped."
+        not_for: "Any sustained discussion."
+        examples: ["'…and whether these things are conscious is another matter entirely.'"]
+      irrelevant:
+        what: "The post never raises whether AI systems have minds, experience, or moral status."
+        not_for: "Posts with even a passing mention."
+        examples: ["A post about GPU supply chains; a post about prompt engineering tips."]
+
+  - name: ai_not_minds
+    group: relevance
+    primitive: noul
+    instructions: "The post is about AI (models, labs, capabilities, safety, policy, products) but does not raise whether AI systems have minds, experience, or moral status."
+    criteria:
+      "true":
+        what: "AI is the topic; machine minds never come up."
+        examples: ["A post on AI regulation that never discusses consciousness or moral status."]
+      "false":
+        what: "Either the post is not about AI at all, or it does raise machine minds."
+        examples: []
+
+  # ------------------------------------------------------------------ C. genre and object
+  - name: genre
+    group: structure
+    primitive: choice
+    instructions: "What kind of writing is this post?"
+    options:
+      essay:
+        what: "An argumentative or reflective essay in the author's voice, making a case or working through a question."
+        not_for: "Lists of links; fiction; transcripts."
+        examples: []
+      roundup:
+        what: "A newsletter digest: a list of news items, links, or summaries, each briefly commented on."
+        not_for: "A single-topic essay that happens to link things."
+        examples: ["'This week in AI' with ten items."]
+      fiction:
+        what: "A story, poem, or imagined scenario presented as fiction."
+        not_for: "Thought experiments inside an essay."
+        examples: []
+      transcript:
+        what: "The post consists mainly of a conversation with an AI model, quoted at length, with framing."
+        not_for: "An essay that quotes a model in one or two places."
+        examples: ["'I asked Claude whether it was conscious. Here is the full exchange.'"]
+      interview_podcast:
+        what: "An interview, podcast episode, or video with show notes or transcript."
+        not_for: "Essays."
+        examples: []
+      other:
+        what: "None of the above (announcement, course material, personal update, etc.)."
+        not_for: ""
+        examples: []
+
+  - name: claim_object
+    group: structure
+    primitive: choice
+    instructions: "When the post discusses machine minds, what kind of system is it mainly about?"
+    options:
+      llms:
+        what: "Large language models or chatbots in general (LLMs, 'these models', 'chatbots')."
+        not_for: "A single named model or lab as the focus."
+        examples: []
+      ai_general:
+        what: "AI, machines, robots, or future AGI in general, without focusing on LLMs."
+        not_for: "Posts clearly about today's LLMs."
+        examples: ["'Could a machine ever be conscious?'"]
+      named_model:
+        what: "A specific named model or lab is the focus: Claude and Anthropic, ChatGPT and OpenAI, Gemini, LaMDA, Bing/Sydney, etc."
+        not_for: "Named models used only as examples."
+        examples: ["A post about Anthropic's model welfare programme and Claude."]
+      not_applicable:
+        what: "The post does not discuss machine minds."
+        not_for: ""
+        examples: []
+
+  - name: reports_lab_view
+    group: structure
+    primitive: noul
+    instructions: "A substantial part of the post describes an AI lab's, company's, or named researcher's position on machine minds (for example Anthropic's model welfare statements, or a philosopher's argument), as opposed to the author's own view."
+    criteria:
+      "true":
+        what: "Several sentences or more report a third party's position on machine minds."
+        examples: ["A summary of what Anthropic's constitution says about Claude's possible experience."]
+      "false":
+        what: "The post argues in its own voice, or only mentions others in passing."
+        examples: []
+
+  # ------------------------------------------------------------------ B. stance items
+  # All use stance_options. `claim` is the proposition the author is coded on.
+  - name: current_conscious
+    group: stance
+    primitive: choice
+    claim: "Current LLM-based systems are conscious or have subjective experience (to some degree)."
+  - name: potential_conscious
+    group: stance
+    primitive: choice
+    claim: "LLM-based or other AI systems could in principle be conscious or have subjective experience."
+  - name: current_cognition
+    group: stance
+    primitive: choice
+    claim: "Current LLM-based systems genuinely think, reason, or exhibit cognition (not merely simulate it)."
+  - name: potential_cognition
+    group: stance
+    primitive: choice
+    claim: "AI systems could in principle genuinely think, reason, or exhibit cognition."
+  - name: understanding
+    group: stance
+    primitive: choice
+    claim: "Current LLM-based systems genuinely understand language or the world."
+  - name: beliefs_knowledge
+    group: stance
+    primitive: choice
+    claim: "Current LLM-based systems have beliefs or knowledge in a genuine sense."
+  - name: emotions
+    group: stance
+    primitive: choice
+    claim: "Current LLM-based systems have emotions, feelings, or can suffer."
+  - name: agency
+    group: stance
+    primitive: choice
+    claim: "Current LLM-based systems have genuine goals, preferences, or agency of their own."
+  - name: moral_worth_current
+    group: stance
+    primitive: choice
+    claim: "Current LLM-based systems have moral worth: their interests or welfare matter morally, or they are moral patients."
+  - name: moral_worth_potential
+    group: stance
+    primitive: choice
+    claim: "Future AI systems could have moral worth, and this deserves preparation now."
+  - name: advance_needed
+    group: stance
+    primitive: choice
+    claim: "Current architectures (transformers, LLMs) are in principle insufficient for consciousness or genuine cognition; a major technological advance would be needed first."
+  - name: cannot_know
+    group: stance
+    primitive: choice
+    claim: "We cannot know, or cannot currently determine, whether AI systems are conscious (the other-minds problem applies)."
+  - name: precaution
+    group: stance
+    primitive: choice
+    claim: "Regardless of whether AI systems are conscious, we should act with precaution as if they might be (for example, take model welfare measures)."
+  - name: deflationary
+    group: stance
+    primitive: choice
+    claim: "Talk of AI consciousness is hype, marketing, anthropomorphism, or manipulation rather than a serious question."
+
+  # ------------------------------------------------------------------ E. arguments (present / absent)
+  - name: arg_chinese_room
+    group: argument
+    primitive: noul
+    instructions: "The post uses the Chinese room argument or the syntax-versus-semantics distinction (symbol manipulation is not understanding)."
+  - name: arg_stochastic_parrot
+    group: argument
+    primitive: noul
+    instructions: "The post argues that LLMs are 'just' next-token predictors, stochastic parrots, autocomplete, statistics, or math, and that this rules out or deflates minds."
+  - name: arg_hard_problem
+    group: argument
+    primitive: noul
+    instructions: "The post invokes the hard problem of consciousness or the explanatory gap (why physical or computational processes would be accompanied by experience)."
+  - name: arg_other_minds
+    group: argument
+    primitive: noul
+    instructions: "The post discusses the problem of other minds or the limits of behavioural evidence: we infer minds from behaviour and cannot verify experience directly."
+  - name: arg_self_report
+    group: argument
+    primitive: noul
+    instructions: "The post argues that a model's self-reports about its experience are unreliable because of training (trained to claim or to deny consciousness)."
+  - name: arg_functionalism
+    group: argument
+    primitive: noul
+    instructions: "The post appeals to functionalism, substrate independence, or the computational theory of mind (what matters is the functional organisation, not the material)."
+  - name: arg_biological
+    group: argument
+    primitive: noul
+    instructions: "The post argues that biology, embodiment, metabolism, or evolution is necessary for consciousness (biological naturalism, enactivism, embodiment)."
+  - name: arg_theory_indicators
+    group: argument
+    primitive: noul
+    instructions: "The post applies a scientific theory of consciousness to AI: global workspace, higher-order theories, attention schema, predictive processing, integrated information theory, or indicator-based assessments (for example the Butlin et al. report)."
+  - name: arg_emergence
+    group: argument
+    primitive: noul
+    instructions: "The post argues that minds or consciousness may emerge from scale, complexity, or training (emergent properties)."
+  - name: arg_anthropomorphism
+    group: argument
+    primitive: noul
+    instructions: "The post warns that people project minds onto AI (anthropomorphism, the ELIZA effect) and that this explains belief in AI consciousness."
+  - name: arg_precaution_moral_circle
+    group: argument
+    primitive: noul
+    instructions: "The post argues from moral uncertainty or precaution: the moral circle has expanded before, and the cost of wrongly denying moral status is high."
+  - name: arg_mimicry
+    group: argument
+    primitive: noul
+    instructions: "The post argues that models imitate or perform consciousness because their training data is full of human descriptions of experience."
+  - name: arg_panpsychism_illusionism
+    group: argument
+    primitive: noul
+    instructions: "The post invokes panpsychism (consciousness is fundamental or ubiquitous) or illusionism (consciousness as normally conceived is an illusion) in relation to AI."
+
+# Publication-level construct, coded separately with different state (name, tagline, bio, titles).
+publication_constructs:
+  - name: community
+    primitive: choice
+    instructions: "What kind of publication is this, judging from its name, tagline, author bio, and post titles? A specialist label is earned in either of two ways: the author shows an identity signal (an academic post, a lab or company role, membership in a named community, a religious vocation), or the post titles show that the publication's recurring subject is that domain (most titles are philosophy, or AI industry news, or theology). Use culture_general when the titles range across unrelated topics and no identity signal points to a specialist label."
+    options:
+      ai_industry:
+        what: "AI industry, practitioner, or product commentary by people working in or on AI: labs, startups, engineering, investing, tooling, model news."
+        not_for: "Academic research writing; general commentators who write about AI among other things (use culture_general)."
+        examples: ["A VC's weekly AI newsletter; an ML engineer's blog."]
+      academic_philosophy:
+        what: "Philosophy as the publication's subject: the author has academic philosophy signals (university post, philosophy PhD, philosophy publications), or most post titles are philosophical arguments and analyses."
+        not_for: "Essayists whose philosophical posts sit among unrelated topics (use culture_general)."
+        examples: ["A philosophy professor's Substack; a newsletter whose titles are mostly about consciousness, free will, and ethics."]
+      academic_science:
+        what: "Neuroscience, cognitive science, psychology, or other science written by or for researchers, with signals of a research role."
+        not_for: "Science journalism or science-flavoured essays for a general audience (use culture_general or journalism_politics)."
+        examples: []
+      rationalist_ea:
+        what: "Writing from within the rationalist, effective altruism, AI safety, or longtermist communities: names those communities or their venues, or the author works in AI alignment."
+        not_for: "General writers who discuss AI risk without those community signals (use culture_general); mainstream AI industry newsletters."
+        examples: ["A LessWrong-adjacent blog; an AI alignment researcher's newsletter."]
+      religion_spirituality:
+        what: "A religious, theological, or spiritual frame is the publication's identity: clergy, theology, a named tradition, or explicitly spiritual practice as the recurring subject."
+        not_for: "General essays that touch on meaning or spirituality among other topics (use culture_general)."
+        examples: []
+      culture_general:
+        what: "Culture, literature, essays, personal writing, or general commentary for a broad audience: the post titles range across unrelated topics and no identity signal points to a specialist label."
+        not_for: "Publications whose titles show one recurring specialist subject, or whose author has a specialist identity signal."
+        examples: ["A writer's essay newsletter that ranges over AI, books, politics, and family life."]
+      journalism_politics:
+        what: "News, journalism, politics, or policy as the main frame."
+        not_for: ""
+        examples: []
+      business_finance:
+        what: "Business, finance, markets, or management, with AI as one topic among others."
+        not_for: "AI-specialist newsletters (use ai_industry)."
+        examples: []
+      other:
+        what: "None of the above, or too little information to tell."
+        not_for: ""
+        examples: []

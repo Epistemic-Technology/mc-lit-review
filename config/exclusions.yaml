@@ -1,0 +1,9 @@
+# Publications removed from the analysis subset. Each entry needs a reason so the exclusion is auditable.
+# Seeded from the reference table: publications whose corpus posts are overwhelmingly self-links or
+# aggregator output. Hosts are the publication hosts as stored in `publications.host`, not the domains
+# they link to. Add to this list from evidence (report output), not from taste.
+hosts:
+  - host: bryantmcgill.substack.com
+    reason: "14 corpus posts carrying 2,364 links to the author's own bryantmcgill.com; aggregator-style output"
+  - host: itnews.substack.com
+    reason: "59 corpus posts; automated IT news aggregator linking it-news-and-events.info"

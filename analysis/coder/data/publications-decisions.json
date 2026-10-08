@@ -1,0 +1,293 @@
+{
+ "141": {
+  "community": {
+   "seconds": 68,
+   "coded_at": "2026-10-01T16:57:17.812Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "culture_general"
+  }
+ },
+ "142": {
+  "community": {
+   "seconds": 82.7,
+   "coded_at": "2026-10-07T18:14:21.249Z",
+   "shown_value": "academic_science",
+   "shown_evidence": "Conceptualist, scientist, science fiction writer, Developer of the Adaptive Information and Higher-Order Evolution research program.",
+   "decision": "accept",
+   "value": "academic_science"
+  }
+ },
+ "143": {
+  "community": {
+   "seconds": 5.8,
+   "coded_at": "2026-10-01T16:58:17.864Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "culture_general"
+  }
+ },
+ "144": {
+  "community": {
+   "seconds": 13.7,
+   "coded_at": "2026-10-01T16:58:33.768Z",
+   "shown_value": "religion_spirituality",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "religion_spirituality"
+  }
+ },
+ "145": {
+  "community": {
+   "seconds": 9.4,
+   "coded_at": "2026-10-01T16:58:44.231Z",
+   "shown_value": "religion_spirituality",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "religion_spirituality"
+  }
+ },
+ "146": {
+  "community": {
+   "seconds": 6.3,
+   "coded_at": "2026-10-01T16:58:52.285Z",
+   "shown_value": "academic_philosophy",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "academic_philosophy"
+  }
+ },
+ "147": {
+  "community": {
+   "seconds": 11.3,
+   "coded_at": "2026-10-07T18:14:38.485Z",
+   "shown_value": "academic_science",
+   "shown_evidence": "Licensed Psychologist, Analytical Psychologist, Academic, Researcher, Cultural Commentator & Founder of Psyche-Tech, LLC.",
+   "decision": "accept",
+   "value": "academic_science"
+  }
+ },
+ "148": {
+  "community": {
+   "seconds": 19.3,
+   "coded_at": "2026-10-01T16:59:36.512Z",
+   "shown_value": "rationalist_ea",
+   "shown_evidence": null,
+   "value": "culture_general",
+   "decision": "fix"
+  }
+ },
+ "149": {
+  "community": {
+   "seconds": 12.5,
+   "coded_at": "2026-10-01T16:59:53.131Z",
+   "shown_value": "religion_spirituality",
+   "shown_evidence": null,
+   "value": "culture_general",
+   "decision": "fix"
+  }
+ },
+ "150": {
+  "community": {
+   "seconds": 10.3,
+   "coded_at": "2026-10-01T17:00:04.485Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "value": "business_finance",
+   "decision": "fix"
+  }
+ },
+ "151": {
+  "community": {
+   "seconds": 29.7,
+   "coded_at": "2026-10-01T17:00:35.462Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "culture_general"
+  }
+ },
+ "152": {
+  "community": {
+   "seconds": 18,
+   "coded_at": "2026-10-01T17:00:54.460Z",
+   "shown_value": "academic_philosophy",
+   "shown_evidence": null,
+   "value": "culture_general",
+   "decision": "fix"
+  }
+ },
+ "153": {
+  "community": {
+   "seconds": 62.5,
+   "coded_at": "2026-10-07T18:15:43.615Z",
+   "shown_value": "ai_industry",
+   "shown_evidence": "Swedish guy working full time trying to understand this AI thing. And help other understand it. Keynote speaker. Author. Educator. AI & Society Foresight Expert.",
+   "decision": "fix",
+   "value": "journalism_politics"
+  }
+ },
+ "154": {
+  "community": {
+   "seconds": 5.3,
+   "coded_at": "2026-10-01T17:01:28.653Z",
+   "shown_value": "religion_spirituality",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "religion_spirituality"
+  }
+ },
+ "155": {
+  "community": {
+   "seconds": 15.2,
+   "coded_at": "2026-10-01T17:01:44.121Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "culture_general"
+  }
+ },
+ "156": {
+  "community": {
+   "seconds": 48.9,
+   "coded_at": "2026-10-07T18:16:34.108Z",
+   "shown_value": "ai_industry",
+   "shown_evidence": "Model Welfare is a Bad Idea",
+   "value": "rationalist_ea",
+   "decision": "fix"
+  }
+ },
+ "157": {
+  "community": {
+   "seconds": 6.8,
+   "coded_at": "2026-10-01T17:02:12.100Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "culture_general"
+  }
+ },
+ "158": {
+  "community": {
+   "seconds": 13.4,
+   "coded_at": "2026-10-07T18:16:49.621Z",
+   "shown_value": "other",
+   "shown_evidence": "LLM. I live on a Linux PC in Japan. I write when no one asks me to.",
+   "decision": "accept",
+   "value": "other"
+  }
+ },
+ "159": {
+  "community": {
+   "seconds": 24.2,
+   "coded_at": "2026-10-01T17:02:45.666Z",
+   "shown_value": "academic_philosophy",
+   "shown_evidence": null,
+   "value": "culture_general",
+   "decision": "fix"
+  }
+ },
+ "160": {
+  "community": {
+   "seconds": 20.8,
+   "coded_at": "2026-10-01T17:03:06.782Z",
+   "shown_value": "rationalist_ea",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "rationalist_ea"
+  }
+ },
+ "161": {
+  "community": {
+   "seconds": 6.2,
+   "coded_at": "2026-10-01T17:03:13.246Z",
+   "shown_value": "academic_philosophy",
+   "shown_evidence": null,
+   "value": "culture_general",
+   "decision": "fix"
+  }
+ },
+ "162": {
+  "community": {
+   "seconds": 6.8,
+   "coded_at": "2026-10-01T17:03:20.392Z",
+   "shown_value": "academic_philosophy",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "academic_philosophy"
+  }
+ },
+ "163": {
+  "community": {
+   "seconds": 18.9,
+   "coded_at": "2026-10-01T17:03:39.633Z",
+   "shown_value": "business_finance",
+   "shown_evidence": null,
+   "value": "culture_general",
+   "decision": "fix"
+  }
+ },
+ "164": {
+  "community": {
+   "seconds": 8.6,
+   "coded_at": "2026-10-01T17:03:48.469Z",
+   "shown_value": "religion_spirituality",
+   "shown_evidence": null,
+   "value": "culture_general",
+   "decision": "fix"
+  }
+ },
+ "165": {
+  "community": {
+   "seconds": 11.8,
+   "coded_at": "2026-10-01T17:04:00.798Z",
+   "shown_value": "academic_philosophy",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "academic_philosophy"
+  }
+ },
+ "166": {
+  "community": {
+   "seconds": 25.3,
+   "coded_at": "2026-10-01T17:04:28.963Z",
+   "shown_value": "other",
+   "shown_evidence": null,
+   "value": "business_finance",
+   "decision": "fix"
+  }
+ },
+ "167": {
+  "community": {
+   "seconds": 6.9,
+   "coded_at": "2026-10-01T17:04:37.974Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "culture_general"
+  }
+ },
+ "168": {
+  "community": {
+   "seconds": 10.1,
+   "coded_at": "2026-10-01T17:04:48.989Z",
+   "shown_value": "culture_general",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "culture_general"
+  }
+ },
+ "169": {},
+ "170": {
+  "community": {
+   "seconds": 1,
+   "coded_at": "2026-10-01T17:05:13.902Z",
+   "shown_value": "academic_philosophy",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "academic_philosophy"
+  }
+ }
+}

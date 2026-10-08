@@ -1,0 +1,364 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "data": {
+    "name": "data-41a1de2637d31cecc0f8a644fccb1970"
+  },
+  "datasets": {
+    "data-41a1de2637d31cecc0f8a644fccb1970": [
+      {
+        "posts": 81,
+        "pubs": 63,
+        "tier": "academic",
+        "work": "Consciousness in Artificial Intelligence: Insights from the Science of…"
+      },
+      {
+        "posts": 70,
+        "pubs": 51,
+        "tier": "academic",
+        "work": "Taking AI Welfare Seriously"
+      },
+      {
+        "posts": 34,
+        "pubs": 34,
+        "tier": "lab",
+        "work": "Brief independent investigation of agents’ behavior, reasoning and col…"
+      },
+      {
+        "posts": 33,
+        "pubs": 32,
+        "tier": "academic",
+        "work": "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It"
+      },
+      {
+        "posts": 32,
+        "pubs": 31,
+        "tier": "substack",
+        "work": "The Rise and Fall of Agent Civilizations"
+      },
+      {
+        "posts": 34,
+        "pubs": 29,
+        "tier": "lab",
+        "work": "Verbalizable Representations Form a Global Workspace in Language Model…"
+      },
+      {
+        "posts": 34,
+        "pubs": 26,
+        "tier": "other",
+        "work": "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …"
+      },
+      {
+        "posts": 26,
+        "pubs": 25,
+        "tier": "other",
+        "work": "A warning about ‘model welfare"
+      },
+      {
+        "posts": 25,
+        "pubs": 24,
+        "tier": "other",
+        "work": "Dario Amodei — We Must Pace the Frontier"
+      },
+      {
+        "posts": 28,
+        "pubs": 21,
+        "tier": "academic",
+        "work": "Large Language Models Report Subjective Experience Under Self-Referent…"
+      },
+      {
+        "posts": 22,
+        "pubs": 21,
+        "tier": "press",
+        "work": "The Mythology Of Conscious AI"
+      },
+      {
+        "posts": 26,
+        "pubs": 20,
+        "tier": "other",
+        "work": "We must build AI for people; not to be a person."
+      },
+      {
+        "posts": 20,
+        "pubs": 19,
+        "tier": "academic",
+        "work": "The Chinese Room Argument"
+      },
+      {
+        "posts": 25,
+        "pubs": 18,
+        "tier": "lab",
+        "work": "Emotion Concepts and their Function in a Large Language Model"
+      },
+      {
+        "posts": 22,
+        "pubs": 18,
+        "tier": "other",
+        "work": "Humanist AI Code of Conduct"
+      },
+      {
+        "posts": 17,
+        "pubs": 17,
+        "tier": "other",
+        "work": "Hard problem of consciousness"
+      },
+      {
+        "posts": 24,
+        "pubs": 16,
+        "tier": "lab",
+        "work": "Emergent Introspective Awareness in Large Language Models"
+      },
+      {
+        "posts": 18,
+        "pubs": 15,
+        "tier": "other",
+        "work": "Chinese room"
+      },
+      {
+        "posts": 14,
+        "pubs": 14,
+        "tier": "lab",
+        "work": "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the…"
+      },
+      {
+        "posts": 14,
+        "pubs": 13,
+        "tier": "academic",
+        "work": "Inducing language models to assert their own consciousness restores hu…"
+      }
+    ]
+  },
+  "height": 400,
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "field": "tier",
+          "legend": {
+            "labelExpr": "{\"academic\": \"Academic\", \"lab\": \"AI lab\", \"substack\": \"Substack\", \"press\": \"Press\", \"other\": \"Other web\"}[datum.label]",
+            "title": "Source"
+          },
+          "scale": {
+            "domain": [
+              "academic",
+              "lab",
+              "substack",
+              "press",
+              "other"
+            ],
+            "range": [
+              "#1baf7a",
+              "#eb6834",
+              "#2a78d6",
+              "#eda100",
+              "#898781"
+            ]
+          },
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "work",
+            "title": "Work",
+            "type": "nominal"
+          },
+          {
+            "field": "tier",
+            "title": "Source",
+            "type": "nominal"
+          },
+          {
+            "field": "pubs",
+            "title": "Citing publications",
+            "type": "quantitative"
+          },
+          {
+            "field": "posts",
+            "title": "Citing posts",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "grid": true
+          },
+          "field": "pubs",
+          "title": "Publications citing the work",
+          "type": "quantitative"
+        },
+        "y": {
+          "axis": {
+            "labelLimit": 330
+          },
+          "field": "work",
+          "sort": [
+            "Consciousness in Artificial Intelligence: Insights from the Science of…",
+            "Taking AI Welfare Seriously",
+            "Brief independent investigation of agents’ behavior, reasoning and col…",
+            "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It",
+            "The Rise and Fall of Agent Civilizations",
+            "Verbalizable Representations Form a Global Workspace in Language Model…",
+            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
+            "A warning about ‘model welfare",
+            "Dario Amodei — We Must Pace the Frontier",
+            "Large Language Models Report Subjective Experience Under Self-Referent…",
+            "The Mythology Of Conscious AI",
+            "We must build AI for people; not to be a person.",
+            "The Chinese Room Argument",
+            "Emotion Concepts and their Function in a Large Language Model",
+            "Humanist AI Code of Conduct",
+            "Hard problem of consciousness",
+            "Emergent Introspective Awareness in Large Language Models",
+            "Chinese room",
+            "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the…",
+            "Inducing language models to assert their own consciousness restores hu…"
+          ],
+          "title": null,
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "height": 16,
+        "type": "bar"
+      }
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "pubs",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "pubs",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "work",
+          "sort": [
+            "Consciousness in Artificial Intelligence: Insights from the Science of…",
+            "Taking AI Welfare Seriously",
+            "Brief independent investigation of agents’ behavior, reasoning and col…",
+            "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It",
+            "The Rise and Fall of Agent Civilizations",
+            "Verbalizable Representations Form a Global Workspace in Language Model…",
+            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
+            "A warning about ‘model welfare",
+            "Dario Amodei — We Must Pace the Frontier",
+            "Large Language Models Report Subjective Experience Under Self-Referent…",
+            "The Mythology Of Conscious AI",
+            "We must build AI for people; not to be a person.",
+            "The Chinese Room Argument",
+            "Emotion Concepts and their Function in a Large Language Model",
+            "Humanist AI Code of Conduct",
+            "Hard problem of consciousness",
+            "Emergent Introspective Awareness in Large Language Models",
+            "Chinese room",
+            "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the…",
+            "Inducing language models to assert their own consciousness restores hu…"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "left",
+        "color": "#52514e",
+        "dx": 5,
+        "fontSize": 11,
+        "type": "text"
+      }
+    }
+  ],
+  "title": {
+    "subtitle": "Most-cited works across relevant posts, by distinct citing publications. Social media and image links excluded.",
+    "text": "What the discourse cites"
+  },
+  "width": 440
+}

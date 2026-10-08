@@ -1,0 +1,199 @@
+# Source tiers for cited works (docs/plan.md stage 4). Tier is decided by reference kind first
+# (arxiv/doi -> academic, book -> book, wikipedia -> encyclopedia, substack_post/homepage -> substack),
+# then by registered domain below, then by suffix rules, else "web".
+# Domains in `ignore` are dropped from source analyses (images, link shorteners, platform chrome).
+
+tiers:
+  academic:
+    - nature.com
+    - science.org
+    - sciencedirect.com
+    - springer.com
+    - link.springer.com
+    - wiley.com
+    - onlinelibrary.wiley.com
+    - cell.com
+    - pnas.org
+    - plos.org
+    - frontiersin.org
+    - academia.edu
+    - researchgate.net
+    - ssrn.com
+    - philpapers.org
+    - philarchive.org
+    - jstor.org
+    - nih.gov
+    - biorxiv.org
+    - psyarxiv.com
+    - osf.io
+    - semanticscholar.org
+    - dl.acm.org
+    - acm.org
+    - ieee.org
+    - ieeexplore.ieee.org
+    - aclanthology.org
+    - openreview.net
+    - proceedings.mlr.press
+    - oup.com
+    - academic.oup.com
+    - cambridge.org
+    - tandfonline.com
+    - sagepub.com
+    - journals.sagepub.com
+    - mdpi.com
+    - scholar.google.com
+  lab:
+    - anthropic.com
+    - openai.com
+    - deepmind.google
+    - deepmind.com
+    - ai.meta.com
+    - ai.google
+    - blog.google
+    - x.ai
+    - mistral.ai
+    - microsoft.com
+    - huggingface.co
+    - cohere.com
+    - nvidia.com
+    - research.google
+    - ai-2027.com
+    - metr.org
+    - eleosai.org
+    - alignment.anthropic.com
+    - transformer-circuits.pub
+  press:
+    - nytimes.com
+    - theguardian.com
+    - wsj.com
+    - reuters.com
+    - apnews.com
+    - bbc.co.uk
+    - bbc.com
+    - ft.com
+    - theatlantic.com
+    - newyorker.com
+    - wired.com
+    - techcrunch.com
+    - theverge.com
+    - vox.com
+    - bloomberg.com
+    - economist.com
+    - washingtonpost.com
+    - forbes.com
+    - cnn.com
+    - nbcnews.com
+    - cbsnews.com
+    - time.com
+    - newscientist.com
+    - scientificamerican.com
+    - quantamagazine.org
+    - nautil.us
+    - aeon.co
+    - noemamag.com
+    - thenewatlantis.com
+    - theconversation.com
+    - axios.com
+    - politico.com
+    - businessinsider.com
+    - fortune.com
+    - cnbc.com
+    - npr.org
+    - arstechnica.com
+    - technologyreview.com
+    - 404media.co
+    - theinformation.com
+    - semafor.com
+    - thetimes.com
+    - telegraph.co.uk
+    - spectator.co.uk
+    - unherd.com
+    - nymag.com
+    - slate.com
+    - salon.com
+    - thebulwark.com
+    - tabletmag.com
+    - firstthings.com
+  encyclopedia:
+    - plato.stanford.edu
+    - iep.utm.edu
+    - britannica.com
+    - wikipedia.org
+  forum:
+    - lesswrong.com
+    - alignmentforum.org
+    - forum.effectivealtruism.org
+    - reddit.com
+    - news.ycombinator.com
+    - greaterwrong.com
+    - astralcodexten.com      # Substack-hosted but reached as a custom domain; counted as substack by kind when linked as a post
+  social:
+    - x.com
+    - twitter.com
+    - youtube.com
+    - youtu.be
+    - linkedin.com
+    - facebook.com
+    - instagram.com
+    - tiktok.com
+    - bsky.app
+    - threads.net
+    - mastodon.social
+    - t.me
+    - discord.com
+    - discord.gg
+  book:
+    - amazon.com
+    - amazon.co.uk
+    - bookshop.org
+    - goodreads.com
+    - audible.com
+    - penguinrandomhouse.com
+    - press.princeton.edu
+    - mitpress.mit.edu
+    - global.oup.com
+    - hup.harvard.edu
+  podcast:
+    - podcasts.apple.com
+    - open.spotify.com
+    - spotify.com
+    - podbean.com
+    - buzzsprout.com
+    - transistor.fm
+
+suffix_rules:            # applied after the explicit list; first match wins
+  - {suffix: ".edu", tier: academic}
+  - {suffix: ".ac.uk", tier: academic}
+  - {suffix: ".gov", tier: government}
+  - {suffix: ".gov.uk", tier: government}
+  - {suffix: ".europa.eu", tier: government}
+
+ignore:
+  - unsplash.com
+  - substackcdn.com
+  - imgur.com
+  - giphy.com
+  - pexels.com
+  - bit.ly
+  - tinyurl.com
+  - google.com           # generic search/docs/drive links; Google products are not citable works
+  - docs.google.com
+  - drive.google.com
+  - apple.com
+  - archive.ph           # a mirror of something else; the mirrored source is unknown
+  - web.archive.org
+  - patreon.com
+  - buymeacoffee.com
+  - ko-fi.com
+  - paypal.com
+  - stripe.com
+  - eventbrite.com
+  - lu.ma
+  - meetup.com
+  - zoom.us
+  - calendly.com
+  - forms.gle
+  - typeform.com
+  - mailchi.mp
+  - substack.com         # platform pages (subscribe, notes); posts are handled by kind
+  - open.substack.com

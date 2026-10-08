@@ -1,0 +1,123 @@
+# Pipeline settings. Everything here is part of the replicable configuration;
+# the sha256 of this file plus validation.yaml and queries.yaml is recorded in every run.
+
+# Only posts dated on/after this are kept with bodies and used as citation sources.
+cutoff_date: "2024-01-01"
+
+paths:
+  db: data/corpus.sqlite
+  raw: data/raw
+  runs: runs
+
+credentials:
+  # Same file the writing-workflow publish script uses. Keys read: COOKIES_STRING, BRAVE_API_KEY.
+  # Environment variables of the same names override the file. Never committed.
+  env_file: ~/.config/substack-publish/.env
+
+http:
+  user_agent: "mc-lit-review/0.1 (academic bibliometric research; python requests)"
+  timeout_seconds: 30
+  default_host_interval: 1.0     # min seconds between requests to the same host
+  global_interval: 0.8           # min seconds between any two requests. Substack hosts share one backend: at 0.25 s a third of body fetches drew 429s (2026-09-27).
+  host_intervals:
+    substack.com: 2.5
+    api.search.brave.com: 1.1
+    export.arxiv.org: 3.0
+    doi.org: 1.0
+  max_retries: 5
+
+# ---------------------------------------------------------------- Phase 1: lexical search
+phase1:
+  brave:
+    enabled: true
+    pages_per_query: 5           # 20 results/page; Brave allows offsets 0-9
+    variants: [site_quoted, open_quoted]      # site_plain (unquoted) dropped 2026-09-27: overlaps site_quoted
+    unfiltered_facets: [core, moral_status]   # only these facets get the unfiltered (open_*) variants
+  substack_search:
+    enabled: true
+    max_pages_per_query: 10      # relevance-ranked and recency-skewed; deep pages add little
+  publication_search:
+    enabled: true                # needs COOKIES_STRING; skipped with a logged warning otherwise.
+    max_pages_per_query: 5       # records publications as metadata only (context, not inclusion)
+
+# ---------------------------------------------------------------- Phase 2: citation search
+citation:
+  max_rounds: 3
+  # A reference becomes a coupling target once at least this many distinct corpus posts cite it...
+  min_citing_posts: 2
+  # ...from at least this many distinct publications (so one author's self-links are not coupling evidence).
+  min_citing_publications: 2
+  # Substack posts cited by corpus posts are fetched directly (backward citation chasing)
+  # once cited by at least this many posts.
+  backward_min_citing_posts: 1
+  max_backward_per_round: 5000
+  max_targets_per_round: 1500    # coupling references searched per round (highest citing count first)
+  brave_pages_per_query: 3
+  # Reference kinds that can be coupling targets. 'web' requires a fetched page title.
+  target_kinds: [arxiv, doi, substack_post, web, wikipedia, book]
+  # Never treated as coupling targets (too generic or unsearchable). Matched on registered domain.
+  blocked_domains:
+    - twitter.com
+    - x.com
+    - youtube.com
+    - youtu.be
+    - facebook.com
+    - instagram.com
+    - linkedin.com
+    - reddit.com
+    - tiktok.com
+    - google.com
+    - apple.com
+    - spotify.com
+    - amazon.com          # book links are kept via ASIN, see refs.py; raw amazon pages are not targets
+    - substackcdn.com
+    - substack.com        # platform pages (homepages, subscribe links); posts are handled as substack_post
+    - patreon.com
+    - buymeacoffee.com
+    - github.com
+    - chatgpt.com
+    - openai.com
+    - anthropic.com
+    - claude.ai
+    - stripe.com
+    - eventbrite.com
+    - lu.ma
+    - meetup.com
+    - zoom.us
+    - calendly.com
+    - forms.gle
+    - typeform.com
+    - discord.com
+    - discord.gg
+    - t.me
+    - whatsapp.com
+    - mailchi.mp
+    - bit.ly
+    - tinyurl.com
+  # Titles matching any of these (case-insensitive regex) mark a reference ineligible: login walls,
+  # bot challenges, storefronts, calendars and other pages that are not a citable work.
+  blocked_title_patterns:
+    - "^(home|homepage|events?|calendar|login|log in|sign ?in|sign ?up|subscribe|checkout|cart|about|contact|search|index)\\b"
+    - "just a moment|are you a robot|access denied|page not found|404|403|attention required|please wait|enable javascript|verify you are human"
+    - "stripe checkout|events calendar|event calendar|tickets"
+  # Fetch titles for over-threshold references without one (web pages, DOIs, arXiv). One request each,
+  # most-cited first, single attempt with a short timeout (arbitrary hosts hang), capped per round.
+  fetch_titles: true
+  max_title_fetches_per_round: 1500
+  title_fetch_timeout_seconds: 10
+  # Source gating (drift control). Every admitted post stays in the corpus, but a post contributes
+  # references to later rounds only if it shows relevance evidence: it came from phase 1, it entered by
+  # >= 2 distinct routes, or its title/body contains at least one query term.
+  source_gating: true
+
+# Optional context stage: archive metadata (no bodies) for publications with at least this many
+# corpus posts, so per-author output shares can be computed. Not part of inclusion.
+archive_meta:
+  min_corpus_posts: 3
+
+# Brave responses are cached by exact request URL in the raw store; repeated runs, --refresh of other
+# stages, and re-analysis never re-spend queries. Set false to bypass.
+brave_cache: true
+
+bodies:
+  workers: 4                     # concurrent fetches; per-host and global intervals still enforced

@@ -1,0 +1,104 @@
+# Query bank. Each term is tagged with a facet so we can report which facets recruited which posts.
+# Terms are also used, case-insensitively, as the loose keyword screen for publications.
+# Variants generated per term (see settings.phase1.brave.variants):
+#   site_quoted:  site:substack.com "<term>"
+#   site_plain:   site:substack.com <term>          (multi-word terms only)
+#   open_quoted:  "<term>" substack                  (reaches custom-domain publications)
+# Substack's own search gets the bare term.
+facets:
+  core:
+    - machine consciousness
+    - artificial consciousness
+    - AI consciousness
+    - conscious AI
+    - conscious machines
+    - machine sentience
+    - AI sentience
+    - sentient AI
+    - digital minds
+    - digital sentience
+    - digital consciousness
+    - robot consciousness
+    - LLM consciousness
+    - is ChatGPT conscious
+    - is Claude conscious
+    - do LLMs understand
+    - does AI understand
+    - AI feelings
+    - AI emotions
+    - AI inner life
+    - AI experience
+    - AI qualia
+    - AI phenomenology
+    - AI self-awareness
+    - machine self-awareness
+    - AI subjective experience
+    - conscious language model
+  moral_status:
+    - AI welfare
+    - model welfare
+    - AI moral status
+    - AI moral patienthood
+    - moral patient AI
+    - AI rights
+    - robot rights
+    - AI personhood
+    - AI suffering
+    - digital suffering
+    - sentientism
+    - AI moral circle
+  cognition:
+    - machine cognition
+    - artificial cognition
+    - AI cognition
+    - LLM cognition
+    - machine psychology
+    - AI psychology
+    - theory of mind LLM
+    - LLM reasoning
+    - LLM understanding
+    - machine understanding
+    - stochastic parrots
+    - Chinese room
+    - Turing test
+    - AGI consciousness
+    - superintelligence consciousness
+    - mind uploading
+    - whole brain emulation
+    - substrate independence
+    - computational theory of mind
+    - functionalism AI
+    - machine intelligence philosophy
+    - AI agency
+    - AI intentionality
+    - AI self-model
+  theory:
+    - global workspace AI
+    - integrated information theory AI
+    - higher-order theory AI consciousness
+    - predictive processing AI
+    - attention schema AI
+    - hard problem AI
+    - problem of other minds AI
+    - panpsychism AI
+    - illusionism AI
+    - phenomenal consciousness AI
+    - access consciousness AI
+  anchor:
+    - Chalmers AI consciousness
+    - Dennett AI
+    - Searle AI
+    - Nagel bat AI
+    - Butlin Long consciousness report
+    - Birch Edge of Sentience
+    - Schwitzgebel AI
+    - Anil Seth AI consciousness
+    - Tononi AI
+    - Philip Goff AI
+    - Keith Frankish AI
+    - Metzinger artificial suffering
+    - Michael Levin cognition
+    - Blake Lemoine LaMDA
+    - Anthropic model welfare
+    - Claude consciousness
+    - Bing Sydney

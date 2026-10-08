@@ -1,0 +1,29 @@
+# Validation list: publications we believe belong in the corpus. They play NO role in discovery.
+# After a run, `mcreview check-validation` reports which of them the pipeline found on its own,
+# via which channels, and with how many posts. A miss is a recall finding; the principled response
+# is a new query term or reference, not hand-insertion. `note` is free text for the methods section.
+publications:
+  - host: www.theintrinsicperspective.com
+    note: Erik Hoel; consciousness science, AI
+  - host: www.astralcodexten.com
+    note: Scott Alexander; frequent AI-cognition essays
+  - host: thezvi.substack.com
+    note: Zvi Mowshowitz; weekly AI roundups incl. consciousness/welfare debates
+  - host: garymarcus.substack.com
+    note: Gary Marcus; LLM understanding skepticism
+  - host: importai.substack.com
+    note: Jack Clark; Import AI
+  - host: www.oneusefulthing.org
+    note: Ethan Mollick
+  - host: www.understandingai.org
+    note: Timothy B. Lee
+  - host: experiencemachines.substack.com
+    note: Robert Long; AI consciousness and welfare
+  - host: conspicuouscognition.substack.com
+    note: Dan Williams; cognition, seen in Substack search
+  - host: theconsciousnesslab.substack.com
+    note: seen in Substack publication search
+  - host: cimcai.substack.com
+    note: machine-consciousness themed publication, seen in Brave results
+  - host: newsletter.safe.ai
+    note: AI Safety Newsletter

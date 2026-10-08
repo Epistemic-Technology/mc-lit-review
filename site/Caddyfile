@@ -1,0 +1,15 @@
+{
+	auto_https off
+	admin off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+	# Framework writes hashed assets under _observablehq/ and _file/; cache those hard, pages lightly.
+	@hashed path /_observablehq/* /_file/* /_npm/* /_import/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+	header Cache-Control "public, max-age=300"
+	try_files {path} {path}.html {path}/index.html /404.html
+	file_server
+}

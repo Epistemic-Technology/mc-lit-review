@@ -1,0 +1,55 @@
+# Named people counted by text mention in relevant posts (docs/plan.md stage 4). Each entry has a display name,
+# a group, and the regexes that count as a mention (case-sensitive; surnames alone only where unambiguous).
+# A post counts once per person however many times the name appears.
+
+people:
+  - {name: David Chalmers, group: philosopher, patterns: ["\\bChalmers\\b"]}
+  - {name: Daniel Dennett, group: philosopher, patterns: ["\\bDennett\\b"]}
+  - {name: John Searle, group: philosopher, patterns: ["\\bSearle\\b"]}
+  - {name: Thomas Nagel, group: philosopher, patterns: ["\\bNagel\\b"]}
+  - {name: Ned Block, group: philosopher, patterns: ["\\bNed Block\\b"]}
+  - {name: Jonathan Birch, group: philosopher, patterns: ["\\bJonathan Birch\\b", "\\bBirch's\\b", "\\bBirch\\b(?=.{0,80}(sentien|moral|precaution))"]}
+  - {name: Eric Schwitzgebel, group: philosopher, patterns: ["\\bSchwitzgebel\\b"]}
+  - {name: Patrick Butlin, group: philosopher, patterns: ["\\bButlin\\b"]}
+  - {name: Robert Long, group: philosopher, patterns: ["\\bRobert Long\\b", "\\bRob Long\\b"]}
+  - {name: Philip Goff, group: philosopher, patterns: ["\\bPhilip Goff\\b", "\\bGoff's\\b"]}
+  - {name: Keith Frankish, group: philosopher, patterns: ["\\bFrankish\\b"]}
+  - {name: Thomas Metzinger, group: philosopher, patterns: ["\\bMetzinger\\b"]}
+  - {name: Joe Carlsmith, group: philosopher, patterns: ["\\bCarlsmith\\b"]}
+  - {name: Susan Schneider, group: philosopher, patterns: ["\\bSusan Schneider\\b"]}
+  - {name: Nick Bostrom, group: philosopher, patterns: ["\\bBostrom\\b"]}
+  - {name: Andy Clark, group: philosopher, patterns: ["\\bAndy Clark\\b"]}
+  - {name: Douglas Hofstadter, group: philosopher, patterns: ["\\bHofstadter\\b"]}
+  - {name: Alan Turing, group: scientist, patterns: ["\\bTuring\\b(?! [Tt]est)", "\\bTuring's\\b"]}
+  - {name: Anil Seth, group: scientist, patterns: ["\\bAnil Seth\\b", "\\bSeth's\\b"]}
+  - {name: Giulio Tononi, group: scientist, patterns: ["\\bTononi\\b"]}
+  - {name: Christof Koch, group: scientist, patterns: ["\\bChristof Koch\\b", "\\bKoch's\\b"]}
+  - {name: Michael Levin, group: scientist, patterns: ["\\bMichael Levin\\b", "\\bLevin's\\b"]}
+  - {name: Stanislas Dehaene, group: scientist, patterns: ["\\bDehaene\\b"]}
+  - {name: Michael Graziano, group: scientist, patterns: ["\\bGraziano\\b"]}
+  - {name: Karl Friston, group: scientist, patterns: ["\\bFriston\\b"]}
+  - {name: Roger Penrose, group: scientist, patterns: ["\\bPenrose\\b"]}
+  - {name: Geoffrey Hinton, group: ai_researcher, patterns: ["\\bHinton\\b"]}
+  - {name: Yann LeCun, group: ai_researcher, patterns: ["\\bLeCun\\b"]}
+  - {name: Ilya Sutskever, group: ai_researcher, patterns: ["\\bSutskever\\b"]}
+  - {name: Emily Bender, group: ai_researcher, patterns: ["\\bEmily Bender\\b", "\\bBender's\\b"]}
+  - {name: Gary Marcus, group: ai_researcher, patterns: ["\\bGary Marcus\\b", "\\bMarcus's\\b", "\\bMarcus'\\b"]}
+  - {name: Blake Lemoine, group: ai_researcher, patterns: ["\\bLemoine\\b"]}
+  - {name: Kyle Fish, group: ai_researcher, patterns: ["\\bKyle Fish\\b"]}
+  - {name: Dario Amodei, group: industry, patterns: ["\\bAmodei\\b"]}
+  - {name: Sam Altman, group: industry, patterns: ["\\bAltman\\b"]}
+  - {name: Mustafa Suleyman, group: industry, patterns: ["\\bSuleyman\\b"]}
+  - {name: Demis Hassabis, group: industry, patterns: ["\\bHassabis\\b"]}
+  - {name: Elon Musk, group: industry, patterns: ["\\bMusk\\b"]}
+  - {name: Eliezer Yudkowsky, group: commentator, patterns: ["\\bYudkowsky\\b"]}
+  - {name: Richard Dawkins, group: commentator, patterns: ["\\bDawkins\\b"]}
+  - {name: Ted Chiang, group: commentator, patterns: ["\\bTed Chiang\\b", "\\bChiang's\\b"]}
+  - {name: Sam Harris, group: commentator, patterns: ["\\bSam Harris\\b"]}
+  - {name: Yuval Noah Harari, group: commentator, patterns: ["\\bHarari\\b"]}
+  - {name: Ray Kurzweil, group: commentator, patterns: ["\\bKurzweil\\b"]}
+  - {name: Erik Hoel, group: commentator, patterns: ["\\bErik Hoel\\b", "\\bHoel's\\b"]}
+  - {name: Scott Alexander, group: commentator, patterns: ["\\bScott Alexander\\b"]}
+  - {name: Dwarkesh Patel, group: commentator, patterns: ["\\bDwarkesh\\b"]}
+  - {name: Zvi Mowshowitz, group: commentator, patterns: ["\\bMowshowitz\\b", "\\bZvi\\b"]}
+  - {name: Ezra Klein, group: commentator, patterns: ["\\bEzra Klein\\b"]}
+  - {name: Pope Leo XIV, group: religious, patterns: ["\\bLeo XIV\\b", "\\bPope Leo\\b"]}

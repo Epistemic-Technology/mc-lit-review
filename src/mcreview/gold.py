@@ -1,0 +1,167 @@
+"""Stage 2: frozen random samples for human verification, and the export the coder tool reads.
+
+Samples are drawn once per name with the configured seed and stored in `gold_samples`; re-running
+`sample` for an existing name is a no-op. Strata: discovery channel class x year x engagement band,
+allocated proportionally, so the human checks reflect the population and not just recent posts.
+"""
+from __future__ import annotations
+
+import json
+import logging
+import random
+from collections import defaultdict
+from pathlib import Path
+
+from . import db
+from .codebook import Codebook
+from .context import Ctx
+
+log = logging.getLogger(__name__)
+
+
+def _stratum(ctx: Ctx, post_id: int, channels: dict[str, list[str]], bands: list[int], cache: dict) -> str:
+    if post_id in cache:
+        return cache[post_id]
+    r = ctx.conn.execute("SELECT substr(post_date,1,4) y, reaction_count FROM posts WHERE id=?", (post_id,)).fetchone()
+    srcs = {s[0] for s in ctx.conn.execute("SELECT DISTINCT source FROM discovery WHERE entity_type='post' AND entity_id=?", (post_id,))}
+    chan = next((name for name, lst in channels.items() if srcs & set(lst)), "other")
+    rc = r["reaction_count"] or 0
+    band = sum(1 for b in bands if rc >= b)
+    cache[post_id] = f"{chan}|{r['y']}|e{band}"
+    return cache[post_id]
+
+
+def sample(ctx: Ctx, name: str) -> int:
+    cfg = ctx.settings.analysis["gold"]
+    spec = cfg["samples"][name]
+    cb = Codebook()
+    if ctx.conn.execute("SELECT COUNT(*) FROM gold_samples WHERE sample_name=?", (name,)).fetchone()[0]:
+        log.info("sample %s already drawn; frozen", name)
+        return 0
+    pop = spec["population"]
+    if pop == "subset":
+        et, ids = "post", [int(r[0]) for r in ctx.conn.execute("SELECT post_id FROM analysis_subset ORDER BY post_id")]
+    elif pop == "relevant":
+        et, ids = "post", [int(r[0]) for r in ctx.conn.execute(
+            "SELECT entity_id FROM code_final WHERE entity_type='post' AND construct='relevance' AND value IN ('central','substantial') ORDER BY entity_id")]
+    elif pop == "publications_relevant":
+        et, ids = "publication", [int(r[0]) for r in ctx.conn.execute(
+            """SELECT DISTINCT p.publication_id FROM code_final f JOIN posts p ON p.id=f.entity_id
+               WHERE f.entity_type='post' AND f.construct='relevance' AND f.value IN ('central','substantial') ORDER BY 1""")]
+    else:
+        raise ValueError(pop)
+    if not ids:
+        raise RuntimeError(f"population '{pop}' is empty; run the earlier stages first")
+    n = min(int(spec["n"]), len(ids))
+    rng = random.Random(f"{cfg['seed']}:{name}")
+    rows = []
+    if et == "post":
+        cache: dict = {}
+        strata: dict[str, list[int]] = defaultdict(list)
+        for pid in ids:
+            strata[_stratum(ctx, pid, cfg["strata"]["channel"], list(cfg["strata"]["engagement_bands"]), cache)].append(pid)
+        # proportional allocation with largest-remainder rounding
+        alloc = {k: n * len(v) / len(ids) for k, v in strata.items()}
+        take = {k: int(a) for k, a in alloc.items()}
+        for k in sorted(alloc, key=lambda k: alloc[k] - take[k], reverse=True)[: n - sum(take.values())]:
+            take[k] += 1
+        for k, v in strata.items():
+            rng.shuffle(v)
+            rows += [(pid, k) for pid in v[: take[k]]]
+    else:
+        rng.shuffle(ids)
+        rows = [(i, None) for i in ids[:n]]
+    rng.shuffle(rows)
+    now = db.now()
+    ctx.conn.executemany(
+        "INSERT INTO gold_samples(sample_name, entity_type, entity_id, stratum, position, sampled_at, run_id, codebook_version) VALUES (?,?,?,?,?,?,?,?)",
+        [(name, et, eid, st, i, now, ctx.run_id, cb.version) for i, (eid, st) in enumerate(rows)])
+    ctx.commit()
+    ctx.counts[f"sampled_{name}"] = len(rows)
+    log.info("sample %s: %d %ss from %d", name, len(rows), et, len(ids))
+    return len(rows)
+
+
+def export(ctx: Ctx, name: str, out: Path, lead_chars: int = 1500) -> Path:
+    """JSON for the coder tool: each sampled item with what the human needs to see and the engine codes to verify."""
+    from .code import _jev_mean
+
+    cb = Codebook()
+    spec = ctx.settings.analysis["gold"]["samples"][name]
+    cons = spec.get("constructs")
+    items = []
+    first = ctx.conn.execute("SELECT entity_type FROM gold_samples WHERE sample_name=? LIMIT 1", (name,)).fetchone()
+    jev_mean = _jev_mean(ctx, cb.code_version(first["entity_type"]), first["entity_type"]) if first else {}
+    for s in ctx.conn.execute("SELECT * FROM gold_samples WHERE sample_name=? ORDER BY position", (name,)):
+        eid = int(s["entity_id"])
+        item: dict = {"sample_id": int(s["id"]), "entity_type": s["entity_type"], "entity_id": eid, "stratum": s["stratum"]}
+        if s["entity_type"] == "post":
+            p = ctx.conn.execute("SELECT title, subtitle, canonical_url, post_date, body_text FROM posts WHERE id=?", (eid,)).fetchone()
+            item.update({"title": p["title"], "subtitle": p["subtitle"], "url": p["canonical_url"], "date": p["post_date"],
+                         "lead": (p["body_text"] or "")[:lead_chars], "body": p["body_text"] or ""})
+        else:
+            from .code import state_for_publication
+
+            item.update(state_for_publication(ctx, eid))
+        # Engine codes for the human to verify: Claude where it coded the item, else Jev's averaged code.
+        # Read from the engines' own codes, not code_final, where an earlier human decision would replace them.
+        codes = {}
+        for con, val, ev in ctx.conn.execute(
+            """SELECT c.construct, c.value, c.evidence FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+               WHERE r.engine='claude' AND r.codebook_version=? AND c.entity_type=? AND c.entity_id=? ORDER BY c.coded_at""",
+            (cb.code_version(s["entity_type"]), s["entity_type"], eid)):
+            if not cons or con in cons:
+                codes[con] = {"value": val, "evidence": ev, "source": "claude"}
+        if not codes:
+            for (e, con), (val, p, conf, _) in jev_mean.items():
+                if e == eid and (not cons or con in cons):
+                    codes[con] = {"value": val, "evidence": None, "source": "jev"}
+        item["codes"] = codes
+        existing = {g["construct"]: dict(g) for g in ctx.conn.execute("SELECT * FROM gold_codes WHERE sample_id=?", (s["id"],))}
+        item["human"] = existing
+        items.append(item)
+    all_cons = cb.constructs if items and items[0]["entity_type"] == "post" else cb.publication_constructs
+    defs = [{"name": c.name, "group": c.group, "primitive": c.primitive, "instructions": c.instructions, "claim": c.claim,
+             "options": {k: v.get("what", "") for k, v in (c.options or c.criteria or {}).items()} or {"true": "", "false": ""}}
+            for c in all_cons if not cons or c.name in cons]
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"sample": name, "codebook_version": cb.version, "constructs": defs, "items": items}, ensure_ascii=False, indent=1))
+    log.info("exported %d items to %s", len(items), out)
+    return out
+
+
+def import_codes(ctx: Ctx, path: Path) -> int:
+    """Read the coder tool's output ({sample_id: {construct: {value, decision, note, seconds}}}) into gold_codes."""
+    cb = Codebook()
+    data = json.loads(Path(path).read_text())
+    now = db.now()
+    n = 0
+    for sid, cons in data.items():
+        for con, d in cons.items():
+            ctx.conn.execute(
+                """INSERT OR REPLACE INTO gold_codes(sample_id, construct, value, decision, shown_value, shown_evidence, note, seconds, coded_at, codebook_version)
+                   VALUES (?,?,?,?,?,?,?,?,?,?)""",
+                (int(sid), con, d.get("value"), d.get("decision"), d.get("shown_value"), d.get("shown_evidence"), d.get("note"), d.get("seconds"), d.get("coded_at") or now, cb.version))
+            n += 1
+    ctx.commit()
+    ctx.counts["gold_codes_imported"] = n
+    return n
+
+
+def human_agreement(ctx: Ctx) -> list[dict]:
+    """Engine vs human on the verified items, per construct and per engine. Reads the engines' own codes
+    (not code_final, where human decisions replace engine values once materialised)."""
+    from .code import _claude_codes, _jev_mean
+
+    cb = Codebook()
+    per: dict[tuple[str, str], list[bool]] = defaultdict(list)
+    for et in ("post", "publication"):
+        ver = cb.code_version(et)
+        engines = {"jev": {k: v[0] for k, v in _jev_mean(ctx, ver, et).items()}, "claude": {k: v[0] for k, v in _claude_codes(ctx, ver, et).items()}}
+        for eid, con, hv in ctx.conn.execute(
+            "SELECT s.entity_id, g.construct, g.value FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL", (et,)):
+            key = (int(eid), con)
+            for name, codes in engines.items():
+                if key in codes:
+                    per[(con, name)].append(codes[key] == hv)
+    return [{"construct": k[0], "source": k[1], "n": len(v), "agree": sum(v) / len(v)} for k, v in sorted(per.items())]

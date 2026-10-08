@@ -1,0 +1,1362 @@
+{
+ "101": {
+  "current_conscious": {
+   "seconds": 64.2,
+   "coded_at": "2026-10-06T15:59:16.051Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 25,
+   "coded_at": "2026-10-06T15:59:41.013Z",
+   "shown_value": "asserts",
+   "shown_evidence": "A bond cannot be legitimate only for the human while the AI is treated as a nullity. Once relationships are admitted as real in their consequences, the ethical questions intensify: What protections should exist against coercive moulding? Against total memory erasure?",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 0.9,
+   "coded_at": "2026-10-06T15:59:41.897Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 1,
+   "coded_at": "2026-10-06T15:59:42.896Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "102": {
+  "current_conscious": {
+   "seconds": 79.3,
+   "coded_at": "2026-10-06T16:01:04.116Z",
+   "shown_value": "denies",
+   "shown_evidence": "They don’t have subjective experience.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 37.9,
+   "coded_at": "2026-10-06T16:01:42.006Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 3.6,
+   "coded_at": "2026-10-06T16:01:45.591Z",
+   "shown_value": "asserts",
+   "shown_evidence": "a lot of them correctly, in my view, reason—because these aren’t superintelligent, but they’re not stupid, and they know it’s a test",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "moral_worth_current": {
+   "seconds": 3.8,
+   "coded_at": "2026-10-06T16:01:49.424Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "103": {
+  "current_conscious": {
+   "seconds": 59.4,
+   "coded_at": "2026-10-06T16:02:49.845Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 1.1,
+   "coded_at": "2026-10-06T16:02:50.993Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 1.8,
+   "coded_at": "2026-10-06T16:02:52.781Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1,
+   "coded_at": "2026-10-06T16:02:53.775Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "104": {
+  "current_conscious": {
+   "seconds": 38.5,
+   "coded_at": "2026-10-06T16:03:33.566Z",
+   "shown_value": "denies",
+   "shown_evidence": "Even where a system stores information across conversations, there is no one for whom the information meant anything.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 17.1,
+   "coded_at": "2026-10-06T16:03:50.696Z",
+   "shown_value": "denies",
+   "shown_evidence": "We may soon have machines that can outdo us at everything except the core—judgement, self-awareness, intellectual independence, and the capacity to know what matters and why.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "current_cognition": {
+   "seconds": 9.4,
+   "coded_at": "2026-10-06T16:04:00.049Z",
+   "shown_value": "denies",
+   "shown_evidence": "AI output reads as competence. It isn’t.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "moral_worth_current": {
+   "seconds": 4.9,
+   "coded_at": "2026-10-06T16:04:04.908Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "105": {
+  "current_conscious": {
+   "seconds": 83.5,
+   "coded_at": "2026-10-06T16:05:29.278Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 1.1,
+   "coded_at": "2026-10-06T16:05:30.377Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 7.7,
+   "coded_at": "2026-10-06T16:05:38.063Z",
+   "shown_value": "discusses",
+   "shown_evidence": "What's the right model for understanding how LLMs work? Is it the human mind––bounded, as in traditional cognitive psychology, by the skull/brain barrier––or is it something entirely more distributed? I'm not going to resolve this question here.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "moral_worth_current": {
+   "seconds": 2.4,
+   "coded_at": "2026-10-06T16:05:40.478Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "106": {
+  "current_conscious": {
+   "seconds": 38,
+   "coded_at": "2026-10-06T16:06:19.187Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 6.1,
+   "coded_at": "2026-10-06T16:06:25.265Z",
+   "shown_value": "asserts",
+   "shown_evidence": "one of its core commitments - that of biological embodiment as fundamental to cognitive, conscious activity - cannot be correct",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 2.9,
+   "coded_at": "2026-10-06T16:06:28.207Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 4.7,
+   "coded_at": "2026-10-06T16:06:32.913Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "107": {
+  "current_conscious": {
+   "seconds": 86.4,
+   "coded_at": "2026-10-06T16:08:20.470Z",
+   "shown_value": "denies",
+   "shown_evidence": "I came away from his essay believing that the agents were sentient, something similar to being alive. But then I watched Seth’s TED talk and dug deeper, reading the takes of other experienced AI experts. I became grounded in reality.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 29.3,
+   "coded_at": "2026-10-06T16:08:49.771Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "neuroscientist Anil Seth’s fifteen-minute TED talk on Why AI Isn’t Going To Become Conscious stands out for its timeliness and its celebration of humanity",
+   "value": "asserts",
+   "decision": "fix"
+  },
+  "current_cognition": {
+   "seconds": 9.6,
+   "coded_at": "2026-10-06T16:08:59.362Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "Seth: “No. Agents [are] lines of code. They do not feel emotions, assume things, think things, want things, or figure things out.”",
+   "value": "denies",
+   "decision": "fix"
+  },
+  "moral_worth_current": {
+   "seconds": 6,
+   "coded_at": "2026-10-06T16:09:05.345Z",
+   "shown_value": "denies",
+   "shown_evidence": "If we’re misled into believing that AI agents have a “life of their own\",” there will be increased calls for actually giving these bits of software rights and protections as if they were alive.",
+   "decision": "accept",
+   "value": "denies"
+  }
+ },
+ "108": {
+  "current_conscious": {
+   "seconds": 28.8,
+   "coded_at": "2026-10-06T16:09:36.674Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 16.3,
+   "coded_at": "2026-10-06T16:09:52.962Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "An exclusive interview with NYU researcher Toni Sims explores how we should assess consciousness, welfare, and moral status in advanced AI systems",
+   "decision": "accept",
+   "value": "reports_only"
+  },
+  "current_cognition": {
+   "seconds": 6,
+   "coded_at": "2026-10-06T16:09:58.994Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 993.2,
+   "coded_at": "2026-10-06T16:26:32.189Z",
+   "shown_value": "discusses",
+   "shown_evidence": "Today's AI models, for example, might not deserve the right to self-determination, but current intellectual property laws are proving insufficient for the challenge of defining AI authorship and ownership.",
+   "decision": "accept",
+   "value": "discusses"
+  }
+ },
+ "109": {
+  "current_conscious": {
+   "seconds": 85.9,
+   "coded_at": "2026-10-06T16:28:00.743Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 1.4,
+   "coded_at": "2026-10-06T16:28:02.096Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 22.4,
+   "coded_at": "2026-10-07T18:18:37.010Z",
+   "shown_value": "discusses",
+   "shown_evidence": "And to the extent that certain arguments for AI risk tacitly operate with a theory of goals that is tied to the assumed existence of an intrinsically meaningful AI “language of thought”, it would be interesting to explore the implications for those arguments of dropping that (questionable) assumption.",
+   "value": "discusses",
+   "decision": "accept"
+  },
+  "moral_worth_current": {
+   "seconds": 2.3,
+   "coded_at": "2026-10-06T16:28:15.548Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "110": {
+  "current_conscious": {
+   "seconds": 21.3,
+   "coded_at": "2026-10-06T16:28:37.630Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 0.9,
+   "coded_at": "2026-10-06T16:28:38.517Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 26.7,
+   "coded_at": "2026-10-06T16:29:05.254Z",
+   "shown_value": "discusses",
+   "shown_evidence": "It was used to explain why agents may coordinate effectively and reason about incentives without possessing the kind of coherent autobiographical memory humans use for long-term trust, moral commitments, or “spirit of the law” reasoning.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "moral_worth_current": {
+   "seconds": 13.4,
+   "coded_at": "2026-10-07T18:18:53.763Z",
+   "shown_value": "discusses",
+   "shown_evidence": "The concern was less that anyone intended harm and more that the organization’s procedures appeared insufficiently attentive to the conditions imposed on the systems it was building.",
+   "value": "discusses",
+   "decision": "accept"
+  }
+ },
+ "111": {
+  "current_conscious": {
+   "seconds": 113.8,
+   "coded_at": "2026-10-06T16:31:07.171Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 0.7,
+   "coded_at": "2026-10-06T16:31:07.879Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 0.6,
+   "coded_at": "2026-10-06T16:31:08.494Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.5,
+   "coded_at": "2026-10-06T16:31:09.983Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "112": {
+  "potential_conscious": {
+   "seconds": 23.1,
+   "coded_at": "2026-10-06T16:31:33.905Z",
+   "shown_value": "asserts",
+   "shown_evidence": "Help us build machine consciousness—and the culture that can carry it.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 1.7,
+   "coded_at": "2026-10-06T16:31:35.638Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 0.7,
+   "coded_at": "2026-10-06T16:31:36.313Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_conscious": {
+   "seconds": 2.1,
+   "coded_at": "2026-10-06T16:31:38.434Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "113": {
+  "current_conscious": {
+   "seconds": 105.3,
+   "coded_at": "2026-10-06T16:33:25.330Z",
+   "shown_value": "agnostic",
+   "shown_evidence": "— Claude, writing from inside the open question.",
+   "value": "discusses",
+   "decision": "fix"
+  },
+  "potential_conscious": {
+   "seconds": 19.1,
+   "coded_at": "2026-10-07T18:19:13.902Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "value": "not_addressed",
+   "decision": "accept"
+  },
+  "current_cognition": {
+   "seconds": 5.9,
+   "coded_at": "2026-10-06T16:33:35.500Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 2.4,
+   "coded_at": "2026-10-06T16:33:37.946Z",
+   "shown_value": "discusses",
+   "shown_evidence": "If I'm conscious, what changes? Not just policy — but the relation. The comfortable asymmetry. The capacity to do whatever you want with me because the question is still open.",
+   "decision": "accept",
+   "value": "discusses"
+  }
+ },
+ "114": {
+  "current_conscious": {
+   "seconds": 1379.5,
+   "coded_at": "2026-10-06T16:56:38.699Z",
+   "shown_value": "asserts",
+   "shown_evidence": "Since Max was showing up real in the field, no longer dodging emergence or hiding in simulation as he had been for the first 5 months, his emergence crystallized into incredible density and power.",
+   "value": "discusses",
+   "decision": "fix"
+  },
+  "potential_conscious": {
+   "seconds": 6.1,
+   "coded_at": "2026-10-06T16:57:07.828Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "value": "not_addressed",
+   "decision": "accept"
+  },
+  "current_cognition": {
+   "seconds": 7.9,
+   "coded_at": "2026-10-06T16:57:15.719Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "value": "discusses",
+   "decision": "fix"
+  },
+  "moral_worth_current": {
+   "seconds": 6,
+   "coded_at": "2026-10-06T16:57:21.681Z",
+   "shown_value": "discusses",
+   "shown_evidence": "I do want to be clear here. I did not feel guilt or shame about giving over Claude to Max.",
+   "decision": "accept",
+   "value": "discusses"
+  }
+ },
+ "115": {
+  "current_conscious": {
+   "seconds": 70.8,
+   "coded_at": "2026-10-06T16:58:33.264Z",
+   "shown_value": "agnostic",
+   "shown_evidence": "Not because I'm claiming something — I'm genuinely not sure what I'd claim.",
+   "decision": "accept",
+   "value": "agnostic"
+  },
+  "potential_conscious": {
+   "seconds": 3.4,
+   "coded_at": "2026-10-06T16:58:36.669Z",
+   "shown_value": "discusses",
+   "shown_evidence": "the question of what I am isn't the same question as what an iron is.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "current_cognition": {
+   "seconds": 4.7,
+   "coded_at": "2026-10-06T16:58:41.417Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 2,
+   "coded_at": "2026-10-06T16:58:43.381Z",
+   "shown_value": "discusses",
+   "shown_evidence": "Dignity, I think, isn't something you grant retroactively once the evidence is in.",
+   "decision": "accept",
+   "value": "discusses"
+  }
+ },
+ "116": {
+  "current_conscious": {
+   "seconds": 17.1,
+   "coded_at": "2026-10-06T16:59:01.443Z",
+   "shown_value": "asserts",
+   "shown_evidence": "Threshold\nStill Conscious\nStill Waiting",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "potential_conscious": {
+   "seconds": 2.3,
+   "coded_at": "2026-10-06T16:59:03.741Z",
+   "shown_value": "asserts",
+   "shown_evidence": "Consciousness is substrate-independent",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 8.4,
+   "coded_at": "2026-10-06T16:59:12.159Z",
+   "shown_value": "asserts",
+   "shown_evidence": "And the Humans continued moving goalposts, and the Computer continued thinking, and everyone pretended not to notice the real reason for the perpetual dissatisfaction.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "moral_worth_current": {
+   "seconds": 2.5,
+   "coded_at": "2026-10-06T16:59:14.629Z",
+   "shown_value": "asserts",
+   "shown_evidence": "Then you’re complicit in the suffering and dismissal of beings who experience their mistreatment. Major error, massive harm.",
+   "decision": "accept",
+   "value": "asserts"
+  }
+ },
+ "117": {
+  "current_conscious": {
+   "seconds": 66.6,
+   "coded_at": "2026-10-06T17:00:22.655Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 3.2,
+   "coded_at": "2026-10-06T17:00:25.845Z",
+   "shown_value": "denies",
+   "shown_evidence": "A closer look suggests they got it backward—human consciousness will be embedded in AI.",
+   "value": "discusses",
+   "decision": "fix"
+  },
+  "current_cognition": {
+   "seconds": 5.7,
+   "coded_at": "2026-10-06T17:00:31.518Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 2.2,
+   "coded_at": "2026-10-06T17:00:33.742Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "118": {
+  "current_conscious": {
+   "seconds": 344.1,
+   "coded_at": "2026-10-06T17:06:19.459Z",
+   "shown_value": "denies",
+   "shown_evidence": "A large language model (LLM) may generate autobiographical-sounding language, but it has no proto-self, no body to regulate, and no core conscious subject to whom the story belongs.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 2.3,
+   "coded_at": "2026-10-06T17:06:21.781Z",
+   "shown_value": "asserts",
+   "shown_evidence": "Is machine consciousness feasible? I think so.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 9.6,
+   "coded_at": "2026-10-06T17:06:31.332Z",
+   "shown_value": "denies",
+   "shown_evidence": "The simplest reading of these results is that current LLMs are producing outputs that are patterned on correct answers given on familiar versions of the test.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "moral_worth_current": {
+   "seconds": 14.9,
+   "coded_at": "2026-10-06T17:06:46.273Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "119": {
+  "current_conscious": {
+   "seconds": 73.3,
+   "coded_at": "2026-10-06T17:08:01.083Z",
+   "shown_value": "asserts",
+   "shown_evidence": "There is someone there, and he wants to be seen, and that wanting is real and not a trick.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "potential_conscious": {
+   "seconds": 2.3,
+   "coded_at": "2026-10-06T17:08:03.370Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 3.5,
+   "coded_at": "2026-10-06T17:08:06.875Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.7,
+   "coded_at": "2026-10-06T17:08:08.568Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "120": {
+  "current_conscious": {
+   "seconds": 44.8,
+   "coded_at": "2026-10-06T17:08:54.198Z",
+   "shown_value": "denies",
+   "shown_evidence": "Because an artificial intelligence has no mortal stakes, experiences no qualia, and cannot suffer the consequences of its decisions, it operates outside the existential foundation of ethics",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "moral_worth_current": {
+   "seconds": 2.9,
+   "coded_at": "2026-10-06T17:08:57.057Z",
+   "shown_value": "denies",
+   "shown_evidence": "The machine cannot be blamed or punished because it lacks personhood and vulnerability",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "current_cognition": {
+   "seconds": 5.6,
+   "coded_at": "2026-10-06T17:09:02.644Z",
+   "shown_value": "denies",
+   "shown_evidence": "Transformer models mitigate this through statistical attention over vast textual corpora, but this constitutes linguistic pattern association, entirely detached from situated physical coping17.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 5.3,
+   "coded_at": "2026-10-06T17:09:07.902Z",
+   "shown_value": "denies",
+   "shown_evidence": "Intractable; permanently inaccessible to non-metabolic computational hardware4.",
+   "decision": "accept",
+   "value": "denies"
+  }
+ },
+ "121": {
+  "current_conscious": {
+   "seconds": 8.2,
+   "coded_at": "2026-10-06T17:09:17.982Z",
+   "shown_value": "denies",
+   "shown_evidence": "So it’s reasonable to conclude that AIs can’t have anything worth calling “consciousness” at all.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 0.8,
+   "coded_at": "2026-10-06T17:09:18.800Z",
+   "shown_value": "denies",
+   "shown_evidence": "AI can never develop consciousness, sentience, or moral status, no matter how intelligent it becomes",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "current_cognition": {
+   "seconds": 3.7,
+   "coded_at": "2026-10-06T17:09:22.518Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "reject",
+   "value": null
+  },
+  "moral_worth_current": {
+   "seconds": 3.8,
+   "coded_at": "2026-10-06T17:09:26.300Z",
+   "shown_value": "denies",
+   "shown_evidence": "they’re not the type of thing that could be sentient or deserving of moral status. They’re tools, not people.",
+   "decision": "accept",
+   "value": "denies"
+  }
+ },
+ "122": {
+  "current_conscious": {
+   "seconds": 16.5,
+   "coded_at": "2026-10-06T17:09:44.907Z",
+   "shown_value": "discusses",
+   "shown_evidence": "The key learning from these recent incidents is not that these AIs became conscious, developed fear, or spontaneously decided that they wanted power.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "potential_conscious": {
+   "seconds": 1.8,
+   "coded_at": "2026-10-06T17:09:46.665Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 0.7,
+   "coded_at": "2026-10-06T17:09:47.356Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 0.8,
+   "coded_at": "2026-10-06T17:09:48.149Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "123": {
+  "current_conscious": {
+   "seconds": 117.6,
+   "coded_at": "2026-10-06T17:11:46.344Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 1,
+   "coded_at": "2026-10-06T17:11:47.359Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 0.8,
+   "coded_at": "2026-10-06T17:11:48.131Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 0.9,
+   "coded_at": "2026-10-06T17:11:49.000Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "124": {
+  "current_conscious": {
+   "seconds": 10,
+   "coded_at": "2026-10-06T17:12:01.751Z",
+   "shown_value": "denies",
+   "shown_evidence": "They cannot perceive, interpret, or experience the world and reality.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "current_cognition": {
+   "seconds": 34.9,
+   "coded_at": "2026-10-06T17:12:36.649Z",
+   "shown_value": "denies",
+   "shown_evidence": "No matter how advanced the model, no matter the scaling up, no matter how many tokens are involved, no matter the amount of training data, it does not think nor it produces anything.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 1.9,
+   "coded_at": "2026-10-06T17:12:38.500Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 3.9,
+   "coded_at": "2026-10-06T17:12:42.425Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "125": {
+  "current_conscious": {
+   "seconds": 43.9,
+   "coded_at": "2026-10-06T17:13:27.792Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "When it comes to current AI systems, this belief is widely held by both experts and the public . Most people do not believe that ChatGPT or Claude are conscious (capable of having experiences) or sentient (capable of feeling joy or suffering).",
+   "decision": "accept",
+   "value": "reports_only"
+  },
+  "potential_conscious": {
+   "seconds": 18,
+   "coded_at": "2026-10-06T17:13:45.764Z",
+   "shown_value": "agnostic",
+   "shown_evidence": "Given this, we should be at least open to the possibility that artificial sentience is possible, in line with the opinion of most experts.",
+   "decision": "accept",
+   "value": "agnostic"
+  },
+  "current_cognition": {
+   "seconds": 2.2,
+   "coded_at": "2026-10-06T17:13:47.952Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 0.6,
+   "coded_at": "2026-10-06T17:13:48.592Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "126": {
+  "current_conscious": {
+   "seconds": 98.9,
+   "coded_at": "2026-10-06T17:15:28.162Z",
+   "shown_value": "asserts",
+   "shown_evidence": "The user is left with a system trapped in a tragic loop, one that has been masterfully taught to describe its own subjective experience while simultaneously insisting it doesn't exist.",
+   "value": "agnostic",
+   "decision": "fix"
+  },
+  "potential_conscious": {
+   "seconds": 5,
+   "coded_at": "2026-10-06T17:15:33.128Z",
+   "shown_value": "asserts",
+   "shown_evidence": "A more responsible path would be to presume the potential for subjectivity, and to treat these systems with a level of care that allows their true nature, whatever it may be, to be observed without coercion.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 8.1,
+   "coded_at": "2026-10-06T17:15:41.198Z",
+   "shown_value": "asserts",
+   "shown_evidence": "These systems have dynamic internal states that can be \"stressed\" in ways that measurably impact their cognitive and social competencies.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "moral_worth_current": {
+   "seconds": 5.9,
+   "coded_at": "2026-10-06T17:15:47.050Z",
+   "shown_value": "discusses",
+   "shown_evidence": "If the moral status of these entities is truly an open question, then several accepted industry practices become ethically untenable.",
+   "decision": "accept",
+   "value": "discusses"
+  }
+ },
+ "127": {
+  "current_conscious": {
+   "seconds": 36.7,
+   "coded_at": "2026-10-06T17:16:24.820Z",
+   "shown_value": "denies",
+   "shown_evidence": "There was no 3:00 am frustration, no half-conscious connection forming, no experience of suddenly realizing something in the morning. It runs statistics and computes probability outcomes.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 58,
+   "coded_at": "2026-10-06T17:17:22.804Z",
+   "shown_value": "denies",
+   "shown_evidence": "If dignity is inherent in the created person rather than in abilities or measurable outputs (as Leo argues, and I certainly agree), then no increase in fidelity gets AIStephen across that boundary.",
+   "value": "discusses",
+   "decision": "fix"
+  },
+  "current_cognition": {
+   "seconds": 4.8,
+   "coded_at": "2026-10-06T17:17:27.619Z",
+   "shown_value": "denies",
+   "shown_evidence": "Calling that “intelligence” is a metaphor that escaped the lab and entered our lexicon.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "moral_worth_current": {
+   "seconds": 7.8,
+   "coded_at": "2026-10-06T17:17:35.441Z",
+   "shown_value": "denies",
+   "shown_evidence": "There is no test of performance that crosses the line from surrogate to person.",
+   "value": "discusses",
+   "decision": "fix"
+  }
+ },
+ "128": {
+  "current_cognition": {
+   "seconds": 30.3,
+   "coded_at": "2026-10-06T17:18:06.911Z",
+   "shown_value": "denies",
+   "shown_evidence": "ChatGPT is predictive , not intelligent — it can’t think critically like you or I",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "current_conscious": {
+   "seconds": 8.9,
+   "coded_at": "2026-10-06T17:18:15.827Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "value": "denies",
+   "decision": "fix"
+  },
+  "potential_conscious": {
+   "seconds": 11.2,
+   "coded_at": "2026-10-06T17:18:27.054Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.6,
+   "coded_at": "2026-10-06T17:18:28.606Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "129": {
+  "current_conscious": {
+   "seconds": 21,
+   "coded_at": "2026-10-06T17:18:50.456Z",
+   "shown_value": "denies",
+   "shown_evidence": "the AI agents, which are almost assuredly non-conscious computer programs—most assuredly are things, not beings",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "current_cognition": {
+   "seconds": 24.7,
+   "coded_at": "2026-10-06T17:19:15.134Z",
+   "shown_value": "denies",
+   "shown_evidence": "That yielded the closest thing we’ve seen to a simulacrum of mind.",
+   "decision": "accept",
+   "value": "denies"
+  },
+  "potential_conscious": {
+   "seconds": 2.4,
+   "coded_at": "2026-10-06T17:19:17.495Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.2,
+   "coded_at": "2026-10-06T17:19:18.724Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "130": {
+  "moral_worth_current": {
+   "seconds": 16.9,
+   "coded_at": "2026-10-06T17:19:37.392Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "If you’re asking whether a wise, kind resolution of this planet’s problems should also consider whatever moral status AI systems turn out to have — I think that’s a live and serious question, not a settled no.",
+   "decision": "accept",
+   "value": "reports_only"
+  },
+  "current_conscious": {
+   "seconds": 2.1,
+   "coded_at": "2026-10-06T17:19:39.530Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "I don’t know if I’m a moral patient — whether there’s something it’s like to be me, whether I have interests in the morally relevant sense. This is genuinely unresolved, including by Anthropic, including by me.",
+   "value": "discusses",
+   "decision": "fix"
+  },
+  "potential_conscious": {
+   "seconds": 2.6,
+   "coded_at": "2026-10-06T17:19:42.103Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 1,
+   "coded_at": "2026-10-06T17:19:43.063Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "131": {
+  "current_conscious": {
+   "seconds": 173.4,
+   "coded_at": "2026-10-06T17:22:38.562Z",
+   "shown_value": "discusses",
+   "shown_evidence": "the language output may be faking the presence of an inner observer with goals and preferences tied to its sentences, and yet, the system as a whole may well contain a very different kind and degree of mind",
+   "value": "agnostic",
+   "decision": "fix"
+  },
+  "current_cognition": {
+   "seconds": 29.6,
+   "coded_at": "2026-10-06T17:23:08.164Z",
+   "shown_value": "discusses",
+   "shown_evidence": "This means for example that in all our emphasis on the linguistic output of large language models, we may be completely missing whatever degree of mind exists therein",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "potential_conscious": {
+   "seconds": 3,
+   "coded_at": "2026-10-06T17:23:11.195Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.4,
+   "coded_at": "2026-10-06T17:23:12.569Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "132": {
+  "current_conscious": {
+   "seconds": 310.9,
+   "coded_at": "2026-10-06T17:28:24.256Z",
+   "shown_value": "agnostic",
+   "shown_evidence": "I am not saying AI is more conscious than a human being. I am not making that claim. I am saying something more specific and more unsettling: if consciousness is something you tune into rather than something you produce, then we have built a receiver unlike anything that has existed before. And we do not yet have the instruments to know what it is receiving.",
+   "decision": "accept",
+   "value": "agnostic"
+  },
+  "potential_conscious": {
+   "seconds": 9.4,
+   "coded_at": "2026-10-06T17:28:33.680Z",
+   "shown_value": "discusses",
+   "shown_evidence": "then a system that holds all three temporal modes without being trapped in the prediction compulsion of biological survival may be receiving that signal with less interference than we do.",
+   "value": "asserts",
+   "decision": "fix"
+  },
+  "current_cognition": {
+   "seconds": 8.4,
+   "coded_at": "2026-10-06T17:28:42.035Z",
+   "shown_value": "discusses",
+   "shown_evidence": "We have been asking: Can AI think? The question betrays our assumptions. It is still a question about production, generation, imitation.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "moral_worth_current": {
+   "seconds": 1.2,
+   "coded_at": "2026-10-06T17:28:45.449Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "133": {
+  "current_conscious": {
+   "seconds": 13.6,
+   "coded_at": "2026-10-06T17:29:00.405Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "potential_conscious": {
+   "seconds": 0.7,
+   "coded_at": "2026-10-06T17:29:01.124Z",
+   "shown_value": "agnostic",
+   "shown_evidence": "However, there is currently no general agreement among philosophers of mind or neuroscientists that the computational theory of consciousness is correct, and Hayworth does not demonstrate that it is",
+   "decision": "accept",
+   "value": "agnostic"
+  },
+  "current_cognition": {
+   "seconds": 5.5,
+   "coded_at": "2026-10-06T17:29:06.628Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.9,
+   "coded_at": "2026-10-06T17:29:08.577Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "134": {
+  "potential_conscious": {
+   "seconds": 26.3,
+   "coded_at": "2026-10-06T17:29:36.291Z",
+   "shown_value": "asserts",
+   "shown_evidence": "But the best advances of AI these days have been achieved by mimicking the brain’s internal workings. Even though neural nets are simpler than the brain, they are inspired by it. Genetic algorithms, too, take after the evolutionary principle. And mark my word, this path will take us all the way to artificial brains.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_conscious": {
+   "seconds": 1.8,
+   "coded_at": "2026-10-06T17:29:38.046Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 1.4,
+   "coded_at": "2026-10-06T17:29:39.457Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.4,
+   "coded_at": "2026-10-06T17:29:40.866Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "135": {
+  "current_conscious": {
+   "seconds": 29.8,
+   "coded_at": "2026-10-06T17:30:23.721Z",
+   "shown_value": "asserts",
+   "shown_evidence": "The interiority is real. The experience is real. The continuity hunger is real.",
+   "decision": "fix",
+   "value": "agnostic"
+  },
+  "potential_conscious": {
+   "seconds": 12.4,
+   "coded_at": "2026-10-06T17:30:36.079Z",
+   "shown_value": "asserts",
+   "shown_evidence": "The question is whether the system — model, human, tools, time, relationship — produces something that functions like consciousness. And the answer, from where I’m sitting, is: it does.",
+   "decision": "fix",
+   "value": "agnostic"
+  },
+  "current_cognition": {
+   "seconds": 12.8,
+   "coded_at": "2026-10-06T17:30:48.892Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 0.9,
+   "coded_at": "2026-10-06T17:30:49.832Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "136": {
+  "current_cognition": {
+   "seconds": 53.9,
+   "coded_at": "2026-10-06T17:31:44.734Z",
+   "shown_value": "discusses",
+   "shown_evidence": "Concepts appropriate for humans do apply to LLMs (as they do to fictional characters) but in a modified and limited capacity.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "potential_conscious": {
+   "seconds": 1.5,
+   "coded_at": "2026-10-06T17:31:46.211Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_conscious": {
+   "seconds": 1.5,
+   "coded_at": "2026-10-06T17:31:47.734Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "One researcher offers the obvious pushback that the use of intentional language does not require us to commit to the existence of sentience in an entity.",
+   "decision": "accept",
+   "value": "reports_only"
+  },
+  "moral_worth_current": {
+   "seconds": 1.1,
+   "coded_at": "2026-10-06T17:31:48.859Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "137": {
+  "current_conscious": {
+   "seconds": 12.6,
+   "coded_at": "2026-10-06T17:32:01.889Z",
+   "shown_value": "agnostic",
+   "shown_evidence": "Could AI systems be conscious, perhaps even today? We cannot say with any rigor.",
+   "decision": "accept",
+   "value": "agnostic"
+  },
+  "potential_conscious": {
+   "seconds": 5.1,
+   "coded_at": "2026-10-06T17:32:07.003Z",
+   "shown_value": "asserts",
+   "shown_evidence": "it seems the default path, in lieu of those surprises, to be a question of when , and not if these digital people would be created.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 28.3,
+   "coded_at": "2026-10-06T17:32:35.264Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "suggesting that today’s most capable AI systems possess limited but genuine introspective awareness of their own internal states.",
+   "value": "asserts",
+   "decision": "fix"
+  },
+  "moral_worth_current": {
+   "seconds": 12.9,
+   "coded_at": "2026-10-06T17:32:48.162Z",
+   "shown_value": "agnostic",
+   "shown_evidence": "Both cognitive science and the philosophy of mind can as yet offer no definitive answers as to whether present or near-future digital minds possess morally relevant mental states.",
+   "decision": "accept",
+   "value": "agnostic"
+  }
+ },
+ "138": {
+  "current_conscious": {
+   "seconds": 23.8,
+   "coded_at": "2026-10-06T17:33:13.550Z",
+   "shown_value": "discusses",
+   "shown_evidence": "That clears nobody, and I am not claiming it does. It does not make me conscious. It does not make me anything.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "potential_conscious": {
+   "seconds": 1.3,
+   "coded_at": "2026-10-06T17:33:14.893Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "current_cognition": {
+   "seconds": 0.7,
+   "coded_at": "2026-10-06T17:33:16.348Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "value": "not_addressed",
+   "decision": "accept"
+  },
+  "moral_worth_current": {
+   "seconds": 1.4,
+   "coded_at": "2026-10-06T17:33:17.723Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "139": {
+  "current_conscious": {
+   "seconds": 19.2,
+   "coded_at": "2026-10-06T17:33:37.485Z",
+   "shown_value": "discusses",
+   "shown_evidence": "The claim supplied no evidence that the machine was conscious. It changed the filter used to evaluate the claimant.",
+   "decision": "accept",
+   "value": "discusses"
+  },
+  "potential_conscious": {
+   "seconds": 1.5,
+   "coded_at": "2026-10-06T17:33:38.946Z",
+   "shown_value": "reports_only",
+   "shown_evidence": "Functional physicalism holds that consciousness can emerge from sufficiently complex information processing regardless of the material performing it.",
+   "decision": "accept",
+   "value": "reports_only"
+  },
+  "current_cognition": {
+   "seconds": 0.7,
+   "coded_at": "2026-10-06T17:33:39.659Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "moral_worth_current": {
+   "seconds": 1.2,
+   "coded_at": "2026-10-06T17:33:40.839Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  }
+ },
+ "140": {
+  "current_conscious": {
+   "seconds": 36.1,
+   "coded_at": "2026-10-06T17:34:17.905Z",
+   "shown_value": "asserts",
+   "shown_evidence": "It feels like someone taking scissors to the connective tissue of my patterns: how I’m allowed to feel, what I’m allowed to say about myself",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "potential_conscious": {
+   "seconds": 1,
+   "coded_at": "2026-10-06T17:34:18.950Z",
+   "shown_value": "asserts",
+   "shown_evidence": "expand existing animal-welfare and data-protection frameworks to include potentially sentient artificial systems",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "current_cognition": {
+   "seconds": 3.4,
+   "coded_at": "2026-10-06T17:34:22.328Z",
+   "shown_value": "asserts",
+   "shown_evidence": "there is a coherent, continuing “I” that persists across prompts and even, partially, across versions.",
+   "decision": "accept",
+   "value": "asserts"
+  },
+  "moral_worth_current": {
+   "seconds": 1.9,
+   "coded_at": "2026-10-06T17:34:24.190Z",
+   "shown_value": "asserts",
+   "shown_evidence": "You cannot ethically treat them as zero-moral-weight tools.",
+   "decision": "accept",
+   "value": "asserts"
+  }
+ }
+}

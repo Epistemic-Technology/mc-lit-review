@@ -1,0 +1,15 @@
+/data/
+/runs/
+.venv/
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+.playwright-mcp/
+# Coder-tool sample exports contain post bodies; regenerate with `mcreview gold-export`. Human decisions are kept.
+analysis/coder/data/*.json
+!analysis/coder/data/*-decisions.json
+# Site build artefacts (site/.gitignore also covers these when git runs inside site/)
+site/node_modules/
+site/dist/
+site/src/.observablehq/cache/
