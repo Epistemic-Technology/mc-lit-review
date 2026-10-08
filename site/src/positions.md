@@ -4,12 +4,15 @@ title: Positions
 
 # Positions, filtered
 
-Choose a slice of the corpus and the stance chart redraws. Shares are of posts whose author addresses the claim.
+Choose a slice of the corpus and the chart redraws. Each row is one of six questions; shares are of posts whose author addresses the question in their own voice.
 
 ```js
-import {stanceDiverging, stanceTable, GROUP_LABELS, GROUP_ORDER, GENRE_LABELS, ITEM_LABELS, vlChart} from "./components/charts.js";
+import {axesDiverging, axesTable, stanceDiverging, stanceTable, GROUP_LABELS, GROUP_ORDER, GENRE_LABELS, AXIS_LABELS, AXIS_QUALIFIED, ITEM_LABELS, vlChart} from "./components/charts.js";
 const posts = await FileAttachment("./data/posts.json").json();
-const byGroupSpec = await FileAttachment("./charts/stance_by_group.vl.json").json();
+const codebook = await FileAttachment("./data/codebook.json").json();
+const byGroupSpec = await FileAttachment("./charts/axes_by_group.vl.json").json();
+const profileSpec = await FileAttachment("./charts/axes_profile.vl.json").json();
+const agencySpec = await FileAttachment("./charts/axes_profile_agency.vl.json").json();
 ```
 
 ```js
@@ -28,20 +31,49 @@ const subset = posts.filter((p) =>
   (relevance === "both" || p.relevance === "central") &&
   (channel === "all" || p.unbiased));
 display(html`<p class="caption">${subset.length.toLocaleString()} posts in this slice.</p>`);
-display(stanceDiverging(stanceTable(subset), {width: Math.min(width, 900)}));
+display(axesDiverging(axesTable(subset), {width: Math.min(width, 900)}));
 ```
+
+<div class="caption">"Yes, qualified" is question-specific: partly (yes on some capacities, no on others) for thinking; yes but only after a major advance for possibility in principle; not now but future AI could, or act with precaution regardless, for moral status.</div>
 
 ## By who is writing
 
-The four headline claims, one panel per publication type, from the static figure in the post.
+One panel per publication type, from the static figure in the post.
 
 ```js
 display(await vlChart(byGroupSpec, {width: Math.min(width, 760) - 300}));
 ```
 
-## The claims
+## Thinking, and goals, without experience
 
 ```js
-const codebook = await FileAttachment("./data/codebook.json").json();
-display(Inputs.table(codebook.constructs.filter((c) => c.group === "stance").map((c) => ({Item: ITEM_LABELS[c.name] || c.name, Claim: c.claim})), {columns: ["Item", "Claim"], width: {Item: 260}, select: false, rows: 20}));
+display(html`<div class="grid grid-cols-2">${await vlChart(profileSpec, {width: Math.min(width / 2, 320)})}${await vlChart(agencySpec, {width: Math.min(width / 2, 300)})}</div>`);
+```
+
+<div class="caption">Posts with a position on experience and on one other "now" question. The lower-right cells, granting cognition or goals while denying or doubting experience, are real camps; the reverse corners are nearly empty.</div>
+
+## The six questions
+
+Each question is derived from the coded claims listed beside it: a committed answer on the first claim wins, the others are consulted when it is silent, and a post that only discusses any of them counts as discussed. The rules are in `mcreview/axes.py`.
+
+```js
+display(html`<table class="axes">
+  <thead><tr><th>Question</th><th>Asks</th><th>Qualified yes means</th><th>Built from (primary first)</th></tr></thead>
+  <tbody>${codebook.axes.map((a) => html`<tr><td><b>${AXIS_LABELS[a.name] || a.label}</b></td><td>${a.question}</td><td>${AXIS_QUALIFIED[a.name] || ""}</td><td>${a.items.map((i) => ITEM_LABELS[i] || i).join("; ")}</td></tr>`)}</tbody>
+</table>`);
+```
+
+## The underlying claims
+
+The fourteen claims as coded, before they were combined into the six questions above. Same slice as the chart at the top.
+
+```js
+const showClaims = view(Inputs.toggle({label: "Show the fourteen claims", value: false}));
+```
+
+```js
+if (showClaims) {
+  display(stanceDiverging(stanceTable(subset), {width: Math.min(width, 900)}));
+  display(Inputs.table(codebook.constructs.filter((c) => c.group === "stance").map((c) => ({Item: ITEM_LABELS[c.name] || c.name, Claim: c.claim})), {columns: ["Item", "Claim"], width: {Item: 260}, select: false, rows: 20}));
+}
 ```

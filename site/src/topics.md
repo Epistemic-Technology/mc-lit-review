@@ -8,29 +8,29 @@ Every relevant post, placed by the similarity of its text and coloured by cluste
 
 ```js
 import * as Plot from "npm:@observablehq/plot";
-import {GROUP_LABELS, GROUP_ORDER, STANCE_LABELS, groupColors, stanceColors} from "./components/charts.js";
+import {GROUP_LABELS, GROUP_ORDER, LEVEL_LABELS, groupColors, axisColors} from "./components/charts.js";
 const posts = await FileAttachment("./data/posts.json").json();
 const topics = await FileAttachment("./data/topics.json").json();
 ```
 
 ```js
-const colorBy = view(Inputs.radio(new Map([["Topic cluster", "cluster"], ["Publication type", "group"], ["Position on current consciousness", "stance"]]), {label: "Colour by", value: "cluster"}));
+const colorBy = view(Inputs.radio(new Map([["Topic cluster", "cluster"], ["Publication type", "group"], ["Current LLMs have experience", "experience_now"], ["Current LLMs genuinely think", "cognition_now"], ["Current LLMs have goals of their own", "agency_now"]]), {label: "Colour by", value: "cluster"}));
 const onlyCore = view(Inputs.toggle({label: "Core cluster members only", value: false}));
 const pick = view(Inputs.select(new Map([["All clusters", null], ...topics.map((t) => [`${t.label} (${t.size})`, t.cluster])]), {label: "Highlight cluster"}));
+const labelN = view(Inputs.range([0, topics.length], {label: "Label the largest N clusters", step: 1, value: 12}));
 ```
 
 ```js
 const laid = posts.filter((p) => p.x != null && (!onlyCore || p.cluster_core));
 const labelOf = new Map(topics.map((t) => [t.cluster, t.label]));
-const gc = groupColors(), sc = stanceColors();
+const gc = groupColors(), sc = axisColors();
 const palette = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"];
 const clusterColor = (c) => palette[((c % palette.length) + palette.length) % palette.length];
 let fill, legend = null;
 if (colorBy === "group") { fill = (d) => gc[d.group]; legend = GROUP_ORDER.map((g) => [GROUP_LABELS[g], gc[g]]); }
-else if (colorBy === "stance") { fill = (d) => sc[d.stance.current_conscious] || "var(--theme-foreground-faintest)"; legend = ["asserts", "agnostic", "discusses", "denies"].map((k) => [STANCE_LABELS[k], sc[k]]); }
+else if (colorBy.endsWith("_now")) { fill = (d) => sc[d.axes[colorBy]] || "var(--theme-foreground-faintest)"; legend = ["yes", "yes_qualified", "unsure", "discussed", "no"].map((k) => [LEVEL_LABELS[k], sc[k]]); }
 else { fill = (d) => clusterColor(d.cluster); }
 const dim = (d) => pick == null || d.cluster === pick;
-const labelN = view(Inputs.range([0, topics.length], {label: "Label the largest N clusters", step: 1, value: 12}));
 const centroids = topics.filter((t) => t.centroid).slice(0, labelN).map((t) => ({x: t.centroid[0], y: t.centroid[1], label: t.label, cluster: t.cluster}));
 display(Plot.plot({
   width: Math.min(width, 960), height: Math.min(width, 960) * 0.75, inset: 20, aspectRatio: 1,
@@ -49,14 +49,13 @@ if (legend) display(html`<div class="caption">${legend.map(([l, c]) => html`<spa
 ## The clusters
 
 ```js
-const sc2 = stanceColors();
 display(Inputs.table(topics.map((t) => ({
   label: t.label, size: t.size, core: t.core_size, description: t.description,
-  deny: t.stance_current_conscious.denies || 0, assert: t.stance_current_conscious.asserts || 0,
+  deny: t.axes_experience_now.no || 0, assert: (t.axes_experience_now.yes || 0), think: (t.axes_cognition_now.yes || 0) + (t.axes_cognition_now.yes_qualified || 0), goals: t.axes_agency_now.yes || 0,
   group: Object.entries(t.groups).sort((a, b) => b[1] - a[1])[0]?.[0], terms: t.terms.slice(0, 8).join(", ")
 })), {
-  columns: ["label", "size", "core", "deny", "assert", "group", "description", "terms"],
-  header: {label: "Topic", size: "Posts", core: "Core", deny: "Deny", assert: "Assert", group: "Main type", description: "Description", terms: "Distinctive terms"},
+  columns: ["label", "size", "core", "deny", "assert", "think", "goals", "group", "description", "terms"],
+  header: {label: "Topic", size: "Posts", core: "Core", deny: "No experience", assert: "Has experience", think: "Thinks", goals: "Own goals", group: "Main type", description: "Description", terms: "Distinctive terms"},
   width: {label: 240, description: 320, terms: 260}, select: false, rows: 40,
   format: {group: (g) => GROUP_LABELS[g] || g}
 }));

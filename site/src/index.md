@@ -9,7 +9,7 @@ What Substack writers say about whether AI systems think, feel, or matter morall
 ```js
 import {statRow, vlChart, GROUP_LABELS} from "./components/charts.js";
 const summary = await FileAttachment("./data/summary.json").json();
-const stanceSpec = await FileAttachment("./charts/stance_landscape.vl.json").json();
+const stanceSpec = await FileAttachment("./charts/axes_landscape.vl.json").json();
 const whoSpec = await FileAttachment("./charts/who_writes.vl.json").json();
 ```
 
@@ -28,7 +28,7 @@ display(statRow([
 display(await vlChart(stanceSpec, {width: Math.min(width, 760) - 300}));
 ```
 
-<div class="caption">Each bar is one claim from the codebook. Shares are of posts whose author addresses the claim in their own voice; posts that only report others' positions, or never raise the claim, are excluded. Hover for counts. <a href="./positions">Filter by publication type, genre and more →</a></div>
+<div class="caption">Each bar is one of six questions, each combining one to three coded claims. Shares are of posts whose author addresses the question in their own voice; posts that only report others' positions, or never raise it, are excluded. "Yes, qualified" means partly (thinking), after a major advance (possibility), or future AI or precaution (moral status). Hover for counts. <a href="./positions">Filter by publication type, genre and more →</a></div>
 
 ## Who writes about it
 
@@ -40,7 +40,7 @@ display(await vlChart(whoSpec, {width: Math.min(width, 700) - 220}));
 
 ## Where to go
 
-- **[Positions](./positions)**: the stance chart with filters, and how positions differ by who is writing.
+- **[Positions](./positions)**: the six questions with filters, how positions differ by who is writing, and the claims behind them.
 - **[Arguments and sources](./arguments)**: which arguments appear, which get traction, what gets cited, who gets named.
 - **[Topic map](./topics)**: the relevant posts laid out by similarity, with labelled clusters.
 - **[Citation network](./network)**: which publications cite which.

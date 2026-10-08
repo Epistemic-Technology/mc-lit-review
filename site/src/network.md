@@ -8,7 +8,7 @@ Which publications cite which. An edge means at least one post in the source pub
 
 ```js
 import * as d3 from "npm:d3";
-import {GROUP_LABELS, GROUP_ORDER, ITEM_LABELS, groupColors, escapeHtml} from "./components/charts.js";
+import {GROUP_LABELS, GROUP_ORDER, AXIS_LABELS, LEVEL_LABELS, groupColors, axisColors, escapeHtml} from "./components/charts.js";
 const net = await FileAttachment("./data/network.json").json();
 ```
 
@@ -18,7 +18,7 @@ const onlyTyped = view(Inputs.toggle({label: "Only publications with relevant po
 const labelTop = view(Inputs.range([0, 80], {label: "Labels in view (top N by citations)", step: 5, value: 20}));
 const minWeight = view(Inputs.range([1, 10], {label: "Minimum links per edge", step: 1, value: 1}));
 const backboneOnly = view(Inputs.toggle({label: "Backbone edges only", value: false}));
-const colorBy = view(Inputs.select(new Map([["Publication type", "group"], ...Object.entries(ITEM_LABELS).map(([k, v]) => [`Position: ${v}`, k])]), {label: "Colour nodes by", value: "group"}));
+const colorBy = view(Inputs.select(new Map([["Publication type", "group"], ...Object.entries(AXIS_LABELS).map(([k, v]) => [`Position: ${v}`, k])]), {label: "Colour nodes by", value: "group"}));
 ```
 
 ```js
@@ -28,15 +28,17 @@ const viewState = {transform: null, focused: null};
 
 ```js
 const gc = groupColors();
-// Stance colouring: lean = (asserts - denies) / positioned posts on a red-grey-blue diverging scale;
-// opacity = share of positioned posts that commit either way, so all-agnostic publications render pale.
-const leanColor = d3.scaleLinear().domain([-1, 0, 1]).range([getComputedStyle(document.documentElement).getPropertyValue("--stance-denies").trim() || "#e34948", "#b4b3ac", getComputedStyle(document.documentElement).getPropertyValue("--stance-asserts").trim() || "#2a78d6"]).interpolate(d3.interpolateRgb);
+// Position colouring on a derived axis: lean = (yes + qualified yes - no) / positioned posts on a
+// red-grey-blue diverging scale; paleness = share of positioned posts that commit either way, so publications
+// that are all unsure or non-committal render pale. Node axes counts are [yes, yes_qualified, unsure, discussed, no].
+const ac = axisColors();
+const leanColor = d3.scaleLinear().domain([-1, 0, 1]).range([ac.no || "#e34948", "#b4b3ac", ac.yes || "#2a78d6"]).interpolate(d3.interpolateRgb);
 function stanceOf(n) {
-  const c = n.stance?.[colorBy];
+  const c = n.axes?.[colorBy];
   if (!c) return null;
-  const [a, d, g, x] = c, pos = a + d + g + x;
+  const [y, q, u, x, d] = c, pos = y + q + u + x + d;
   if (!pos) return null;
-  return {lean: (a - d) / pos, commit: (a + d) / pos, a, d, g, x, pos};
+  return {lean: (y + q - d) / pos, commit: (y + q + d) / pos, y, q, u, x, d, pos};
 }
 // Paleness is a blend toward the surface colour rather than transparency, so disks stay opaque and edges
 // end at their border.
@@ -94,7 +96,7 @@ const circles = root.append("g").selectAll("circle").data(ranked).join("circle")
   .on("click", (ev, n) => { ev.stopPropagation(); setFocus(focused && focused.length === 1 && focused[0] === n.id ? null : n.id); });
 circles.append("title").text((n) => {
   const st = colorBy !== "group" ? stanceOf(n) : null;
-  const pos = st ? `\n${ITEM_LABELS[colorBy]}: asserts ${st.a}, denies ${st.d}, agnostic ${st.g}, discusses ${st.x}` : colorBy !== "group" ? `\n${ITEM_LABELS[colorBy]}: no position taken` : "";
+  const pos = st ? `\n${AXIS_LABELS[colorBy]}: yes ${st.y}, qualified ${st.q}, unsure ${st.u}, discussed ${st.x}, no ${st.d}` : colorBy !== "group" ? `\n${AXIS_LABELS[colorBy]}: no position taken` : "";
   return `${n.name || n.host}\n${GROUP_LABELS[n.group] || "untyped"}\ncited by ${n.in_pubs} publications · cites ${n.out_pubs}\n${n.relevant_posts} relevant posts${pos}\nClick to focus; click the name to open its page`;
 });
 // Labels are links to the publication page, in the site's link colour with an underline on hover.
@@ -154,8 +156,8 @@ display(svg.node());
 display(html`<p class="caption">Scroll or pinch to zoom, drag to pan, double-click to reset. About twenty labels are shown for whatever is in view, so zooming into a region labels it. Click a node to focus on it and its neighbours; click the name to open the publication page.</p>`);
 const legend = colorBy === "group"
   ? GROUP_ORDER.map((k) => html`<span class="pill"><span class="swatch" style="background:${gc[k]}"></span>${GROUP_LABELS[k]}</span>`)
-  : html`<span class="pill"><span class="swatch" style="background:${leanColor(-1)}"></span>Denies</span><span class="pill"><span class="swatch" style="background:linear-gradient(90deg, ${leanColor(-1)}, ${leanColor(0)}, ${leanColor(1)}); width:60px"></span>lean</span><span class="pill"><span class="swatch" style="background:${leanColor(1)}"></span>Asserts</span><span class="pill"><span class="swatch" style="background:${d3.interpolateRgb(surface, leanColor(0))(0.3)}"></span>pale: mostly agnostic or non-committal</span><span class="pill"><span class="swatch" style="background:${d3.interpolateRgb(surface, "#b4b3ac")(0.45)}"></span>no position taken</span>`;
-display(html`<div class="caption">${nodes.length} publications, ${edges.length} edges. ${legend} Node size: citing publications.${colorBy !== "group" ? html` Colour: the publication's lean on "${ITEM_LABELS[colorBy]}", asserts minus denies over posts taking a position; a single post is enough.` : ""}</div>`);
+  : html`<span class="pill"><span class="swatch" style="background:${leanColor(-1)}"></span>No</span><span class="pill"><span class="swatch" style="background:linear-gradient(90deg, ${leanColor(-1)}, ${leanColor(0)}, ${leanColor(1)}); width:60px"></span>lean</span><span class="pill"><span class="swatch" style="background:${leanColor(1)}"></span>Yes</span><span class="pill"><span class="swatch" style="background:${d3.interpolateRgb(surface, leanColor(0))(0.3)}"></span>pale: mostly unsure or non-committal</span><span class="pill"><span class="swatch" style="background:${d3.interpolateRgb(surface, "#b4b3ac")(0.45)}"></span>no position taken</span>`;
+display(html`<div class="caption">${nodes.length} publications, ${edges.length} edges. ${legend} Node size: citing publications.${colorBy !== "group" ? html` Colour: the publication's lean on "${AXIS_LABELS[colorBy]}", yes (including qualified) minus no over posts taking a position; a single post is enough.` : ""}</div>`);
 ```
 
 ## Most cited publications
@@ -177,14 +179,15 @@ viewState.apply?.(picked.map((r) => r.id));
 ## Do camps cite each other?
 
 ```js
-const cc = net.cross_camp.filter((d) => d.citing && d.cited && !["not_addressed", "reports_only"].includes(d.citing) && !["not_addressed", "reports_only"].includes(d.cited));
-const order = ["asserts", "agnostic", "discusses", "denies"];
+const cc = net.cross_camp_axes.filter((d) => d.citing && d.cited && d.citing !== "not_addressed" && d.cited !== "not_addressed");
+const order = ["yes", "unsure", "discussed", "no"];
+const short = {yes: "Yes", unsure: "Unsure", discussed: "Discussed", no: "No"};
 display(Plot.plot({
   width: 420, height: 320, marginLeft: 90, marginBottom: 60, padding: 0.05,
-  x: {domain: order, label: "Cited post's position →", tickFormat: (d) => d}, y: {domain: order, label: "↑ Citing post's position"},
+  x: {domain: order, label: "Cited post's position →", tickFormat: (d) => short[d]}, y: {domain: order, label: "↑ Citing post's position", tickFormat: (d) => short[d]},
   color: {scheme: "blues", legend: true, label: "Links"},
-  marks: [Plot.cell(cc, {x: "cited", y: "citing", fill: "n", inset: 1, title: (d) => `${d.citing} → ${d.cited}: ${d.n} links`}), Plot.text(cc, {x: "cited", y: "citing", text: "n", fill: (d) => (d.n > 15 ? "white" : "var(--theme-foreground)")})]
+  marks: [Plot.cell(cc, {x: "cited", y: "citing", fill: "n", inset: 1, title: (d) => `${LEVEL_LABELS[d.citing]} → ${LEVEL_LABELS[d.cited]}: ${d.n} links`}), Plot.text(cc, {x: "cited", y: "citing", text: "n", fill: (d) => (d.n > 15 ? "white" : "var(--theme-foreground)")})]
 }));
 ```
 
-<div class="caption">Links between relevant posts, by the citing and cited authors' positions on current LLM consciousness. Counts are small: most posts about machine minds do not link to other Substack posts about machine minds.</div>
+<div class="caption">Links between relevant posts, by the citing and cited authors' positions on whether current LLMs have experience. Counts are small: most posts about machine minds do not link to other Substack posts about machine minds.</div>

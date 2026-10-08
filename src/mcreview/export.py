@@ -15,6 +15,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from .axes import AXES, LEVELS, derive
 from .codebook import Codebook
 from .config import CONFIG_DIR, PROJECT_ROOT, load_yaml
 from .context import Ctx
@@ -86,6 +87,7 @@ def load_posts(ctx: Ctx, cb: Codebook) -> list[dict]:
             "community": community, "group": GROUPS.get(community or "", "general"),
             "relevance": c.get("relevance"), "genre": c.get("genre"), "claim_object": c.get("claim_object"), "reports_lab_view": c.get("reports_lab_view"),
             "stance": {k: c.get(k) for k in stance_items},
+            "axes": derive({k: c.get(k) for k in stance_items}),
             "arguments": [k for k in arg_items if c.get(k) == "true"],
             "reactions": r["reaction_count"], "comments": r["comment_count"], "restacks": r["restack_count"],
             "baseline_reactions": round(baseline, 2) if baseline is not None else None,
@@ -121,6 +123,27 @@ def stance_tables(posts: list[dict], cb: Codebook) -> dict:
             "group_labels": GROUP_LABELS}
 
 
+def axis_tables(posts: list[dict]) -> dict:
+    """The five derived axes (mcreview.axes), tabulated like stance_tables, plus the joint distribution of the
+    two 'now' axes: the experience x cognition profile is where 'thinks but is not conscious' shows up."""
+    def table(subset):
+        return {a: {lv: sum(1 for p in subset if p["axes"][a] == lv) for lv in LEVELS} for a in AXES}
+    by_group = {g: table([p for p in posts if p["group"] == g]) for g in GROUP_LABELS}
+    by_genre = {g: table([p for p in posts if p["genre"] == g]) for g in sorted({p["genre"] for p in posts if p["genre"]})}
+    by_object = {g: table([p for p in posts if p["claim_object"] == g]) for g in sorted({p["claim_object"] for p in posts if p["claim_object"]})}
+    unbiased = [p for p in posts if p["unbiased"] and p["quarter"]]
+    by_quarter = {qq: table([p for p in unbiased if p["quarter"] == qq]) for qq in sorted({p["quarter"] for p in unbiased})}
+    profile = Counter((p["axes"]["experience_now"], p["axes"]["cognition_now"]) for p in posts)
+    profile_ag = Counter((p["axes"]["experience_now"], p["axes"]["agency_now"]) for p in posts)
+    committed = Counter(sum(1 for a in AXES if p["axes"][a] not in ("not_addressed", "discussed")) for p in posts)
+    return {"axes": [{"name": a, **{k: v for k, v in d.items() if k != "items"}, "items": d["items"]} for a, d in AXES.items()],
+            "levels": list(LEVELS), "n": len(posts), "overall": table(posts), "by_group": by_group, "by_genre": by_genre,
+            "by_claim_object": by_object, "by_quarter_unbiased": by_quarter, "n_unbiased": len(unbiased),
+            "profile_experience_cognition": [{"experience_now": k[0], "cognition_now": k[1], "n": v} for k, v in profile.items()],
+            "profile_experience_agency": [{"experience_now": k[0], "agency_now": k[1], "n": v} for k, v in profile_ag.items()],
+            "axes_committed_per_post": {str(k): v for k, v in sorted(committed.items())}, "group_labels": GROUP_LABELS}
+
+
 def argument_tables(posts: list[dict], cb: Codebook) -> list[dict]:
     out = []
     n = len(posts) or 1
@@ -138,6 +161,7 @@ def argument_tables(posts: list[dict], cb: Codebook) -> list[dict]:
             "mean_in_pubs": round(sum(cited) / len(cited), 3) if cited else 0,
             "share_cited": round(sum(1 for x in cited if x > 0) / (len(cited) or 1), 4),
             "stance_current_conscious": _count(with_arg, lambda p: p["stance"].get("current_conscious")),
+            "axes_experience_now": _count(with_arg, lambda p: p["axes"]["experience_now"]),
         })
     return out
 
@@ -158,6 +182,9 @@ def topic_tables(ctx: Ctx, posts: list[dict]) -> list[dict]:
             "groups": _count(ps, lambda p: p["group"]), "genres": _count(ps, lambda p: p["genre"]),
             "stance_current_conscious": _count(ps, lambda p: p["stance"].get("current_conscious")),
             "stance_moral_worth_current": _count(ps, lambda p: p["stance"].get("moral_worth_current")),
+            "axes_experience_now": _count(ps, lambda p: p["axes"]["experience_now"]),
+            "axes_cognition_now": _count(ps, lambda p: p["axes"]["cognition_now"]),
+            "axes_agency_now": _count(ps, lambda p: p["axes"]["agency_now"]),
             "median_reactions": statistics.median([p["reactions"] or 0 for p in ps]) if ps else 0,
             "centroid": [round(statistics.mean(p["x"] for p in ps if p["x"] is not None), 3), round(statistics.mean(p["y"] for p in ps if p["y"] is not None), 3)] if ps else None,
         })
@@ -170,16 +197,23 @@ def network_tables(ctx: Ctx, posts: list[dict]) -> dict:
         """SELECT n.publication_id, u.host, u.name, n.community, n.in_pubs, n.out_pubs, n.in_posts, n.pagerank, n.betweenness, n.x, n.y
            FROM pub_network n JOIN publications u ON u.id=n.publication_id""").fetchall()
     rel_pubs = Counter(p["publication_id"] for p in posts)
-    # Per-publication stance counts on every item (asserts, denies, agnostic, discusses) for colouring nodes.
+    # Per-publication stance counts on every item (asserts, denies, agnostic, discusses) for colouring nodes,
+    # and the same on the derived axes (yes, yes_qualified, unsure, discussed, no).
     stance_items = [c.name for c in Codebook().by_group("stance")]
     pub_stance: dict[int, dict[str, list[int]]] = defaultdict(lambda: {it: [0, 0, 0, 0] for it in stance_items})
+    axis_levels = ("yes", "yes_qualified", "unsure", "discussed", "no")
+    pub_axes: dict[int, dict[str, list[int]]] = defaultdict(lambda: {a: [0] * len(axis_levels) for a in AXES})
     for p in posts:
         for it in stance_items:
             v = p["stance"].get(it)
             if v in ("asserts", "denies", "agnostic", "discusses"):
                 pub_stance[p["publication_id"]][it][("asserts", "denies", "agnostic", "discusses").index(v)] += 1
+        for a in AXES:
+            v = p["axes"][a]
+            if v in axis_levels:
+                pub_axes[p["publication_id"]][a][axis_levels.index(v)] += 1
     nodes = [{"id": int(r["publication_id"]), "host": r["host"], "name": r["name"], "community": r["community"],
-              "stance": pub_stance.get(int(r["publication_id"])),
+              "stance": pub_stance.get(int(r["publication_id"])), "axes": pub_axes.get(int(r["publication_id"])),
               "group": GROUPS.get((pub_codes.get(int(r["publication_id"])) or {}).get("community", ""), None),
               "relevant_posts": rel_pubs.get(int(r["publication_id"]), 0),
               "in_pubs": r["in_pubs"], "out_pubs": r["out_pubs"], "in_posts": r["in_posts"], "pagerank": round(r["pagerank"], 6), "betweenness": round(r["betweenness"], 2),
@@ -187,11 +221,15 @@ def network_tables(ctx: Ctx, posts: list[dict]) -> dict:
     edges = [{"source": int(r[0]), "target": int(r[1]), "weight": int(r[2]), "backbone": int(r[3])} for r in ctx.conn.execute("SELECT * FROM pub_edges")]
     post_ids = {p["id"] for p in posts}
     post_edges = [{"source": int(r[0]), "target": int(r[1])} for r in ctx.conn.execute("SELECT src_post_id, dst_post_id FROM network_edges") if int(r[0]) in post_ids and int(r[1]) in post_ids]
-    # cross-camp citation: stance of citing vs cited post on current consciousness
+    # cross-camp citation: position of citing vs cited post on current consciousness (raw item) and on the
+    # derived experience axis
     st = {p["id"]: p["stance"].get("current_conscious") for p in posts}
     camp = Counter((st.get(e["source"]), st.get(e["target"])) for e in post_edges)
+    ax = {p["id"]: p["axes"]["experience_now"] for p in posts}
+    camp_ax = Counter((ax.get(e["source"]), ax.get(e["target"])) for e in post_edges)
     return {"pub_nodes": nodes, "pub_edges": edges, "post_edges": post_edges,
-            "cross_camp": [{"citing": k[0], "cited": k[1], "n": v} for k, v in camp.items()]}
+            "cross_camp": [{"citing": k[0], "cited": k[1], "n": v} for k, v in camp.items()],
+            "cross_camp_axes": [{"citing": k[0], "cited": k[1], "n": v} for k, v in camp_ax.items()]}
 
 
 def _tier_lookup(tiers_cfg: dict):
@@ -294,6 +332,7 @@ def publication_tables(ctx: Ctx, posts: list[dict]) -> list[dict]:
             "in_pubs": int(n["in_pubs"]) if n else 0, "out_pubs": int(n["out_pubs"]) if n else 0, "pagerank": round(n["pagerank"], 6) if n else None,
             "betweenness": round(n["betweenness"], 2) if n else None, "network_community": int(n["community"]) if n else None,
             "stance_current_conscious": _count(ps, lambda p: p["stance"].get("current_conscious")),
+            "axes_experience_now": _count(ps, lambda p: p["axes"]["experience_now"]),
             "top_cluster": Counter(p["cluster_label"] for p in ps if p["cluster_label"]).most_common(1)[0][0] if any(p["cluster_label"] for p in ps) else None,
             "post_ids": [p["id"] for p in ps],
         })
@@ -342,6 +381,7 @@ def export(ctx: Ctx, out_dir: Path | None = None) -> Path:
         "posts.json": posts,
         "summary.json": summary(ctx, posts, cb),
         "stance.json": stance_tables(posts, cb),
+        "stance_axes.json": axis_tables(posts),
         "arguments.json": argument_tables(posts, cb),
         "topics.json": topic_tables(ctx, posts),
         "network.json": network_tables(ctx, posts),
@@ -349,6 +389,7 @@ def export(ctx: Ctx, out_dir: Path | None = None) -> Path:
         "publications.json": publication_tables(ctx, posts),
         "methods.json": methods(ctx),
         "codebook.json": {"version": cb.version, "domain": cb.domain, "stance_options": cb.stance_options,
+                          "axes": [{"name": a, **d} for a, d in AXES.items()], "axis_levels": list(LEVELS),
                           "constructs": [{"name": c.name, "group": c.group, "primitive": c.primitive, "instructions": c.instructions, "claim": c.claim, "options": list(c.options)} for c in cb.constructs],
                           "publication_constructs": [{"name": c.name, "options": list(c.options)} for c in cb.publication_constructs]},
     }

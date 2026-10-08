@@ -17,6 +17,18 @@ export const ITEM_LABELS = {
   advance_needed: "Current architectures are insufficient", cannot_know: "We cannot know whether AI is conscious",
   precaution: "Act with precaution regardless", deflationary: "AI consciousness talk is hype"
 };
+// Derived axes (mcreview.axes): five positions computed from the stance items; the site's headline view.
+export const AXIS_KEYS = ["experience_now", "cognition_now", "agency_now", "possible", "moral_status", "serious"];
+export const AXIS_LABELS = {
+  experience_now: "Current LLMs have experience", cognition_now: "Current LLMs genuinely think", agency_now: "Current LLMs have goals of their own",
+  possible: "AI could have a mind in principle", moral_status: "AI has moral status", serious: "AI consciousness is a serious question"
+};
+export const AXIS_QUALIFIED = {
+  cognition_now: "Partly: yes on some capacities, no on others", possible: "Yes, but only after a major advance beyond current architectures",
+  moral_status: "Not now, but future AI could, or act with precaution regardless"
+};
+export const LEVELS = ["no", "unsure", "discussed", "yes_qualified", "yes"];   // left to right on the diverging bar
+export const LEVEL_LABELS = {no: "No", unsure: "Unsure", discussed: "Discussed, no position", yes_qualified: "Yes, qualified", yes: "Yes", not_addressed: "Not addressed"};
 export const ARG_LABELS = {
   arg_chinese_room: "Chinese room", arg_stochastic_parrot: "Stochastic parrot / next-token", arg_hard_problem: "Hard problem",
   arg_other_minds: "Other minds / behavioural evidence", arg_self_report: "Self-reports unreliable", arg_functionalism: "Functionalism / substrate independence",
@@ -30,6 +42,9 @@ export function cssVar(name) {
 }
 export function stanceColors() {
   return {denies: cssVar("--stance-denies"), agnostic: cssVar("--stance-agnostic"), discusses: cssVar("--stance-discusses"), asserts: cssVar("--stance-asserts")};
+}
+export function axisColors() {
+  return {no: cssVar("--axis-no"), unsure: cssVar("--axis-unsure"), discussed: cssVar("--axis-discussed"), yes_qualified: cssVar("--axis-yes-qualified"), yes: cssVar("--axis-yes")};
 }
 export function groupColors() {
   return {general: cssVar("--series-1"), ai_field: cssVar("--series-2"), academic: cssVar("--series-3"), journalism: cssVar("--series-4"), religion: cssVar("--series-5")};
@@ -91,6 +106,57 @@ export function stanceDiverging(table, {items = Object.keys(ITEM_LABELS), width 
       Plot.text(rows.filter((r) => r.option === "asserts"), {x: 1, y: "item", text: (d) => d.n.toLocaleString(), dx: 40, textAnchor: "start", fill: "var(--theme-foreground-muted)", fontSize: 10})
     ]
   });
+}
+
+// Diverging stacked bar of the derived axes, from a table {axis: {level: count}}. Yes and qualified yes on the
+// right, no on the left, unsure and discussed straddling zero. Shares are of posts addressing the axis.
+export function axesDiverging(table, {axes = AXIS_KEYS, width = 640, title} = {}) {
+  const colors = axisColors();
+  const rows = [];
+  for (const axis of axes) {
+    const c = table[axis];
+    if (!c) continue;
+    const n = LEVELS.reduce((a, k) => a + (c[k] || 0), 0);
+    if (!n) continue;
+    const sh = Object.fromEntries(LEVELS.map((k) => [k, (c[k] || 0) / n]));
+    const pos = sh.yes + sh.yes_qualified;
+    let x = -(sh.no + (sh.unsure + sh.discussed) / 2);
+    for (const k of LEVELS) {
+      rows.push({item: AXIS_LABELS[axis] || axis, key: axis, option: k, x1: x, x2: x + sh[k], share: sh[k], count: c[k] || 0, n, pos, neg: sh.no});
+      x += sh[k];
+    }
+  }
+  const order = [...new Set(rows.filter((r) => r.option === "yes").sort((a, b) => b.pos - a.pos).map((r) => r.item))];
+  const label = (d) => d.option === "yes_qualified" && AXIS_QUALIFIED[d.key] ? `${LEVEL_LABELS[d.option]} (${AXIS_QUALIFIED[d.key]})` : LEVEL_LABELS[d.option];
+  return Plot.plot({
+    title, width, height: 32 * order.length + 60, marginLeft: 250, marginRight: 90,
+    x: {label: "Share of posts addressing the question", domain: [-1, 1], tickFormat: (d) => `${Math.round(Math.abs(d) * 100)}%`, grid: true},
+    y: {domain: order, label: null},
+    color: {domain: LEVELS, range: LEVELS.map((k) => colors[k]), legend: true, tickFormat: (d) => LEVEL_LABELS[d]},
+    marks: [
+      Plot.barX(rows, {x1: "x1", x2: "x2", y: "item", fill: "option", insetTop: 4, insetBottom: 4, stroke: "var(--theme-background)", strokeWidth: 2,
+        title: (d) => `${d.item}\n${label(d)}: ${d.count} posts (${Math.round(d.share * 100)}%) of ${d.n} addressing`}),
+      Plot.ruleX([0], {stroke: "var(--axis)"}),
+      Plot.text(rows.filter((r) => r.option === "yes" && r.pos > 0 && r.pos < 0.9), {x: "x2", y: "item", text: (d) => `${Math.round(d.pos * 100)}%`, dx: 6, textAnchor: "start", fill: "var(--theme-foreground-muted)", fontSize: 11}),
+      Plot.text(rows.filter((r) => r.option === "yes" && r.pos >= 0.9), {x: "x2", y: "item", text: (d) => `${Math.round(d.pos * 100)}%`, dx: -6, textAnchor: "end", fill: "white", fontSize: 11}),
+      Plot.text(rows.filter((r) => r.option === "no" && r.neg > 0 && r.neg < 0.9), {x: "x1", y: "item", text: (d) => `${Math.round(d.neg * 100)}%`, dx: -6, textAnchor: "end", fill: "var(--theme-foreground-muted)", fontSize: 11}),
+      Plot.text(rows.filter((r) => r.option === "no" && r.neg >= 0.9), {x: "x1", y: "item", text: (d) => `${Math.round(d.neg * 100)}%`, dx: 6, textAnchor: "start", fill: "white", fontSize: 11}),
+      Plot.text(rows.filter((r) => r.option === "yes"), {x: 1, y: "item", text: (d) => d.n.toLocaleString(), dx: 40, textAnchor: "start", fill: "var(--theme-foreground-muted)", fontSize: 10})
+    ]
+  });
+}
+
+// Count posts per level for each axis, from a list of post objects.
+export function axesTable(posts, axes = AXIS_KEYS) {
+  const t = {};
+  for (const a of axes) {
+    t[a] = {};
+    for (const p of posts) {
+      const v = p.axes?.[a];
+      if (v) t[a][v] = (t[a][v] || 0) + 1;
+    }
+  }
+  return t;
 }
 
 // Count posts per stance option for each item, from a list of post objects.

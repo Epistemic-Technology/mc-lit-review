@@ -6,6 +6,7 @@
   --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100; --series-5: #e87ba4;
   --series-6: #008300; --series-7: #4a3aa7; --series-8: #e34948;
   --stance-denies: #e34948; --stance-agnostic: #898781; --stance-discusses: #c3c2b7; --stance-asserts: #2a78d6;
+  --axis-no: #e34948; --axis-unsure: #898781; --axis-discussed: #c3c2b7; --axis-yes-qualified: #1baf7a; --axis-yes: #2a78d6;
   --grid: #e1e0d9; --axis: #c3c2b7; --muted: #898781;
 }
 @media (prefers-color-scheme: dark) {
@@ -13,6 +14,7 @@
     --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
     --series-6: #008300; --series-7: #9085e9; --series-8: #e66767;
     --stance-denies: #e66767; --stance-agnostic: #898781; --stance-discusses: #4a4a47; --stance-asserts: #3987e5;
+    --axis-no: #e66767; --axis-unsure: #898781; --axis-discussed: #4a4a47; --axis-yes-qualified: #199e70; --axis-yes: #3987e5;
     --grid: #2c2c2a; --axis: #383835;
   }
 }
@@ -20,6 +22,7 @@
   --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --series-5: #d55181;
   --series-6: #008300; --series-7: #9085e9; --series-8: #e66767;
   --stance-denies: #e66767; --stance-agnostic: #898781; --stance-discusses: #4a4a47; --stance-asserts: #3987e5;
+  --axis-no: #e66767; --axis-unsure: #898781; --axis-discussed: #4a4a47; --axis-yes-qualified: #199e70; --axis-yes: #3987e5;
   --grid: #2c2c2a; --axis: #383835;
 }
 
@@ -35,6 +38,8 @@
 figure { margin: 0; }
 .tt { font-size: 12px; }
 table.posts td { vertical-align: top; }
+table.axes { font-size: 13px; }
+table.axes td, table.axes th { vertical-align: top; padding: 6px 10px 6px 0; }
 .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; background: var(--theme-foreground-faintest); margin-right: 4px; }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
 .netlabel text { cursor: pointer; }

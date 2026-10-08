@@ -1,0 +1,265 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "data": {
+    "name": "data-22b1d2b465c5bd96004605cfc8f41447"
+  },
+  "datasets": {
+    "data-22b1d2b465c5bd96004605cfc8f41447": [
+      {
+        "experience": "No",
+        "n": 296,
+        "other": "No",
+        "share": 0.4713375796178344
+      },
+      {
+        "experience": "Unsure",
+        "n": 67,
+        "other": "Yes",
+        "share": 0.10668789808917198
+      },
+      {
+        "experience": "No",
+        "n": 24,
+        "other": "Yes",
+        "share": 0.03821656050955414
+      },
+      {
+        "experience": "Yes",
+        "n": 187,
+        "other": "Yes",
+        "share": 0.29777070063694266
+      },
+      {
+        "experience": "Yes",
+        "n": 5,
+        "other": "No",
+        "share": 0.007961783439490446
+      },
+      {
+        "experience": "No",
+        "n": 5,
+        "other": "Unsure",
+        "share": 0.007961783439490446
+      },
+      {
+        "experience": "Unsure",
+        "n": 19,
+        "other": "No",
+        "share": 0.030254777070063694
+      },
+      {
+        "experience": "Unsure",
+        "n": 25,
+        "other": "Unsure",
+        "share": 0.03980891719745223
+      }
+    ]
+  },
+  "height": 200,
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "field": "n",
+          "legend": null,
+          "scale": {
+            "range": [
+              "#cde2fb",
+              "#0d366b"
+            ]
+          },
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "experience",
+            "title": "Experience",
+            "type": "nominal"
+          },
+          {
+            "field": "other",
+            "title": "Current LLMs have goals of their own",
+            "type": "nominal"
+          },
+          {
+            "field": "n",
+            "title": "Posts",
+            "type": "quantitative"
+          },
+          {
+            "field": "share",
+            "format": ".0%",
+            "title": "Share of committed",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "labelAngle": 0,
+            "labelPadding": 6,
+            "orient": "top"
+          },
+          "field": "other",
+          "sort": [
+            "No",
+            "Unsure",
+            "Yes"
+          ],
+          "title": "Current LLMs have goals of their own",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "experience",
+          "sort": [
+            "Yes",
+            "Unsure",
+            "No"
+          ],
+          "title": "Current LLMs have experience",
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "stroke": "#fcfcfb",
+        "strokeWidth": 2,
+        "type": "rect"
+      }
+    },
+    {
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "(datum.n > 75.36)",
+            "value": "#fcfcfb"
+          },
+          "value": "#0b0b0b"
+        },
+        "text": {
+          "field": "n",
+          "format": ",d",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "other",
+          "sort": [
+            "No",
+            "Unsure",
+            "Yes"
+          ],
+          "type": "nominal"
+        },
+        "y": {
+          "field": "experience",
+          "sort": [
+            "Yes",
+            "Unsure",
+            "No"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "fontSize": 13,
+        "fontWeight": 600,
+        "type": "text"
+      }
+    }
+  ],
+  "title": {
+    "subtitle": [
+      "Posts with a position on both questions (628). Granting goals while unsure about experience",
+      "is the AI-safety framing; the reverse corner is nearly empty."
+    ],
+    "text": "Goals without experience"
+  },
+  "width": 225
+}

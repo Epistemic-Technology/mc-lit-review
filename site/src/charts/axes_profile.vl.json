@@ -1,0 +1,273 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "data": {
+    "name": "data-b94ab99e6999159087b43226e9564700"
+  },
+  "datasets": {
+    "data-b94ab99e6999159087b43226e9564700": [
+      {
+        "experience": "No",
+        "n": 62,
+        "other": "Yes",
+        "share": 0.0746987951807229
+      },
+      {
+        "experience": "Unsure",
+        "n": 131,
+        "other": "Yes",
+        "share": 0.1578313253012048
+      },
+      {
+        "experience": "No",
+        "n": 358,
+        "other": "No",
+        "share": 0.43132530120481927
+      },
+      {
+        "experience": "Yes",
+        "n": 216,
+        "other": "Yes",
+        "share": 0.26024096385542167
+      },
+      {
+        "experience": "No",
+        "n": 12,
+        "other": "Partly",
+        "share": 0.014457831325301205
+      },
+      {
+        "experience": "Unsure",
+        "n": 12,
+        "other": "No",
+        "share": 0.014457831325301205
+      },
+      {
+        "experience": "No",
+        "n": 4,
+        "other": "Unsure",
+        "share": 0.004819277108433735
+      },
+      {
+        "experience": "Unsure",
+        "n": 33,
+        "other": "Unsure",
+        "share": 0.03975903614457831
+      },
+      {
+        "experience": "Yes",
+        "n": 2,
+        "other": "No",
+        "share": 0.0024096385542168677
+      }
+    ]
+  },
+  "height": 200,
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "field": "n",
+          "legend": null,
+          "scale": {
+            "range": [
+              "#cde2fb",
+              "#0d366b"
+            ]
+          },
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "experience",
+            "title": "Experience",
+            "type": "nominal"
+          },
+          {
+            "field": "other",
+            "title": "Current LLMs genuinely think",
+            "type": "nominal"
+          },
+          {
+            "field": "n",
+            "title": "Posts",
+            "type": "quantitative"
+          },
+          {
+            "field": "share",
+            "format": ".0%",
+            "title": "Share of committed",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "labelAngle": 0,
+            "labelPadding": 6,
+            "orient": "top"
+          },
+          "field": "other",
+          "sort": [
+            "No",
+            "Unsure",
+            "Partly",
+            "Yes"
+          ],
+          "title": "Current LLMs genuinely think",
+          "type": "nominal"
+        },
+        "y": {
+          "field": "experience",
+          "sort": [
+            "Yes",
+            "Unsure",
+            "No"
+          ],
+          "title": "Current LLMs have experience",
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "stroke": "#fcfcfb",
+        "strokeWidth": 2,
+        "type": "rect"
+      }
+    },
+    {
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "(datum.n > 99.6)",
+            "value": "#fcfcfb"
+          },
+          "value": "#0b0b0b"
+        },
+        "text": {
+          "field": "n",
+          "format": ",d",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "other",
+          "sort": [
+            "No",
+            "Unsure",
+            "Partly",
+            "Yes"
+          ],
+          "type": "nominal"
+        },
+        "y": {
+          "field": "experience",
+          "sort": [
+            "Yes",
+            "Unsure",
+            "No"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "fontSize": 13,
+        "fontWeight": 600,
+        "type": "text"
+      }
+    }
+  ],
+  "title": {
+    "subtitle": [
+      "Posts with a position on both questions (830). The off-diagonal 'thinks, but not conscious' cells",
+      "are a real camp; the reverse is nearly empty."
+    ],
+    "text": "Thinking without experience"
+  },
+  "width": 300
+}

@@ -26,6 +26,10 @@ GROUP_COLORS = {"general": BLUE, "ai_field": ORANGE, "academic": AQUA, "journali
 GROUP_LABELS = {"general": "General and culture", "ai_field": "AI field", "academic": "Academic", "journalism": "Journalism and politics", "religion": "Religion and spirituality"}
 STANCE_COLORS = {"denies": RED, "agnostic": GRAY, "discusses": GRAY_LIGHT, "asserts": BLUE}
 STANCE_LABELS = {"denies": "Denies", "agnostic": "Agnostic", "discusses": "Discusses, no position", "asserts": "Asserts"}
+# Derived axes (mcreview.axes): same diverging pair, with aqua for the qualified-yes level. A blue ramp step
+# cannot clear the normal-vision floor against both the light gray and full blue; aqua does (validated 2026-10-08).
+AXIS_COLORS = {"no": RED, "unsure": GRAY, "discussed": GRAY_LIGHT, "yes_qualified": AQUA, "yes": BLUE}
+AXIS_LABELS = {"no": "No", "unsure": "Unsure", "discussed": "Discussed, no position", "yes_qualified": "Yes, qualified", "yes": "Yes"}
 TIER_COLORS = {"academic": AQUA, "lab": ORANGE, "substack": BLUE, "press": YELLOW, "other": GRAY}
 TIER_LABELS = {"academic": "Academic", "lab": "AI lab", "substack": "Substack", "press": "Press", "other": "Other web"}
 

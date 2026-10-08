@@ -36,6 +36,19 @@ Two engines read every post against one codebook. **Jev** (TypeSafe's decision m
 
 The codebook has ${codebook.constructs.length} post-level constructs: a four-level relevance gate, genre, the object of the claim, ${codebook.constructs.filter((c) => c.group === "stance").length} stance items each coded on a six-value scale (asserts, denies, agnostic, discusses without committing, reports others only, not addressed), and ${codebook.constructs.filter((c) => c.group === "argument").length} argument types coded present or absent. Publications were typed into nine communities from name, tagline, author bio and post titles, after a crawl of each publication's archive back to 2024.
 
+### From fourteen claims to six questions
+
+The stance items proved too granular to read: most were not addressed in most posts, and when a post committed on two related items it almost always answered them the same way (current cognition and understanding agree 95% of the time, current consciousness and emotions 91%, future moral worth and precaution 98%). The site therefore reports six derived questions, computed deterministically from the coded items without re-coding. Agency (goals of one's own) is kept apart from thinking even though the two agree when both are coded, because a third of the posts that commit on agency commit on no other cognition claim, and many grant goals while unsure about experience. Each question has a primary item whose committed answer wins; related items are consulted when it is silent; asserting that we cannot know counts as unsure on experience; and a post that only discusses any contributing item counts as discussed. The qualified-yes level captures the one real nuance per question: thinking in some respects but not others, possibility only after a major advance, and moral status for future AI or as a precaution. Posts that only report others' positions count as not addressed, since the question asks for the author's own view.
+
+```js
+display(html`<table class="axes">
+  <thead><tr><th>Question</th><th>Asks</th><th>Qualified yes means</th><th>Built from (primary first)</th></tr></thead>
+  <tbody>${codebook.axes.map((a) => html`<tr><td><b>${a.label}</b></td><td>${a.question}</td><td>${a.qualified || ""}</td><td>${a.items.map((i) => ITEM_LABELS[i] || i).join("; ")}</td></tr>`)}</tbody>
+</table>`);
+```
+
+The engine-agreement and human-verification figures below are on the coded items, not the derived questions; a derived answer inherits the reliability of its primary item.
+
 ## How well the coding holds up
 
 This is a one-person project. There is no inter-rater study; reliability rests on three things: agreement between the two engines at scale, a human verification of a sample, and publication of every code and quote so any reader can audit any post.

@@ -3,7 +3,7 @@ title: Publication
 ---
 
 ```js
-import {stanceDiverging, stanceTable, statRow, GROUP_LABELS, STANCE_LABELS, GENRE_LABELS, ARG_LABELS} from "../components/charts.js";
+import {axesDiverging, axesTable, statRow, GROUP_LABELS, LEVEL_LABELS, GENRE_LABELS, ARG_LABELS} from "../components/charts.js";
 const slice = await FileAttachment(`../data/pub/${observable.params.id}.json`).json();
 const pub = slice.publication, node = slice.node;
 const mine = slice.posts.slice().sort((a, b) => (b.date || "").localeCompare(a.date || ""));
@@ -27,16 +27,19 @@ display(statRow([
 ## Positions taken here
 
 ```js
-display(mine.length >= 3 ? stanceDiverging(stanceTable(mine), {width: Math.min(width, 860)}) : html`<p class="caption">Too few posts for a stance profile; see the table below.</p>`);
+display(mine.length >= 3 ? axesDiverging(axesTable(mine), {width: Math.min(width, 860)}) : html`<p class="caption">Too few posts for a position profile; see the table below.</p>`);
 ```
+
+<div class="caption">The six questions combine the coded claims; see <a href="../positions">Positions</a> for the definitions.</div>
 
 ## Relevant posts
 
 ```js
-display(Inputs.table(mine.map((p) => ({date: p.date, title: p.title, genre: GENRE_LABELS[p.genre] || p.genre, conscious: STANCE_LABELS[p.stance.current_conscious] || "", moral: STANCE_LABELS[p.stance.moral_worth_current] || "", arguments: p.arguments.map((a) => ARG_LABELS[a] || a).join("; "), topic: p.cluster_label || "", reactions: p.reactions, url: p.url})), {
-  columns: ["date", "title", "genre", "conscious", "moral", "topic", "arguments", "reactions"],
-  header: {date: "Date", title: "Post", genre: "Genre", conscious: "Conscious now?", moral: "Moral worth now?", topic: "Topic", arguments: "Arguments", reactions: "Reactions"},
-  width: {title: 300, arguments: 260, topic: 200}, select: false, rows: 30,
+const lv = (v) => (v && v !== "not_addressed" ? LEVEL_LABELS[v] : "");
+display(Inputs.table(mine.map((p) => ({date: p.date, title: p.title, genre: GENRE_LABELS[p.genre] || p.genre, experience: lv(p.axes.experience_now), cognition: lv(p.axes.cognition_now), moral: lv(p.axes.moral_status), arguments: p.arguments.map((a) => ARG_LABELS[a] || a).join("; "), topic: p.cluster_label || "", reactions: p.reactions, url: p.url})), {
+  columns: ["date", "title", "genre", "experience", "cognition", "moral", "topic", "arguments", "reactions"],
+  header: {date: "Date", title: "Post", genre: "Genre", experience: "Experience now?", cognition: "Thinks now?", moral: "Moral status?", topic: "Topic", arguments: "Arguments", reactions: "Reactions"},
+  width: {title: 300, arguments: 260, topic: 200}, layout: "auto", select: false, rows: 30,
   format: {title: (v, i, d) => html`<a href="${d[i].url}" target="_blank" rel="noopener">${v}</a>`}
 }));
 ```

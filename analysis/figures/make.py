@@ -70,30 +70,53 @@ ITEM_LABELS = {
 }
 
 
-def _stance_chart(rows: list[dict], title: str, subtitle: str, height_per_row: int = 26, facet_col: str | None = None, columns: int = 1) -> alt.Chart:
+def _axis_rows(table: dict, axes: list[dict], facet: str | None = None) -> list[dict]:
+    """Same Likert layout for the derived axes (mcreview.axes): no on the left, yes and qualified yes on the
+    right, unsure and discussed straddling zero. Shares are of posts addressing the axis."""
+    rows = []
+    for ax in axes:
+        c = table[ax["name"]]
+        keys = ("no", "unsure", "discussed", "yes_qualified", "yes")
+        n = sum(c[k] for k in keys)
+        if n == 0:
+            continue
+        sh = {k: c[k] / n for k in keys}
+        x = -(sh["no"] + (sh["unsure"] + sh["discussed"]) / 2)
+        for k in keys:
+            rows.append({"item": ax["label"], "option": k, "x0": x, "x1": x + sh[k], "share": sh[k], "n": n, "count": c[k],
+                         "addressing": n, "facet": facet, "asserts_share": sh["yes"] + sh["yes_qualified"], "denies_share": sh["no"]})
+            x += sh[k]
+    return rows
+
+
+AXIS_SCHEME = {"colors": T.AXIS_COLORS, "labels": T.AXIS_LABELS, "pos": "yes", "neg": "no", "x_title": "Share of posts addressing the question"}
+
+
+def _stance_chart(rows: list[dict], title: str, subtitle: str, height_per_row: int = 26, facet_col: str | None = None, columns: int = 1, scheme: dict | None = None) -> alt.Chart:
+    sc = scheme or {"colors": T.STANCE_COLORS, "labels": T.STANCE_LABELS, "pos": "asserts", "neg": "denies", "x_title": "Share of posts addressing the claim"}
     df = pd.DataFrame(rows)
-    order = (df[df.option == "asserts"].groupby("item")["asserts_share"].mean().sort_values(ascending=False).index.tolist())
+    order = (df[df.option == sc["pos"]].groupby("item")["asserts_share"].mean().sort_values(ascending=False).index.tolist())
     # In facet mode every layer must be data-less so the facet partition applies; the data goes on the facet.
     src = alt.Chart(df) if facet_col is None else alt.Chart()
     base = src.encode(
         y=alt.Y("item:N", sort=order, title=None, axis=alt.Axis(labelLimit=260)),
     )
     bars = base.mark_bar(height=18, cornerRadiusEnd=0).encode(
-        x=alt.X("x0:Q", title="Share of posts addressing the claim", axis=alt.Axis(format="%", values=[-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1], labelExpr="abs(datum.value) == 1 ? format(abs(datum.value), '.0%') : format(abs(datum.value), '.0%')", grid=True), scale=alt.Scale(domain=[-1, 1])),
+        x=alt.X("x0:Q", title=sc["x_title"], axis=alt.Axis(format="%", values=[-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1], labelExpr="abs(datum.value) == 1 ? format(abs(datum.value), '.0%') : format(abs(datum.value), '.0%')", grid=True), scale=alt.Scale(domain=[-1, 1])),
         x2="x1:Q",
-        color=alt.Color("option:N", scale=alt.Scale(domain=list(T.STANCE_COLORS), range=list(T.STANCE_COLORS.values())),
-                        legend=alt.Legend(title="Author's position", labelExpr=json.dumps(T.STANCE_LABELS) + "[datum.label]")),
+        color=alt.Color("option:N", scale=alt.Scale(domain=list(sc["colors"]), range=list(sc["colors"].values())),
+                        legend=alt.Legend(title="Author's position", labelExpr=json.dumps(sc["labels"]) + "[datum.label]")),
         stroke=alt.value(T.SURFACE), strokeWidth=alt.value(2),
         tooltip=[alt.Tooltip("item:N", title="Claim"), alt.Tooltip("option:N", title="Position"), alt.Tooltip("count:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share"), alt.Tooltip("addressing:Q", title="Posts addressing")],
     )
     # every layer shares `df` (a facet needs one data source): the zero rule and the end labels are filters on it
     zero = src.mark_rule(color=T.AXIS, strokeWidth=1).encode(x=alt.datum(0))
-    lab_r = src.transform_filter(alt.datum.option == "asserts").mark_text(align="left", dx=6, color=T.INK2, fontSize=11).encode(
+    lab_r = src.transform_filter(alt.datum.option == sc["pos"]).mark_text(align="left", dx=6, color=T.INK2, fontSize=11).encode(
         y=alt.Y("item:N", sort=order), x="x1:Q", text=alt.Text("asserts_share:Q", format=".0%"))
-    lab_l = src.transform_filter(alt.datum.option == "denies").mark_text(align="right", dx=-6, color=T.INK2, fontSize=11).encode(
+    lab_l = src.transform_filter(alt.datum.option == sc["neg"]).mark_text(align="right", dx=-6, color=T.INK2, fontSize=11).encode(
         y=alt.Y("item:N", sort=order), x="x0:Q", text=alt.Text("denies_share:Q", format=".0%"))
     if facet_col is None:
-        n_lab = src.transform_filter(alt.datum.option == "asserts").mark_text(align="left", color=T.MUTED, fontSize=10).encode(
+        n_lab = src.transform_filter(alt.datum.option == sc["pos"]).mark_text(align="left", color=T.MUTED, fontSize=10).encode(
             y=alt.Y("item:N", sort=order), x=alt.value(WIDTH + 44), text=alt.Text("addressing:Q", format=",d"))
         chart = alt.layer(bars, zero, lab_l, lab_r, n_lab).properties(width=WIDTH, height=height_per_row * len(order), title=alt.Title(title, subtitle=subtitle))
     else:
@@ -122,6 +145,109 @@ def stance_by_group():
     chart = _stance_chart(rows, "Positions differ by who is writing", "Share of posts addressing each claim, by publication type. Agnostic and non-committal posts straddle the centre.",
                           facet_col="facet", columns=1, height_per_row=24)
     save(chart, "stance_by_group")
+
+
+# ---------------------------------------------------------------- derived axes (mcreview.axes)
+
+def _axes_meta():
+    st = load("stance_axes")
+    return st, [{"name": a["name"], "label": a["label"]} for a in st["axes"]]
+
+
+def axes_landscape():
+    st, axes = _axes_meta()
+    rows = _axis_rows(st["overall"], axes)
+    chart = _stance_chart(rows, "Six positions on machine minds",
+                          [f"Authors' own positions in {st['n']:,} relevant posts, as a share of posts addressing each question. Right: posts addressing it.",
+                           "'Yes, qualified' is question-specific: partly, after a major advance, or future AI / precaution."],
+                          scheme=AXIS_SCHEME, height_per_row=30)
+    save(chart, "axes_landscape")
+
+
+def axes_by_group():
+    st, axes = _axes_meta()
+    rows = []
+    for g, table in st["by_group"].items():
+        rows += _axis_rows(table, axes, facet=T.GROUP_LABELS[g])
+    chart = _stance_chart(rows, "Positions by who is writing", "Share of posts addressing each question, by publication type. Unsure and non-committal posts straddle the centre.",
+                          facet_col="facet", columns=1, height_per_row=24, scheme=AXIS_SCHEME)
+    save(chart, "axes_by_group")
+
+
+def axes_over_time():
+    """Composition by quarter for the two 'now' axes, on the recency-unbiased channels."""
+    st, axes = _axes_meta()
+    events = __import__("yaml").safe_load((ROOT / "config" / "events.yaml").read_text())["events"]
+    keys = ["no", "unsure", "discussed", "yes_qualified", "yes"]
+    label_of = {a["name"]: a["label"] for a in axes}
+    axes_shown = ("experience_now", "cognition_now", "agency_now")
+    # Start at the first quarter from which every shown axis stays at or above the threshold, so the series is
+    # unbroken: an omitted quarter in the middle would make the area interpolate across a gap.
+    qs = sorted(st["by_quarter_unbiased"])
+    ok = [all(sum(st["by_quarter_unbiased"][q][ax][k] for k in keys) >= 15 for ax in axes_shown) for q in qs]
+    start = next(i for i in range(len(qs)) if all(ok[i:]))
+    rows = []
+    for q in qs[start:]:
+        for ax in axes_shown:
+            c = st["by_quarter_unbiased"][q][ax]
+            n = sum(c[k] for k in keys)
+            for k in keys:
+                rows.append({"quarter": q, "axis": label_of[ax], "option": k, "share": c[k] / n, "count": c[k], "n": n})
+    df = pd.DataFrame(rows)
+    df["date"] = pd.to_datetime(df["quarter"].str[:4] + "-" + ((df["quarter"].str[5].astype(int) - 1) * 3 + 2).astype(str).str.zfill(2) + "-15")
+    ev = pd.DataFrame(events)
+    ev["date"] = pd.to_datetime(ev["date"])
+    ev = ev[(ev.date >= df.date.min()) & (ev.date <= df.date.max() + pd.Timedelta(days=45))].reset_index(drop=True)
+    ev["ty"] = 6 + 14 * (ev.index % 2)   # stagger neighbouring labels
+    ev["late"] = ev.date > df.date.min() + 0.8 * (df.date.max() - df.date.min())   # right-align labels near the end
+    area = alt.Chart().mark_area(interpolate="monotone", opacity=0.85, stroke=T.SURFACE, strokeWidth=1.5).encode(
+        x=alt.X("date:T", title=None, axis=alt.Axis(format="%b %Y", grid=False, labelAngle=0, labelPadding=18)),
+        y=alt.Y("share:Q", stack="normalize", title="Share of posts", axis=alt.Axis(format="%", grid=True)),
+        color=alt.Color("option:N", scale=alt.Scale(domain=keys, range=[T.AXIS_COLORS[k] for k in keys]), sort=keys,
+                        legend=alt.Legend(title="Author's position", labelExpr=json.dumps(T.AXIS_LABELS) + "[datum.label]")),
+        order=alt.Order("option:N", sort="ascending"),
+        tooltip=[alt.Tooltip("axis:N", title="Question"), alt.Tooltip("quarter:N", title="Quarter"), alt.Tooltip("option:N", title="Position"), alt.Tooltip("count:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share"), alt.Tooltip("n:Q", title="Posts addressing")])
+    rules = alt.Chart(ev).mark_rule(color=T.INK, strokeWidth=1, opacity=0.5).encode(x="date:T")
+    txt = [alt.Chart(ev[(ev.ty == v) & (ev.late == late)]).mark_text(align="right" if late else "left", dx=-5 if late else 5, fontSize=10, color=T.INK, baseline="top").encode(x="date:T", y=alt.value(v), text="short:N")
+           for v in sorted(ev.ty.unique()) for late in (False, True) if len(ev[(ev.ty == v) & (ev.late == late)])]
+    first_q, last_q = df.quarter.min(), df.quarter.max()
+    chart = alt.layer(area, rules, *txt, data=df).properties(width=WIDTH, height=170).facet(
+        row=alt.Row("axis:N", title=None, sort=[label_of[a] for a in axes_shown], header=alt.Header(labelAngle=0, labelAlign="left", labelOrient="top")),
+        title=alt.Title("Positions over time", subtitle=[f"Quarterly composition, {first_q} to {last_q}, among the {st['n_unbiased']:,} relevant posts found through web search or citation.",
+                                                         "Substack's own search is recency-skewed and excluded; quarters with fewer than 15 posts are omitted."]))
+    save(chart, "axes_over_time")
+
+
+def _profile_chart(st: dict, key: str, other: str, other_title: str, title: str, subtitle: list[str], name: str):
+    """Experience x another 'now' axis, counts of posts committed on both."""
+    lv = {"yes": "Yes", "yes_qualified": "Partly", "unsure": "Unsure", "no": "No"}
+    rows = [{"experience": lv[r["experience_now"]], "other": lv[r[other]], "n": r["n"]} for r in st[key] if r["experience_now"] in lv and r[other] in lv]
+    df = pd.DataFrame(rows)
+    total = int(df.n.sum())
+    df["share"] = df.n / total
+    xo, yo = [k for k in ["No", "Unsure", "Partly", "Yes"] if k in set(df.other)], ["Yes", "Unsure", "No"]
+    cells = alt.Chart(df).mark_rect(stroke=T.SURFACE, strokeWidth=2).encode(
+        x=alt.X("other:N", sort=xo, title=other_title, axis=alt.Axis(labelAngle=0, orient="top", labelPadding=6)),
+        y=alt.Y("experience:N", sort=yo, title="Current LLMs have experience"),
+        color=alt.Color("n:Q", scale=alt.Scale(range=["#cde2fb", "#0d366b"]), legend=None),
+        tooltip=[alt.Tooltip("experience:N", title="Experience"), alt.Tooltip("other:N", title=other_title), alt.Tooltip("n:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share of committed")])
+    text = alt.Chart(df).mark_text(fontSize=13, fontWeight=600).encode(
+        x=alt.X("other:N", sort=xo), y=alt.Y("experience:N", sort=yo), text=alt.Text("n:Q", format=",d"),
+        color=alt.condition(alt.datum.n > total * 0.12, alt.value(T.SURFACE), alt.value(T.INK)))
+    chart = alt.layer(cells, text).properties(width=75 * len(xo), height=200, title=alt.Title(title, subtitle=[s.format(total=f"{total:,}") for s in subtitle]))
+    save(chart, name)
+
+
+def axes_profile():
+    st, _ = _axes_meta()
+    _profile_chart(st, "profile_experience_cognition", "cognition_now", "Current LLMs genuinely think", "Thinking without experience",
+                   ["Posts with a position on both questions ({total}). The off-diagonal 'thinks, but not conscious' cells", "are a real camp; the reverse is nearly empty."], "axes_profile")
+
+
+def axes_profile_agency():
+    st, _ = _axes_meta()
+    _profile_chart(st, "profile_experience_agency", "agency_now", "Current LLMs have goals of their own", "Goals without experience",
+                   ["Posts with a position on both questions ({total}). Granting goals while unsure about experience", "is the AI-safety framing; the reverse corner is nearly empty."], "axes_profile_agency")
 
 
 # ---------------------------------------------------------------- arguments: frequency x traction
@@ -263,6 +389,7 @@ def topics():
 
 
 ALL = {"stance_landscape": stance_landscape, "stance_by_group": stance_by_group, "arguments_traction": arguments_scatter, "stance_over_time": stance_over_time,
+       "axes_landscape": axes_landscape, "axes_by_group": axes_by_group, "axes_over_time": axes_over_time, "axes_profile": axes_profile, "axes_profile_agency": axes_profile_agency,
        "top_cited_works": top_cited, "who_writes": who_writes, "people_named": people, "topics_top": topics}
 
 if __name__ == "__main__":
