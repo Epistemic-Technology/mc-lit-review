@@ -154,5 +154,20 @@ RULES = {"experience_now": experience_now, "cognition_now": cognition_now, "agen
 
 
 def derive(stance: dict) -> dict[str, str]:
-    """Map one post's stance codes ({item: option}) to {axis: level}."""
+    """Map one post's 0.1.0 stance item codes ({item: option}) to {axis: level}."""
     return {axis: fn(stance) for axis, fn in RULES.items()}
+
+
+def from_codes(codes: dict) -> dict[str, str] | None:
+    """From codebook 0.2.0 on, the axes are coded directly as constructs with the same names and levels.
+    Returns {axis: level} when every axis has a code (reports_only counts as not addressed, as the derivation
+    does), else None so the caller can fall back to `derive` on the 0.1.0 items."""
+    if not all(codes.get(a) for a in AXES):
+        return None
+    return {a: ("not_addressed" if codes[a] == "reports_only" else codes[a]) for a in AXES}
+
+
+def axes_for(codes: dict, old_items: dict) -> tuple[dict[str, str], str]:
+    """The axes for a post and their provenance: ('coded' from 0.2.0 constructs, or 'derived' from 0.1.0 items)."""
+    coded = from_codes(codes)
+    return (coded, "coded") if coded else (derive(old_items), "derived")

@@ -114,20 +114,29 @@ def _coded(ctx: Ctx, engine: str, model: str, version: str, entity_type: str, re
         (engine, model, version, entity_type, repeat_no))}
 
 
-def jev_relevance(ctx: Ctx, version: str) -> dict[int, float]:
-    """post_id -> mean over repeats of p(central)+p(substantial) from Jev codes at this codebook version."""
+def jev_relevance(ctx: Ctx, cb: Codebook) -> dict[int, float]:
+    """post_id -> mean over repeats of p(central)+p(substantial) from Jev codes at any version the codebook
+    accepts for `relevance` (an unchanged relevance gate keeps its 0.1.0 screen)."""
     acc: dict[int, list[float]] = defaultdict(list)
-    for pid, dist in ctx.conn.execute(
-        """SELECT c.entity_id, c.distribution_json FROM codes c JOIN code_runs r ON r.id=c.code_run_id
-           WHERE r.engine='jev' AND r.codebook_version=? AND c.entity_type='post' AND c.construct='relevance' AND c.distribution_json IS NOT NULL""", (version,)):
+    for pid, dist, ver in ctx.conn.execute(
+        """SELECT c.entity_id, c.distribution_json, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+           WHERE r.engine='jev' AND c.entity_type='post' AND c.construct='relevance' AND c.distribution_json IS NOT NULL"""):
+        if not cb.accepts("relevance", ver):
+            continue
         d = json.loads(dist)
         acc[int(pid)].append(sum(float(d.get(k, 0.0)) for k in RELEVANT))
     return {k: sum(v) / len(v) for k, v in acc.items()}
 
 
-def select_posts(ctx: Ctx, engine: str, model: str, version: str, repeat_no: int, only_relevant: bool,
-                 limit: int | None, post_ids: list[int] | None) -> list:
-    done = _coded(ctx, engine, model, version, "post", repeat_no)
+def final_relevant_ids(ctx: Ctx) -> set[int]:
+    """Posts whose coder-of-record relevance is central or substantial (code_final)."""
+    return {int(r[0]) for r in ctx.conn.execute(
+        "SELECT entity_id FROM code_final WHERE entity_type='post' AND construct='relevance' AND value IN ('central','substantial')")}
+
+
+def select_posts(ctx: Ctx, engine: str, model: str, cb: Codebook, repeat_no: int, only_relevant: bool,
+                 limit: int | None, post_ids: list[int] | None, final_relevant: bool = False) -> list:
+    done = _coded(ctx, engine, model, cb.version, "post", repeat_no)
     sql = "SELECT p.id, p.title, p.subtitle, p.body_text FROM analysis_subset s JOIN posts p ON p.id=s.post_id"
     args: list = []
     if post_ids:
@@ -136,9 +145,12 @@ def select_posts(ctx: Ctx, engine: str, model: str, version: str, repeat_no: int
     sql += " ORDER BY p.id"
     rows = [r for r in ctx.conn.execute(sql, args) if int(r["id"]) not in done]
     if only_relevant:
-        rel = jev_relevance(ctx, version)
+        rel = jev_relevance(ctx, cb)
         thr = float(ctx.settings.analysis["coding"]["claude"].get("relevance_min_prob", 0.25))
         rows = [r for r in rows if rel.get(int(r["id"]), 0.0) >= thr]
+    if final_relevant:
+        keep = final_relevant_ids(ctx)
+        rows = [r for r in rows if int(r["id"]) in keep]
     return rows[:limit] if limit else rows
 
 
@@ -146,9 +158,12 @@ def select_posts(ctx: Ctx, engine: str, model: str, version: str, repeat_no: int
 
 def code_posts(ctx: Ctx, engine_name: str, limit: int | None = None, repeats: int | None = None, dry_run: bool = False,
                only_relevant: bool = False, post_ids: list[int] | None = None, batch: bool = False,
-               constructs: list[str] | None = None) -> None:
+               constructs: list[str] | None = None, final_relevant: bool = False) -> None:
     cb = Codebook()
     cons = [cb.get(n) for n in constructs] if constructs else cb.constructs
+    retired = [c.name for c in cons if c.retired_in]
+    if retired:
+        raise ValueError(f"retired constructs cannot be coded: {', '.join(retired)}")
     a = ctx.settings.analysis["coding"]
     model = engine_model(ctx, engine_name)
     n_rep = repeats if repeats is not None else (int(a["jev"].get("repeats", 1)) if engine_name == "jev" else 1)
@@ -156,7 +171,7 @@ def code_posts(ctx: Ctx, engine_name: str, limit: int | None = None, repeats: in
     work: list[tuple[int, int]] = []           # (repeat_no, post_id)
     rows_by_id: dict[int, object] = {}
     for rep in range(n_rep):
-        rows = select_posts(ctx, engine_name, model, cb.version, rep, only_relevant, limit, post_ids)
+        rows = select_posts(ctx, engine_name, model, cb, rep, only_relevant, limit, post_ids, final_relevant)
         for r in rows:
             rows_by_id[int(r["id"])] = r
             work.append((rep, int(r["id"])))
@@ -176,7 +191,7 @@ def code_posts(ctx: Ctx, engine_name: str, limit: int | None = None, repeats: in
         log.info("nothing to code for %s", engine_name)
         return
     engine = make_engine(ctx, engine_name, cb)
-    code_run_id = start_code_run(ctx, engine_name, model, cb, "posts", {"repeats": n_rep, "only_relevant": only_relevant, "limit": limit, "batch": batch, "constructs": constructs})
+    code_run_id = start_code_run(ctx, engine_name, model, cb, "posts", {"repeats": n_rep, "only_relevant": only_relevant, "final_relevant": final_relevant, "limit": limit, "batch": batch, "constructs": constructs})
     if batch and engine_name == "claude":
         items = [(f"post:{pid}:{rep}", state_for_post(rows_by_id[pid], body_max)) for rep, pid in work]
         bid = engine.submit_batch(items, cons)
@@ -284,12 +299,15 @@ def collect(ctx: Ctx, code_run_id: int) -> None:
 
 # ---------------------------------------------------------------- final codes and agreement
 
-def _jev_mean(ctx: Ctx, version: str, entity_type: str) -> dict[tuple[int, str], tuple[str, float, float, dict]]:
-    """(entity, construct) -> (argmax value, p(value), mean confidence, mean distribution) over repeats."""
+def _jev_mean(ctx: Ctx, cb: Codebook, entity_type: str) -> dict[tuple[int, str], tuple[str, float, float, dict]]:
+    """(entity, construct) -> (argmax value, p(value), mean confidence, mean distribution) over repeats, from
+    codes at every version the codebook accepts for the construct."""
     acc: dict[tuple[int, str], list[tuple[dict, float | None]]] = defaultdict(list)
-    for eid, con, dist, conf, val, prob in ctx.conn.execute(
-        """SELECT c.entity_id, c.construct, c.distribution_json, c.confidence, c.value, c.probability FROM codes c JOIN code_runs r ON r.id=c.code_run_id
-           WHERE r.engine='jev' AND r.codebook_version=? AND c.entity_type=?""", (version, entity_type)):
+    for eid, con, dist, conf, val, prob, ver in ctx.conn.execute(
+        """SELECT c.entity_id, c.construct, c.distribution_json, c.confidence, c.value, c.probability, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+           WHERE r.engine='jev' AND c.entity_type=?""", (entity_type,)):
+        if not cb.accepts(con, ver, entity_type):
+            continue
         d = json.loads(dist) if dist else {val: prob or 1.0}
         acc[(int(eid), con)].append((d, conf))
     out = {}
@@ -303,31 +321,38 @@ def _jev_mean(ctx: Ctx, version: str, entity_type: str) -> dict[tuple[int, str],
     return out
 
 
-def _claude_codes(ctx: Ctx, version: str, entity_type: str) -> dict[tuple[int, str], tuple[str, str | None]]:
+def _claude_codes(ctx: Ctx, cb: Codebook, entity_type: str) -> dict[tuple[int, str], tuple[str, str | None]]:
+    """(entity, construct) -> (value, evidence), latest accepted code wins (a 0.2.0 re-code of an unchanged
+    construct overrides its 0.1.0 code; otherwise the 0.1.0 code stands)."""
     out = {}
-    for eid, con, val, ev in ctx.conn.execute(
-        """SELECT c.entity_id, c.construct, c.value, c.evidence FROM codes c JOIN code_runs r ON r.id=c.code_run_id
-           WHERE r.engine='claude' AND r.codebook_version=? AND c.entity_type=? ORDER BY c.coded_at""", (version, entity_type)):
-        out[(int(eid), con)] = (val, ev)   # latest wins
+    for eid, con, val, ev, ver in ctx.conn.execute(
+        """SELECT c.entity_id, c.construct, c.value, c.evidence, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+           WHERE r.engine='claude' AND c.entity_type=? ORDER BY c.coded_at""", (entity_type,)):
+        if cb.accepts(con, ver, entity_type):
+            out[(int(eid), con)] = (val, ev)   # latest wins
     return out
 
 
 def materialise(ctx: Ctx) -> None:
-    """code_final: human gold > Claude (coder of record where present) > Jev above its construct threshold > Jev."""
+    """code_final: human gold > Claude (coder of record where present) > Jev above its construct threshold > Jev.
+    Rows are written at the current codebook version; constructs unchanged since an earlier version keep
+    their codes from that version (Codebook.accepts). Rows for retired constructs are left at their old
+    version so the retired codes stay readable."""
     cb = Codebook()
     thr: dict[str, float] = ctx.settings.analysis.get("thresholds") or {}
     now = db.now()
     rows = []
     for et in ("post", "publication"):
         ver = cb.code_version(et)
-        jev = _jev_mean(ctx, ver, et)
-        cl = _claude_codes(ctx, ver, et)
+        jev = _jev_mean(ctx, cb, et)
+        cl = _claude_codes(ctx, cb, et)
         gold = {}
-        # Human decisions are keyed on the base codebook version; a publication rubric revision does not
-        # invalidate them (the human judged the publication, not the rubric wording).
-        for eid, con, val in ctx.conn.execute(
-            "SELECT s.entity_id, g.construct, g.value FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.codebook_version=? AND g.value IS NOT NULL", (et, cb.version)):
-            gold[(int(eid), con)] = val
+        # Human decisions are keyed on the base codebook version at which they were made; they stay valid for
+        # a construct unchanged since then (the human judged the post, not the rubric wording).
+        for eid, con, val, gver in ctx.conn.execute(
+            "SELECT s.entity_id, g.construct, g.value, g.codebook_version FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL", (et,)):
+            if et == "publication" or cb.accepts(con, gver, et):
+                gold[(int(eid), con)] = val
         for key in set(jev) | set(cl) | set(gold):
             eid, con = key
             if key in gold:
@@ -348,8 +373,8 @@ def materialise(ctx: Ctx) -> None:
 def agreement(ctx: Ctx, entity_type: str = "post") -> list[dict]:
     """Per construct: Jev vs Claude agreement on items both coded, and agreement/coverage above confidence cut-offs."""
     cb = Codebook()
-    jev = _jev_mean(ctx, cb.code_version(entity_type), entity_type)
-    cl = _claude_codes(ctx, cb.code_version(entity_type), entity_type)
+    jev = _jev_mean(ctx, cb, entity_type)
+    cl = _claude_codes(ctx, cb, entity_type)
     cuts = (0.5, 0.7, 0.8, 0.9)
     per: dict[str, list[tuple[bool, float]]] = defaultdict(list)
     for key in set(jev) & set(cl):

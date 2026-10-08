@@ -39,8 +39,8 @@ def test_jev_repeat_zero_is_codebook_order_and_repeats_are_reproducible():
 
 def test_claude_parse_reads_structured_json():
     cb = Codebook()
-    cons = [cb.get("current_conscious"), cb.get("arg_emergence")]
-    payload = {"current_conscious": {"value": "denies", "evidence": "They are not conscious."}, "arg_emergence": {"value": "true", "evidence": ""}}
+    cons = [cb.get("experience_now"), cb.get("arg_emergence")]
+    payload = {"experience_now": {"value": "no", "evidence": "They are not conscious."}, "arg_emergence": {"value": "true", "evidence": ""}}
     msg = SimpleNamespace(
         stop_reason="end_turn", stop_details=None, model="claude-opus-5-5",
         content=[SimpleNamespace(type="text", text=json.dumps(payload))],
@@ -50,8 +50,8 @@ def test_claude_parse_reads_structured_json():
     eng = ClaudeEngine.__new__(ClaudeEngine)
     eng.model = "claude-opus-5-5"
     res = eng._parse(msg, cons, batch=True)
-    assert res.answers["current_conscious"].value == "denies"
-    assert res.answers["current_conscious"].evidence == "They are not conscious."
+    assert res.answers["experience_now"].value == "no"
+    assert res.answers["experience_now"].evidence == "They are not conscious."
     assert res.answers["arg_emergence"].evidence is None
     assert res.input_tokens == 8000
     assert abs(res.cost_usd - (8000 / 1e6 * 4.0 + 200 / 1e6 * 20.0) * 0.5) < 1e-9

@@ -26,6 +26,9 @@ class Construct:
     options: dict[str, dict] = field(default_factory=dict)   # choice: name -> {what, not_for, examples}
     criteria: dict[str, dict] = field(default_factory=dict)  # noul: {"true": {...}, "false": {...}}
     claim: str | None = None
+    since: str = ""                     # codebook version in which this definition was introduced; codes at any
+                                        # version >= since are valid for it (unchanged constructs are not re-coded)
+    retired_in: str | None = None       # first version without the construct (retired constructs only)
 
     @property
     def values(self) -> list[str]:
@@ -49,19 +52,43 @@ class Codebook:
         self.domain: str = d["domain"].strip()
         self.stance_options: dict[str, dict] = d["stance_options"]
         self.constructs: list[Construct] = [self._build(c) for c in d["constructs"]]
+        self.retired: list[Construct] = [self._build(c) for c in d.get("retired_constructs") or []]
         self.publication_constructs: list[Construct] = [self._build(c) for c in d.get("publication_constructs") or []]
 
     def _build(self, c: dict) -> Construct:
         prim = c["primitive"]
         group = c.get("group", "publication")
+        since = str(c.get("since") or self.version)
+        retired_in = str(c["retired_in"]) if c.get("retired_in") else None
         if group == "stance":
             instr = c.get("instructions") or (
                 "What is the author's own position on this claim? Claim: " + c["claim"].strip()
             )
-            return Construct(c["name"], group, prim, instr, options=dict(self.stance_options), claim=c["claim"].strip())
+            # 0.1.0 items share `stance_options`; 0.2.0 questions carry their own.
+            return Construct(c["name"], group, prim, instr.strip(), options=dict(c.get("options") or self.stance_options), claim=c["claim"].strip(), since=since, retired_in=retired_in)
         if prim == "choice":
-            return Construct(c["name"], group, prim, c["instructions"].strip(), options=c["options"])
-        return Construct(c["name"], group, prim, c["instructions"].strip(), criteria=c.get("criteria") or {})
+            return Construct(c["name"], group, prim, c["instructions"].strip(), options=c["options"], since=since, retired_in=retired_in)
+        return Construct(c["name"], group, prim, c["instructions"].strip(), criteria=c.get("criteria") or {}, since=since, retired_in=retired_in)
+
+    # -- versions -------------------------------------------------------------
+    @staticmethod
+    def _vt(version: str) -> tuple[int, ...]:
+        """Comparable tuple of a post codebook version ('0.2.0'; a publication version '0.2.0/pub0.1.3' uses its base)."""
+        return tuple(int(x) for x in version.split("/")[0].split("."))
+
+    def accepts(self, construct: str, version: str, entity_type: str = "post") -> bool:
+        """Whether codes recorded at `version` are valid for `construct` under this codebook: for posts, the
+        construct is current (not retired) and `version` is at or after the construct's `since`, and before
+        `retired_in` for retired ones; for publications, the exact publication code version."""
+        if entity_type == "publication":
+            return version == self.pub_code_version
+        c = self._lookup(construct)
+        if c is None:
+            return False
+        v = self._vt(version)
+        if v < self._vt(c.since):
+            return False
+        return c.retired_in is None or v < self._vt(c.retired_in)
 
     @property
     def pub_code_version(self) -> str:
@@ -71,14 +98,21 @@ class Codebook:
         return self.pub_code_version if entity_type == "publication" else self.version
 
     # -- lookup ---------------------------------------------------------------
-    def get(self, name: str) -> Construct:
-        for c in self.constructs + self.publication_constructs:
+    def _lookup(self, name: str) -> Construct | None:
+        for c in self.constructs + self.publication_constructs + self.retired:
             if c.name == name:
                 return c
-        raise KeyError(name)
+        return None
 
-    def by_group(self, *groups: str) -> list[Construct]:
-        return [c for c in self.constructs if c.group in groups]
+    def get(self, name: str) -> Construct:
+        """A construct by name, current or retired (retired ones are readable, never coded)."""
+        c = self._lookup(name)
+        if c is None:
+            raise KeyError(name)
+        return c
+
+    def by_group(self, *groups: str, retired: bool = False) -> list[Construct]:
+        return [c for c in (self.retired if retired else self.constructs) if c.group in groups]
 
     # -- Jev ------------------------------------------------------------------
     def jev_questions(self, constructs: list[Construct], rng: random.Random | None = None) -> dict[str, dict]:
@@ -154,18 +188,14 @@ class Codebook:
     def render_markdown(self) -> str:
         out = [f"# Codebook v{self.version}", "", "Generated from `config/codebook.yaml` by `mcreview codebook render`. Edit the YAML, not this file.", "",
                "## Domain", "", self.domain, ""]
-        groups = [("relevance", "A. Relevance gate"), ("structure", "C. Genre and object"), ("stance", "B. Stance items"), ("argument", "E. Arguments")]
+        groups = [("relevance", "A. Relevance gate"), ("structure", "C. Genre and object"), ("stance", "B. Stance questions"), ("argument", "E. Arguments")]
         for g, title in groups:
             out += [f"## {title}", ""]
-            if g == "stance":
-                out += ["Every stance item uses the same options:", ""]
-                out += _options_md(self.stance_options)
-                out += ["", "| Item | Claim |", "|---|---|"]
-                out += [f"| `{c.name}` | {c.claim} |" for c in self.by_group(g)]
-                out.append("")
-                continue
             for c in self.by_group(g):
-                out += [f"### `{c.name}` ({c.primitive})", "", c.instructions, ""]
+                out += [f"### `{c.name}` ({c.primitive}, since {c.since})", ""]
+                if c.claim:
+                    out += [f"Claim: {c.claim}", ""]
+                out += [c.instructions, ""]
                 if c.primitive == "choice":
                     out += _options_md(c.options)
                 elif c.criteria:
@@ -174,6 +204,14 @@ class Codebook:
         out += ["## Publication constructs", ""]
         for c in self.publication_constructs:
             out += [f"### `{c.name}` ({c.primitive})", "", c.instructions, ""] + _options_md(c.options) + [""]
+        if self.retired:
+            out += ["## Retired constructs", "", "No longer coded; their codes at earlier versions remain readable.", ""]
+            shared = [c for c in self.retired if c.options == self.stance_options]
+            if shared:
+                out += ["The retired stance items all used these options:", ""] + _options_md(self.stance_options) + [""]
+            out += ["| Construct | Since | Retired in | Claim or instructions |", "|---|---|---|---|"]
+            out += [f"| `{c.name}` | {c.since} | {c.retired_in} | {c.claim or c.instructions} |" for c in self.retired]
+            out.append("")
         return "\n".join(out)
 
 

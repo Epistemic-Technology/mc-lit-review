@@ -91,7 +91,7 @@ def export(ctx: Ctx, name: str, out: Path, lead_chars: int = 1500) -> Path:
     cons = spec.get("constructs")
     items = []
     first = ctx.conn.execute("SELECT entity_type FROM gold_samples WHERE sample_name=? LIMIT 1", (name,)).fetchone()
-    jev_mean = _jev_mean(ctx, cb.code_version(first["entity_type"]), first["entity_type"]) if first else {}
+    jev_mean = _jev_mean(ctx, cb, first["entity_type"]) if first else {}
     for s in ctx.conn.execute("SELECT * FROM gold_samples WHERE sample_name=? ORDER BY position", (name,)):
         eid = int(s["entity_id"])
         item: dict = {"sample_id": int(s["id"]), "entity_type": s["entity_type"], "entity_id": eid, "stratum": s["stratum"]}
@@ -106,11 +106,11 @@ def export(ctx: Ctx, name: str, out: Path, lead_chars: int = 1500) -> Path:
         # Engine codes for the human to verify: Claude where it coded the item, else Jev's averaged code.
         # Read from the engines' own codes, not code_final, where an earlier human decision would replace them.
         codes = {}
-        for con, val, ev in ctx.conn.execute(
-            """SELECT c.construct, c.value, c.evidence FROM codes c JOIN code_runs r ON r.id=c.code_run_id
-               WHERE r.engine='claude' AND r.codebook_version=? AND c.entity_type=? AND c.entity_id=? ORDER BY c.coded_at""",
-            (cb.code_version(s["entity_type"]), s["entity_type"], eid)):
-            if not cons or con in cons:
+        for con, val, ev, ver in ctx.conn.execute(
+            """SELECT c.construct, c.value, c.evidence, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+               WHERE r.engine='claude' AND c.entity_type=? AND c.entity_id=? ORDER BY c.coded_at""",
+            (s["entity_type"], eid)):
+            if cb.accepts(con, ver, s["entity_type"]) and (not cons or con in cons):
                 codes[con] = {"value": val, "evidence": ev, "source": "claude"}
         if not codes:
             for (e, con), (val, p, conf, _) in jev_mean.items():
@@ -156,8 +156,7 @@ def human_agreement(ctx: Ctx) -> list[dict]:
     cb = Codebook()
     per: dict[tuple[str, str], list[bool]] = defaultdict(list)
     for et in ("post", "publication"):
-        ver = cb.code_version(et)
-        engines = {"jev": {k: v[0] for k, v in _jev_mean(ctx, ver, et).items()}, "claude": {k: v[0] for k, v in _claude_codes(ctx, ver, et).items()}}
+        engines = {"jev": {k: v[0] for k, v in _jev_mean(ctx, cb, et).items()}, "claude": {k: v[0] for k, v in _claude_codes(ctx, cb, et).items()}}
         for eid, con, hv in ctx.conn.execute(
             "SELECT s.entity_id, g.construct, g.value FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL", (et,)):
             key = (int(eid), con)

@@ -12,22 +12,34 @@ def test_every_choice_has_an_abstain_option():
             assert c.abstain is not None, c.name
 
 
-def test_stance_items_share_options_and_carry_claims():
+def test_stance_questions_carry_claims_and_uniform_levels():
     cb = Codebook()
     stance = cb.by_group("stance")
-    assert len(stance) >= 10
+    assert len(stance) == 6
+    allowed = {"yes", "yes_qualified", "no", "unsure", "discussed", "reports_only", "not_addressed"}
     for c in stance:
-        assert c.claim and list(c.options) == list(cb.stance_options)
-        assert "not_addressed" in c.options and "reports_only" in c.options
+        assert c.claim and c.instructions and c.since == cb.version
+        assert set(c.options) <= allowed and {"yes", "no", "discussed", "reports_only", "not_addressed"} <= set(c.options)
+    retired = cb.by_group("stance", retired=True)
+    assert len(retired) == 14 and all(list(c.options) == list(cb.stance_options) and c.retired_in == "0.2.0" for c in retired)
+
+
+def test_versions_accept_unchanged_constructs_from_earlier_codebooks():
+    cb = Codebook()
+    assert cb.get("relevance").since == "0.1.0" and cb.accepts("relevance", "0.1.0") and cb.accepts("relevance", "0.2.0")
+    assert cb.get("experience_now").since == "0.2.0" and not cb.accepts("experience_now", "0.1.0") and cb.accepts("experience_now", "0.2.0")
+    assert cb.accepts("current_conscious", "0.1.0") and not cb.accepts("current_conscious", "0.2.0")   # retired
+    assert not cb.accepts("no_such_construct", "0.2.0")
+    assert cb.accepts("community", cb.pub_code_version, "publication") and not cb.accepts("community", "0.1.0/pub0.1.2", "publication")
 
 
 def test_jev_permutation_changes_order_not_names():
     cb = Codebook()
-    cons = [cb.get("relevance"), cb.get("current_conscious"), cb.get("arg_chinese_room")]
+    cons = [cb.get("relevance"), cb.get("experience_now"), cb.get("arg_chinese_room")]
     base = cb.jev_questions(cons)
     perm = cb.jev_questions(cons, random.Random(7))
     assert set(base["relevance"]["criteria"]) == set(perm["relevance"]["criteria"])
-    assert any(list(base[n]["criteria"]) != list(perm[n]["criteria"]) for n in ("relevance", "current_conscious"))
+    assert any(list(base[n]["criteria"]) != list(perm[n]["criteria"]) for n in ("relevance", "experience_now"))
     assert base["arg_chinese_room"]["type"] == "noul"
     assert "domain" not in json.dumps(base)                       # definition goes in the state, once
     assert cb.jev_state({"title": "t"})["definitions"]["machine minds"] == cb.domain

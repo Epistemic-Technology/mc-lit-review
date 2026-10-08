@@ -15,7 +15,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from .axes import AXES, LEVELS, derive
+from .axes import AXES, LEVELS, axes_for
 from .codebook import Codebook
 from .config import CONFIG_DIR, PROJECT_ROOT, load_yaml
 from .context import Ctx
@@ -45,6 +45,11 @@ def _final(ctx: Ctx, entity_type: str) -> dict[int, dict[str, str]]:
     return out
 
 
+def stance_item_names(cb: Codebook) -> list[str]:
+    """The fourteen 0.1.0 stance items: retired from 0.2.0 but still exported as the raw view behind the axes."""
+    return [c.name for c in cb.by_group("stance", retired=True)] or [c.name for c in cb.by_group("stance")]
+
+
 def relevant_ids(ctx: Ctx) -> list[int]:
     return [int(r[0]) for r in ctx.conn.execute(
         "SELECT entity_id FROM code_final WHERE entity_type='post' AND construct='relevance' AND value IN ('central','substantial') ORDER BY entity_id")]
@@ -54,7 +59,7 @@ def load_posts(ctx: Ctx, cb: Codebook) -> list[dict]:
     ids = relevant_ids(ctx)
     codes = _final(ctx, "post")
     pub_codes = _final(ctx, "publication")
-    stance_items = [c.name for c in cb.by_group("stance")]
+    stance_items = stance_item_names(cb)
     arg_items = [c.name for c in cb.by_group("argument")]
     q = ",".join("?" * len(ids))
     channels: dict[int, set[str]] = defaultdict(set)
@@ -87,7 +92,8 @@ def load_posts(ctx: Ctx, cb: Codebook) -> list[dict]:
             "community": community, "group": GROUPS.get(community or "", "general"),
             "relevance": c.get("relevance"), "genre": c.get("genre"), "claim_object": c.get("claim_object"), "reports_lab_view": c.get("reports_lab_view"),
             "stance": {k: c.get(k) for k in stance_items},
-            "axes": derive({k: c.get(k) for k in stance_items}),
+            "axes": axes_for(c, {k: c.get(k) for k in stance_items})[0],
+            "axes_source": axes_for(c, {k: c.get(k) for k in stance_items})[1],
             "arguments": [k for k in arg_items if c.get(k) == "true"],
             "reactions": r["reaction_count"], "comments": r["comment_count"], "restacks": r["restack_count"],
             "baseline_reactions": round(baseline, 2) if baseline is not None else None,
@@ -109,7 +115,7 @@ def _count(items, key) -> dict:
 
 
 def stance_tables(posts: list[dict], cb: Codebook) -> dict:
-    items = [{"name": c.name, "claim": c.claim} for c in cb.by_group("stance")]
+    items = [{"name": c.name, "claim": c.claim} for c in (cb.by_group("stance", retired=True) or cb.by_group("stance"))]
     options = list(cb.stance_options)
     def table(subset):
         return {it["name"]: {o: sum(1 for p in subset if p["stance"].get(it["name"]) == o) for o in options} for it in items}
@@ -136,12 +142,13 @@ def axis_tables(posts: list[dict]) -> dict:
     profile = Counter((p["axes"]["experience_now"], p["axes"]["cognition_now"]) for p in posts)
     profile_ag = Counter((p["axes"]["experience_now"], p["axes"]["agency_now"]) for p in posts)
     committed = Counter(sum(1 for a in AXES if p["axes"][a] not in ("not_addressed", "discussed")) for p in posts)
+    source = Counter(p["axes_source"] for p in posts)
     return {"axes": [{"name": a, **{k: v for k, v in d.items() if k != "items"}, "items": d["items"]} for a, d in AXES.items()],
             "levels": list(LEVELS), "n": len(posts), "overall": table(posts), "by_group": by_group, "by_genre": by_genre,
             "by_claim_object": by_object, "by_quarter_unbiased": by_quarter, "n_unbiased": len(unbiased),
             "profile_experience_cognition": [{"experience_now": k[0], "cognition_now": k[1], "n": v} for k, v in profile.items()],
             "profile_experience_agency": [{"experience_now": k[0], "agency_now": k[1], "n": v} for k, v in profile_ag.items()],
-            "axes_committed_per_post": {str(k): v for k, v in sorted(committed.items())}, "group_labels": GROUP_LABELS}
+            "axes_committed_per_post": {str(k): v for k, v in sorted(committed.items())}, "axes_source": dict(source), "group_labels": GROUP_LABELS}
 
 
 def argument_tables(posts: list[dict], cb: Codebook) -> list[dict]:
@@ -199,7 +206,7 @@ def network_tables(ctx: Ctx, posts: list[dict]) -> dict:
     rel_pubs = Counter(p["publication_id"] for p in posts)
     # Per-publication stance counts on every item (asserts, denies, agnostic, discusses) for colouring nodes,
     # and the same on the derived axes (yes, yes_qualified, unsure, discussed, no).
-    stance_items = [c.name for c in Codebook().by_group("stance")]
+    stance_items = stance_item_names(Codebook())
     pub_stance: dict[int, dict[str, list[int]]] = defaultdict(lambda: {it: [0, 0, 0, 0] for it in stance_items})
     axis_levels = ("yes", "yes_qualified", "unsure", "discussed", "no")
     pub_axes: dict[int, dict[str, list[int]]] = defaultdict(lambda: {a: [0] * len(axis_levels) for a in AXES})
@@ -390,7 +397,8 @@ def export(ctx: Ctx, out_dir: Path | None = None) -> Path:
         "methods.json": methods(ctx),
         "codebook.json": {"version": cb.version, "domain": cb.domain, "stance_options": cb.stance_options,
                           "axes": [{"name": a, **d} for a, d in AXES.items()], "axis_levels": list(LEVELS),
-                          "constructs": [{"name": c.name, "group": c.group, "primitive": c.primitive, "instructions": c.instructions, "claim": c.claim, "options": list(c.options)} for c in cb.constructs],
+                          "constructs": [{"name": c.name, "group": c.group, "primitive": c.primitive, "instructions": c.instructions, "claim": c.claim, "options": list(c.options), "since": c.since} for c in cb.constructs],
+                          "retired_constructs": [{"name": c.name, "group": c.group, "primitive": c.primitive, "claim": c.claim, "options": list(c.options), "since": c.since, "retired_in": c.retired_in} for c in cb.retired],
                           "publication_constructs": [{"name": c.name, "options": list(c.options)} for c in cb.publication_constructs]},
     }
     for name, data in files.items():

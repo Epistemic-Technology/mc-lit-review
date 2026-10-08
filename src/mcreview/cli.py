@@ -246,6 +246,7 @@ def code(
     limit: int | None = typer.Option(None, help="Cap on items (smoke tests)"),
     repeats: int | None = typer.Option(None, help="Jev: identical requests with permuted option order (default from config)"),
     only_relevant: bool = typer.Option(False, help="Posts: only those Jev rates central/substantial above coding.claude.relevance_min_prob"),
+    final_relevant: bool = typer.Option(False, help="Posts: only those whose code_final relevance is central/substantial (re-coding stance on the relevant set)"),
     post_id: list[int] = typer.Option(None, help="Specific post ids"),
     batch: bool = typer.Option(False, help="Claude: submit as a Message Batch (half price; collect with code-collect)"),
     construct: list[str] = typer.Option(None, help="Restrict to these constructs"),
@@ -255,8 +256,8 @@ def code(
     from . import code as code_mod
 
     if target == "posts":
-        _run("code", lambda ctx, **_: code_mod.code_posts(ctx, engine, limit, repeats, dry_run, only_relevant, post_id or None, batch, construct or None),
-             engine=engine, target=target, limit=limit, repeats=repeats, only_relevant=only_relevant, batch=batch, dry_run=dry_run)
+        _run("code", lambda ctx, **_: code_mod.code_posts(ctx, engine, limit, repeats, dry_run, only_relevant, post_id or None, batch, construct or None, final_relevant),
+             engine=engine, target=target, limit=limit, repeats=repeats, only_relevant=only_relevant, final_relevant=final_relevant, batch=batch, dry_run=dry_run, constructs=construct or None)
     elif target == "publications":
         _run("code", lambda ctx, **_: code_mod.code_publications(ctx, engine, limit, dry_run), engine=engine, target=target, limit=limit, dry_run=dry_run)
     else:
