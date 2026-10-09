@@ -49,10 +49,32 @@ gold:
       n: 100
       population: subset
       constructs: [relevance, ai_not_minds]
-    stance:                    # human verification of frontier codes + quotes
+    stance:                    # human verification of frontier codes + quotes (codebook 0.1.0 items, now retired)
       n: 40
       population: relevant     # requires code_final.relevance in (central, substantial)
       constructs: [current_conscious, potential_conscious, current_cognition, moral_worth_current]
+    stance_v2:                 # codebook 0.2.0: the six questions, verified against Claude's quotes (2026-10-09)
+      n: 40
+      population: relevant
+      constructs: [experience_now, cognition_now, agency_now, possible, moral_status, serious]
+    # Targeted checks on the shifts the derived-versus-coded comparison found (Methods page): posts where the
+    # answer coded at 0.2.0 moved away from the answer derived from the 0.1.0 items. One construct each so the
+    # coder tool shows only the question that moved.
+    shift_serious:
+      n: 12
+      population: axes_shift
+      shift: {axis: serious, derived: [not_addressed], coded: ["yes"]}
+      constructs: [serious]
+    shift_possible:
+      n: 10
+      population: axes_shift
+      shift: {axis: possible, derived: [not_addressed, discussed], coded: ["yes"]}
+      constructs: [possible]
+    shift_cognition:
+      n: 8
+      population: axes_shift
+      shift: {axis: cognition_now, derived: ["no"], coded: [yes_qualified]}
+      constructs: [cognition_now]
     publications:
       n: 30
       population: publications_relevant

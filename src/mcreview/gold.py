@@ -31,6 +31,30 @@ def _stratum(ctx: Ctx, post_id: int, channels: dict[str, list[str]], bands: list
     return cache[post_id]
 
 
+def _axes_shift_population(ctx: Ctx, cb: Codebook, shift: dict) -> list[int]:
+    """Relevant posts where the axis coded at 0.2.0 is in `coded` while the same axis derived from the retired
+    0.1.0 items (mcreview.axes.derive) is in `derived`: the cells of the derived-versus-coded matrix on the
+    Methods page that a human should look at."""
+    from .axes import derive
+    from .export import stance_item_names
+
+    items = set(stance_item_names(cb))
+    axis = shift["axis"]
+    rel = {int(r[0]) for r in ctx.conn.execute(
+        "SELECT entity_id FROM code_final WHERE entity_type='post' AND construct='relevance' AND value IN ('central','substantial')")}
+    old: dict[int, dict] = defaultdict(dict)
+    coded: dict[int, str] = {}
+    for eid, con, val in ctx.conn.execute("SELECT entity_id, construct, value FROM code_final WHERE entity_type='post'"):
+        if int(eid) not in rel:
+            continue
+        if con in items:
+            old[int(eid)][con] = val
+        elif con == axis:
+            coded[int(eid)] = "not_addressed" if val == "reports_only" else val
+    want_d, want_c = set(shift["derived"]), set(shift["coded"])
+    return sorted(pid for pid, c in coded.items() if c in want_c and derive(old.get(pid, {}))[axis] in want_d)
+
+
 def sample(ctx: Ctx, name: str) -> int:
     cfg = ctx.settings.analysis["gold"]
     spec = cfg["samples"][name]
@@ -48,6 +72,8 @@ def sample(ctx: Ctx, name: str) -> int:
         et, ids = "publication", [int(r[0]) for r in ctx.conn.execute(
             """SELECT DISTINCT p.publication_id FROM code_final f JOIN posts p ON p.id=f.entity_id
                WHERE f.entity_type='post' AND f.construct='relevance' AND f.value IN ('central','substantial') ORDER BY 1""")]
+    elif pop == "axes_shift":
+        et, ids = "post", _axes_shift_population(ctx, cb, spec["shift"])
     else:
         raise ValueError(pop)
     if not ids:
@@ -55,7 +81,12 @@ def sample(ctx: Ctx, name: str) -> int:
     n = min(int(spec["n"]), len(ids))
     rng = random.Random(f"{cfg['seed']}:{name}")
     rows = []
-    if et == "post":
+    if pop == "axes_shift":
+        # A targeted check, not a population estimate: simple random draw, stratum records the shift.
+        s = spec["shift"]
+        rng.shuffle(ids)
+        rows = [(pid, f"{s['axis']}:{'/'.join(s['derived'])}>{'/'.join(s['coded'])}") for pid in ids[:n]]
+    elif et == "post":
         cache: dict = {}
         strata: dict[str, list[int]] = defaultdict(list)
         for pid in ids:
