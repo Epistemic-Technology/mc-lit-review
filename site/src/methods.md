@@ -119,12 +119,61 @@ The human checks: 100 random posts for relevance from title and lead; 40 relevan
 - **Closed models.** Both engines are hosted, closed models pinned by version. Every raw response is stored; the codebook, prompts, and gold sample are published so the coding can be rerun with any classifier.
 - **One coder.** The human sample is small; its numbers are a sanity check on direction and magnitude, not a validation.
 
-## Engines and versions
+## What it cost
 
 ```js
-display(Inputs.table(summary.engines.map((e) => ({engine: e.engine, model: e.model, target: e.target, version: e.codebook_version, items: e.n_items, started: (e.started_at || "").slice(0, 10)})), {
-  columns: ["engine", "model", "target", "version", "items", "started"], header: {engine: "Engine", model: "Model", target: "Target", version: "Codebook", items: "Items", started: "Date"}, select: false, rows: 20
+const cost = methods.costs;
+const usd = (v) => (v == null ? "" : `$${v.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
+const mtok = (v) => `${(v / 1e6).toFixed(1)}M`;
+const claudeRuns = cost.runs.filter((r) => r.engine === "claude");
+const jevRuns = cost.runs.filter((r) => r.engine === "jev");
+display(statRow([
+  ["Charged", usd(cost.totals.charged_usd), "Jev API, all runs"],
+  ["Claude, list-price equivalent", usd(cost.totals.subscription_list_price_usd), `not charged: ${cost.totals.subscription_hours.toLocaleString()} h on a Claude Code subscription`],
+  ["Search requests", cost.brave_requests.toLocaleString(), cost.brave_usd != null ? `Brave Search API, ${usd(cost.brave_usd)}` : "Brave Search API; Substack's own search is free"],
+  ["Human coding", `${(cost.human_minutes / 60).toFixed(1)} h`, `${cost.human.reduce((a, h) => a + h.decisions, 0).toLocaleString()} decisions`]
+]));
+```
+
+Three things cost money or time at scale: the two coding engines, web search, and the human checks. Everything else (Substack's public endpoints, embeddings, clustering, the citation network) ran locally or against free endpoints.
+
+**Engines.** Jev is billed per input token and was charged as recorded. Claude ran through the Claude Code command-line tool on a claude.ai subscription rather than the API: nothing was charged per token, but each call consumed subscription usage, and the tool reports what the same traffic would have cost at API list price, recorded here as the list-price equivalent. Every call also carries the tool's own context (about 12,000 tokens), which inflates the token counts against a pure API run. The batch API at half price would have been the cheapest paid route; the subscription was free at the margin and already paid for.
+
+```js
+display(Inputs.table(cost.runs.map((r) => ({id: r.id, engine: r.engine, model: r.model, transport: r.transport === "cli" ? "Claude Code (subscription)" : "API", target: r.target, version: r.codebook_version, items: r.n_items, input: r.input_tokens, output: r.output_tokens, cost: r.cost_usd, charged: r.charged ? "charged" : "list-price equivalent", hours: r.hours, date: (r.started_at || "").slice(0, 10)})), {
+  columns: ["date", "engine", "transport", "target", "version", "items", "input", "output", "cost", "charged", "hours"],
+  header: {date: "Date", engine: "Engine", transport: "Transport", target: "Target", version: "Codebook", items: "Items", input: "Input tokens", output: "Output tokens", cost: "Cost (USD)", charged: "Basis", hours: "Wall-clock h"},
+  format: {input: mtok, output: mtok, cost: usd, hours: (v) => (v == null ? "" : v.toFixed(1)), items: (v) => v.toLocaleString()}, layout: "auto", select: false, rows: 20
 }));
+```
+
+```js
+display(html`<p class="caption">Per engine: ${Object.entries(cost.totals.by_engine).map(([e, t]) => `${e}: ${t.items.toLocaleString()} items, ${mtok(t.input_tokens)} input tokens, ${usd(t.cost_usd)}`).join(" · ")}. Models: ${[...new Set(cost.runs.map((r) => r.model))].join(", ")}.</p>`);
+```
+
+**Search.** Brave's Search API is billed per request, one page of twenty results. Substack's own search endpoints are free and were called at a polite rate.
+
+```js
+display(Inputs.table(cost.search.map((s) => ({backend: s.backend, variant: s.variant, queries: s.queries, requests: s.requests, results: s.results})), {
+  columns: ["backend", "variant", "queries", "requests", "results"], header: {backend: "Backend", variant: "Query kind", queries: "Distinct queries", requests: "Requests (pages)", results: "Results stored"},
+  format: {queries: (v) => v.toLocaleString(), requests: (v) => v.toLocaleString(), results: (v) => v.toLocaleString()}, select: false, rows: 10
+}));
+display(html`<p class="caption">${cost.brave_requests.toLocaleString()} Brave requests in all${cost.brave_price_per_1000 ? `, at $${cost.brave_price_per_1000} per thousand: ${usd(cost.brave_usd)}` : "; the per-request price depends on the plan and is not recorded here"}. Citation coupling (the "coupling" kinds) accounts for most of them.</p>`);
+```
+
+**Human time.** One person verified engine codes against their evidence quotes in a browser tool; the times are the tool's own measurements per decision, including reading.
+
+```js
+display(Inputs.table(cost.human.map((h) => ({sample: h.sample_name, items: h.items, decisions: h.decisions, minutes: h.minutes, per: h.seconds_per_decision})), {
+  columns: ["sample", "items", "decisions", "minutes", "per"], header: {sample: "Sample", items: "Items", decisions: "Decisions", minutes: "Minutes", per: "Seconds per decision"}, select: false, rows: 10
+}));
+```
+
+**Wall-clock time** by pipeline stage, summed over completed runs. Coding dominates; the archive crawl and body fetches are bounded by the one-request-per-second politeness rule, not by compute.
+
+```js
+display(Inputs.table(cost.stages.filter((s) => s.hours >= 0.1).map((s) => ({stage: s.stage, runs: s.runs, hours: s.hours})), {columns: ["stage", "runs", "hours"], header: {stage: "Stage", runs: "Runs", hours: "Hours"}, select: false, rows: 20}));
+display(html`<p class="caption">${cost.http.fetch_log.toLocaleString()} page fetches logged; ${cost.http.http_cache.toLocaleString()} responses cached.</p>`);
 ```
 
 Codebook version ${codebook.version}. Data generated ${summary.generated_at.slice(0, 10)}.

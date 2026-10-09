@@ -42,6 +42,14 @@ coding:
     # sample showed 4 of 12 relevant posts had Jev mass 0.013-0.083; adds ~1,750 posts.
     relevance_min_prob: 0.05
 
+# ---------------------------------------------------------------- usage and cost accounting (Methods page)
+costs:
+  # Brave Search API is billed per request (one page of results). Price per 1,000 requests in USD on the plan
+  # used; leave null to report request counts without a dollar figure.
+  brave_price_per_1000: null
+  # Claude Code CLI runs on the claude.ai subscription: the engine records the list-price equivalent the CLI
+  # reports, which is not a charge. Jev and any API-transport Claude runs are charged as recorded.
+
 gold:
   seed: 20260929
   samples:

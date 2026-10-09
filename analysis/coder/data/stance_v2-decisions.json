@@ -1,0 +1,53 @@
+{
+ "171": {
+  "experience_now": {
+   "seconds": 66.1,
+   "coded_at": "2026-10-09T19:23:33.722Z",
+   "shown_value": "unsure",
+   "shown_evidence": "Obviously, if the science of AI consciousness is far from settled, it makes no sense to declare by fiat that AI is not conscious.",
+   "decision": "accept",
+   "value": "unsure"
+  },
+  "cognition_now": {
+   "seconds": 20.6,
+   "coded_at": "2026-10-09T19:23:54.291Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "agency_now": {
+   "seconds": 2.3,
+   "coded_at": "2026-10-09T19:23:56.550Z",
+   "shown_value": "not_addressed",
+   "shown_evidence": null,
+   "decision": "accept",
+   "value": "not_addressed"
+  },
+  "possible": {
+   "seconds": 5.7,
+   "coded_at": "2026-10-09T19:24:02.213Z",
+   "shown_value": "unsure",
+   "shown_evidence": "We barely understand consciousness, sentience, and agency in humans—barring unexpected breakthroughs, it’s hard to imagine that we’ll understand it before it arrives (if it does).",
+   "decision": "accept",
+   "value": "unsure"
+  },
+  "moral_status": {
+   "seconds": 16.6,
+   "coded_at": "2026-10-09T19:24:18.849Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "And if AI might be conscious, categorically rejecting the idea that it might deserve welfare is abominable.",
+   "decision": "accept",
+   "value": "yes_qualified"
+  },
+  "serious": {
+   "seconds": 6.8,
+   "coded_at": "2026-10-09T19:24:25.624Z",
+   "shown_value": "yes",
+   "shown_evidence": "Here, even more than in other parts of AI, I don’t really see a viable alternative to just trying to figure it out as we go.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "172": {}
+}

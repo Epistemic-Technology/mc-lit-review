@@ -411,12 +411,69 @@ def axes_derived_vs_coded(ctx: Ctx, cb: Codebook) -> dict | None:
     return out
 
 
+def _hours(a: str | None, b: str | None) -> float | None:
+    if not a or not b:
+        return None
+    from datetime import datetime
+    return round((datetime.fromisoformat(b) - datetime.fromisoformat(a)).total_seconds() / 3600, 2)
+
+
+def costs(ctx: Ctx) -> dict:
+    """Usage and cost accounting for the Methods page: every engine run with its transport, tokens, recorded
+    cost and wall-clock; search requests by backend; human coding time; pipeline stage durations.
+    Claude runs through the Claude Code CLI are on the subscription: the CLI reports a list-price equivalent,
+    recorded as `cost_usd` but never charged. The transport is read from the stored raw response of one code
+    in the run (the CLI's JSON carries `modelUsage`; the API's carries `stop_reason`)."""
+    c = ctx.conn
+    cfg = ctx.settings.analysis.get("costs") or {}
+    runs = []
+    for r in c.execute("SELECT * FROM code_runs WHERE n_items>0 ORDER BY id"):
+        ref = c.execute("SELECT raw_ref FROM codes WHERE code_run_id=? LIMIT 1", (r["id"],)).fetchone()
+        transport = None
+        if ref and ref[0]:
+            try:
+                d = json.loads(ctx.raw.get(ref[0]))
+                transport = "cli" if ("modelUsage" in d or "session_id" in d) else ("api" if ("stop_reason" in d or "content" in d) else None)
+            except Exception:  # noqa: BLE001
+                transport = None
+        if r["engine"] == "jev":
+            transport = "api"
+        charged = r["engine"] == "jev" or transport == "api"
+        runs.append({"id": int(r["id"]), "engine": r["engine"], "model": r["model"], "transport": transport, "target": r["target"], "codebook_version": r["codebook_version"],
+                     "n_items": int(r["n_items"]), "input_tokens": int(r["input_tokens"] or 0), "output_tokens": int(r["output_tokens"] or 0),
+                     "cost_usd": round(float(r["cost_usd"] or 0), 2), "charged": charged, "started_at": r["started_at"], "finished_at": r["finished_at"],
+                     "hours": _hours(r["started_at"], r["finished_at"])})
+    totals = {
+        "charged_usd": round(sum(x["cost_usd"] for x in runs if x["charged"]), 2),
+        "subscription_list_price_usd": round(sum(x["cost_usd"] for x in runs if not x["charged"]), 2),
+        "subscription_hours": round(sum(x["hours"] or 0 for x in runs if not x["charged"]), 1),
+        "input_tokens": sum(x["input_tokens"] for x in runs), "output_tokens": sum(x["output_tokens"] for x in runs),
+        "by_engine": {e: {"items": sum(x["n_items"] for x in runs if x["engine"] == e), "cost_usd": round(sum(x["cost_usd"] for x in runs if x["engine"] == e), 2),
+                          "input_tokens": sum(x["input_tokens"] for x in runs if x["engine"] == e)} for e in sorted({x["engine"] for x in runs})},
+    }
+    search = [dict(r) for r in c.execute(
+        """SELECT q.backend, q.variant, COUNT(DISTINCT q.id) queries, COUNT(DISTINCT q.id||':'||COALESCE(s.page,0)) requests, COUNT(*) results
+           FROM search_results s JOIN queries q ON q.id=s.query_id GROUP BY 1,2 ORDER BY 1,2""")]
+    brave_requests = sum(s["requests"] for s in search if s["backend"] == "brave")
+    price = cfg.get("brave_price_per_1000")
+    human = [dict(r) for r in c.execute(
+        """SELECT s.sample_name, COUNT(*) decisions, COUNT(DISTINCT g.sample_id) items, ROUND(SUM(g.seconds)/60.0, 1) minutes, ROUND(AVG(g.seconds), 1) seconds_per_decision
+           FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id GROUP BY 1 ORDER BY MIN(g.coded_at)""")]
+    stages = [dict(r) for r in c.execute(
+        """SELECT stage, COUNT(*) runs, ROUND(SUM((julianday(finished_at)-julianday(started_at))*24), 1) hours
+           FROM runs WHERE finished_at IS NOT NULL AND status='ok' GROUP BY stage ORDER BY MIN(started_at)""")]
+    http = {"fetch_log": c.execute("SELECT COUNT(*) FROM fetch_log").fetchone()[0], "http_cache": c.execute("SELECT COUNT(*) FROM http_cache").fetchone()[0]}
+    return {"runs": runs, "totals": totals, "search": search, "brave_requests": brave_requests, "brave_price_per_1000": price,
+            "brave_usd": round(brave_requests / 1000 * price, 2) if price else None,
+            "human": human, "human_minutes": round(sum(h["minutes"] or 0 for h in human), 1), "stages": stages, "http": http}
+
+
 def methods(ctx: Ctx) -> dict:
     from .code import agreement
     from .gold import human_agreement
 
     return {"jev_vs_claude_posts": agreement(ctx, "post"), "jev_vs_claude_publications": agreement(ctx, "publication"), "engine_vs_human": human_agreement(ctx),
-            "axes_derived_vs_coded": axes_derived_vs_coded(ctx, Codebook()),
+            "axes_derived_vs_coded": axes_derived_vs_coded(ctx, Codebook()), "costs": costs(ctx),
             "gold_samples": [dict(r) for r in ctx.conn.execute("SELECT sample_name, entity_type, COUNT(*) n, MIN(sampled_at) sampled_at FROM gold_samples GROUP BY 1,2")],
             "human_decisions": [dict(r) for r in ctx.conn.execute("SELECT s.sample_name, g.decision, COUNT(*) n FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id GROUP BY 1,2")]}
 
