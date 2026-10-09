@@ -7,7 +7,7 @@ title: Positions
 Choose a slice of the corpus and the chart redraws. Each row is one of six questions; shares are of posts whose author addresses the question in their own voice.
 
 ```js
-import {axesDiverging, axesTable, stanceDiverging, stanceTable, GROUP_LABELS, GROUP_ORDER, GENRE_LABELS, AXIS_LABELS, AXIS_QUALIFIED, ITEM_LABELS, vlChart} from "./components/charts.js";
+import {axesDiverging, axesTable, GROUP_LABELS, GROUP_ORDER, GENRE_LABELS, AXIS_LABELS, AXIS_QUALIFIED, ITEM_LABELS, vlChart} from "./components/charts.js";
 const posts = await FileAttachment("./data/posts.json").json();
 const codebook = await FileAttachment("./data/codebook.json").json();
 const byGroupSpec = await FileAttachment("./charts/axes_by_group.vl.json").json();
@@ -54,26 +54,11 @@ display(html`<div class="grid grid-cols-2">${await vlChart(profileSpec, {width: 
 
 ## The six questions
 
-Each question is derived from the coded claims listed beside it: a committed answer on the first claim wins, the others are consulted when it is silent, and a post that only discusses any of them counts as discussed. The rules are in `mcreview/axes.py`.
+Each question is coded directly from the post (codebook 0.2.0). An earlier version of this site derived them from fourteen finer claims; the two agree closely, and the comparison is on the <a href="./methods">Methods</a> page.
 
 ```js
 display(html`<table class="axes">
-  <thead><tr><th>Question</th><th>Asks</th><th>Qualified yes means</th><th>Built from (primary first)</th></tr></thead>
+  <thead><tr><th>Question</th><th>Asks</th><th>Qualified yes means</th><th>Replaced these 0.1.0 claims</th></tr></thead>
   <tbody>${codebook.axes.map((a) => html`<tr><td><b>${AXIS_LABELS[a.name] || a.label}</b></td><td>${a.question}</td><td>${AXIS_QUALIFIED[a.name] || ""}</td><td>${a.items.map((i) => ITEM_LABELS[i] || i).join("; ")}</td></tr>`)}</tbody>
 </table>`);
-```
-
-## The underlying claims
-
-The fourteen claims as coded, before they were combined into the six questions above. Same slice as the chart at the top.
-
-```js
-const showClaims = view(Inputs.toggle({label: "Show the fourteen claims", value: false}));
-```
-
-```js
-if (showClaims) {
-  display(stanceDiverging(stanceTable(subset), {width: Math.min(width, 900)}));
-  display(Inputs.table(codebook.constructs.filter((c) => c.group === "stance").map((c) => ({Item: ITEM_LABELS[c.name] || c.name, Claim: c.claim})), {columns: ["Item", "Claim"], width: {Item: 260}, select: false, rows: 20}));
-}
 ```
