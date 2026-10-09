@@ -368,11 +368,55 @@ def summary(ctx: Ctx, posts: list[dict], cb: Codebook) -> dict:
     }
 
 
+def axes_derived_vs_coded(ctx: Ctx, cb: Codebook) -> dict | None:
+    """Codebook 0.2.0 check: the six axes derived from the 0.1.0 stance items (mcreview.axes.derive) against the
+    same axes coded directly by Claude at 0.2.0, post by post over the relevant set. Reads the engines' own
+    0.2.0 codes and the 0.1.0 coder-of-record rows (which materialise leaves in place for retired items), so it
+    stays computable after code_final moves to 0.2.0. reports_only counts as not_addressed on both sides."""
+    from .axes import derive
+
+    items = set(stance_item_names(cb))
+    old: dict[int, dict] = defaultdict(dict)
+    for eid, con, val in ctx.conn.execute("SELECT entity_id, construct, value FROM code_final WHERE entity_type='post' AND codebook_version='0.1.0'"):
+        if con in items:
+            old[int(eid)][con] = val
+    new: dict[int, dict] = defaultdict(dict)
+    for eid, con, val in ctx.conn.execute(
+        """SELECT c.entity_id, c.construct, c.value FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+           WHERE r.engine='claude' AND r.codebook_version='0.2.0' AND c.entity_type='post' ORDER BY c.coded_at"""):
+        if con in AXES:
+            new[int(eid)][con] = val
+    posts = [p for p in new if len(new[p]) == len(AXES) and p in old]
+    if not posts:
+        return None
+    norm = lambda v: "not_addressed" if v == "reports_only" else v  # noqa: E731
+    polarity = {"yes": "pro", "yes_qualified": "pro", "no": "con", "unsure": "neutral", "discussed": "neutral", "not_addressed": "na"}
+    out = {"n": len(posts), "levels": list(LEVELS), "axes": []}
+    for ax, meta in AXES.items():
+        t: Counter = Counter()
+        for p in posts:
+            t[(derive(old[p])[ax], norm(new[p][ax]))] += 1
+        n = len(posts)
+        both = {k: v for k, v in t.items() if polarity[k[0]] != "na" and polarity[k[1]] != "na"}
+        nb = sum(both.values())
+        out["axes"].append({
+            "name": ax, "label": meta["label"],
+            "exact": round(sum(v for (d, c), v in t.items() if d == c) / n, 3),
+            "coarse": round(sum(v for (d, c), v in t.items() if polarity[d] == polarity[c]) / n, 3),
+            "n_both": nb, "polarity": round(sum(v for (d, c), v in both.items() if polarity[d] == polarity[c]) / nb, 3) if nb else None,
+            "reversals": sum(v for (d, c), v in t.items() if {polarity[d], polarity[c]} == {"pro", "con"}),
+            "na_derived": sum(v for (d, _), v in t.items() if d == "not_addressed"), "na_coded": sum(v for (_, c), v in t.items() if c == "not_addressed"),
+            "matrix": [{"derived": d, "coded": c, "n": v} for (d, c), v in sorted(t.items())],
+        })
+    return out
+
+
 def methods(ctx: Ctx) -> dict:
     from .code import agreement
     from .gold import human_agreement
 
     return {"jev_vs_claude_posts": agreement(ctx, "post"), "jev_vs_claude_publications": agreement(ctx, "publication"), "engine_vs_human": human_agreement(ctx),
+            "axes_derived_vs_coded": axes_derived_vs_coded(ctx, Codebook()),
             "gold_samples": [dict(r) for r in ctx.conn.execute("SELECT sample_name, entity_type, COUNT(*) n, MIN(sampled_at) sampled_at FROM gold_samples GROUP BY 1,2")],
             "human_decisions": [dict(r) for r in ctx.conn.execute("SELECT s.sample_name, g.decision, COUNT(*) n FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id GROUP BY 1,2")]}
 

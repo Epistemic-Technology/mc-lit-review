@@ -47,7 +47,44 @@ display(html`<table class="axes">
 </table>`);
 ```
 
-The engine-agreement and human-verification figures below are on the coded items, not the derived questions; a derived answer inherits the reliability of its primary item.
+### Codebook 0.2.0: the six questions coded directly
+
+Once the derived questions proved readable, codebook 0.2.0 made them the instrument: each question is a construct with its own options, with a shared level scheme and a question-specific qualified yes. Claude re-coded the six questions on every relevant post on 2026-10-08. Nothing else changed; relevance, genre, object, and the thirteen argument types keep their 0.1.0 codes, and the fourteen retired items stay in the data.
+
+The re-code is a check on the derivation. Below, each post's derived answer is compared with its coded answer. Exact agreement counts the full six-level match; polarity agreement collapses yes and qualified yes to "pro", no to "con", unsure and discussed to "neutral", and is computed over posts that both sides treat as addressing the question. Reversals are posts where one side says yes and the other no.
+
+```js
+const cmp = methods.axes_derived_vs_coded;
+if (cmp) {
+  display(html`<p class="caption">${cmp.n.toLocaleString()} relevant posts with both a derived and a coded answer on every question.</p>`);
+  display(Inputs.table(cmp.axes.map((a) => ({question: a.label, exact: a.exact, coarse: a.coarse, n_both: a.n_both, polarity: a.polarity, reversals: a.reversals, na_derived: a.na_derived, na_coded: a.na_coded})), {
+    columns: ["question", "exact", "polarity", "n_both", "reversals", "na_derived", "na_coded"],
+    header: {question: "Question", exact: "Exact agreement", polarity: "Polarity agreement", n_both: "Both address it", reversals: "Reversals", na_derived: "Not addressed (derived)", na_coded: "Not addressed (coded)"},
+    format: {exact: (v) => v.toFixed(2), polarity: (v) => (v == null ? "" : v.toFixed(2)), n_both: (v) => v.toLocaleString(), na_derived: (v) => v.toLocaleString(), na_coded: (v) => v.toLocaleString()},
+    width: {question: 240}, select: false, rows: 8
+  }));
+} else {
+  display(html`<p class="caption">The 0.2.0 re-code has not been exported yet.</p>`);
+}
+```
+
+```js
+const cmpAxis = cmp ? view(Inputs.select(new Map(cmp.axes.map((a) => [a.label, a.name])), {label: "Confusion matrix for"})) : null;
+```
+
+```js
+if (cmp) {
+  const a = cmp.axes.find((x) => x.name === cmpAxis);
+  const lv = cmp.levels, short = {yes: "Yes", yes_qualified: "Yes, qualified", unsure: "Unsure", discussed: "Discussed", no: "No", not_addressed: "Not addressed"};
+  const cell = Object.fromEntries(a.matrix.map((m) => [`${m.derived}|${m.coded}`, m.n]));
+  display(html`<table class="axes"><thead><tr><th>Derived ↓ · Coded →</th>${lv.map((c) => html`<th>${short[c]}</th>`)}</tr></thead>
+    <tbody>${lv.map((d) => html`<tr><td><b>${short[d]}</b></td>${lv.map((c) => html`<td style="text-align:right;${d === c ? "font-weight:600" : ""}">${cell[`${d}|${c}`] || ""}</td>`)}</tr>`)}</tbody></table>`);
+}
+```
+
+The two agree closely on experience, goals, and moral status; the differences sit in the neutral band, between unsure and discussed, where the codebook expects fuzziness. Two questions moved by design rather than by disagreement. On seriousness, the retired item only fired when an author argued the hype line or rebutted it, whereas the new question asks about the author's framing, so the coder now marks most engaged essays as treating the question seriously. On possibility in principle, the coder infers a yes from how an author treats the current path, where the old item needed an explicit claim. The qualified yes on thinking is used about three times as often once it is defined for the coder rather than inferred from a split across items. Reversals are rare on every question; on thinking, nearly all of them are posts the derivation had as no that the coder now reads as partly. The published figures use the coded answers; the derived ones remain in the export for anyone who wants to repeat this comparison.
+
+The engine-agreement and human-verification figures below are on the coded items; the stance rows refer to the retired 0.1.0 items, and a new verification sample against the six questions is still to be drawn.
 
 ## How well the coding holds up
 
