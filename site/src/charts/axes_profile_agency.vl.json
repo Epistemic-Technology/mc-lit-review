@@ -90,57 +90,57 @@
     }
   },
   "data": {
-    "name": "data-22b1d2b465c5bd96004605cfc8f41447"
+    "name": "data-b4554abb6e96d3697e2a02f07b0c7376"
   },
   "datasets": {
-    "data-22b1d2b465c5bd96004605cfc8f41447": [
+    "data-b4554abb6e96d3697e2a02f07b0c7376": [
       {
         "experience": "No",
-        "n": 296,
+        "n": 358,
         "other": "No",
-        "share": 0.4713375796178344
-      },
-      {
-        "experience": "Unsure",
-        "n": 67,
-        "other": "Yes",
-        "share": 0.10668789808917198
-      },
-      {
-        "experience": "No",
-        "n": 24,
-        "other": "Yes",
-        "share": 0.03821656050955414
+        "share": 0.46134020618556704
       },
       {
         "experience": "Yes",
-        "n": 187,
+        "n": 211,
         "other": "Yes",
-        "share": 0.29777070063694266
+        "share": 0.27190721649484534
       },
       {
-        "experience": "Yes",
-        "n": 5,
-        "other": "No",
-        "share": 0.007961783439490446
+        "experience": "Unsure",
+        "n": 91,
+        "other": "Yes",
+        "share": 0.1172680412371134
       },
       {
         "experience": "No",
-        "n": 5,
-        "other": "Unsure",
-        "share": 0.007961783439490446
+        "n": 38,
+        "other": "Yes",
+        "share": 0.04896907216494845
       },
       {
         "experience": "Unsure",
-        "n": 19,
+        "n": 31,
         "other": "No",
-        "share": 0.030254777070063694
+        "share": 0.03994845360824742
+      },
+      {
+        "experience": "Yes",
+        "n": 6,
+        "other": "No",
+        "share": 0.007731958762886598
+      },
+      {
+        "experience": "No",
+        "n": 6,
+        "other": "Unsure",
+        "share": 0.007731958762886598
       },
       {
         "experience": "Unsure",
-        "n": 25,
+        "n": 35,
         "other": "Unsure",
-        "share": 0.03980891719745223
+        "share": 0.045103092783505154
       }
     ]
   },
@@ -218,7 +218,7 @@
       "encoding": {
         "color": {
           "condition": {
-            "test": "(datum.n > 75.36)",
+            "test": "(datum.n > 93.11999999999999)",
             "value": "#fcfcfb"
           },
           "value": "#0b0b0b"
@@ -256,7 +256,7 @@
   ],
   "title": {
     "subtitle": [
-      "Posts with a position on both questions (628). Granting goals while unsure about experience",
+      "Posts with a position on both questions (776). Granting goals while unsure about experience",
       "is the AI-safety framing; the reverse corner is nearly empty."
     ],
     "text": "Goals without experience"

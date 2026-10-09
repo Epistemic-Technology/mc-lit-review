@@ -336,8 +336,8 @@ def _claude_codes(ctx: Ctx, cb: Codebook, entity_type: str) -> dict[tuple[int, s
 def materialise(ctx: Ctx) -> None:
     """code_final: human gold > Claude (coder of record where present) > Jev above its construct threshold > Jev.
     Rows are written at the current codebook version; constructs unchanged since an earlier version keep
-    their codes from that version (Codebook.accepts). Rows for retired constructs are left at their old
-    version so the retired codes stay readable."""
+    their codes from that version, and retired constructs keep the codes from the versions that had them
+    (Codebook.accepts), so every coder-of-record value is carried forward under one version label."""
     cb = Codebook()
     thr: dict[str, float] = ctx.settings.analysis.get("thresholds") or {}
     now = db.now()

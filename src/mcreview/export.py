@@ -371,15 +371,15 @@ def summary(ctx: Ctx, posts: list[dict], cb: Codebook) -> dict:
 def axes_derived_vs_coded(ctx: Ctx, cb: Codebook) -> dict | None:
     """Codebook 0.2.0 check: the six axes derived from the 0.1.0 stance items (mcreview.axes.derive) against the
     same axes coded directly by Claude at 0.2.0, post by post over the relevant set. Reads the engines' own
-    0.2.0 codes and the 0.1.0 coder-of-record rows (which materialise leaves in place for retired items), so it
-    stays computable after code_final moves to 0.2.0. reports_only counts as not_addressed on both sides."""
+    0.2.0 codes and the coder-of-record rows for the retired items (materialise carries them forward under the
+    current version, since they were only ever coded at 0.1.0). reports_only counts as not_addressed on both sides."""
     from .axes import derive
 
     items = set(stance_item_names(cb))
     old: dict[int, dict] = defaultdict(dict)
-    for eid, con, val in ctx.conn.execute("SELECT entity_id, construct, value FROM code_final WHERE entity_type='post' AND codebook_version='0.1.0'"):
-        if con in items:
-            old[int(eid)][con] = val
+    q = ",".join("?" * len(items))
+    for eid, con, val in ctx.conn.execute(f"SELECT entity_id, construct, value FROM code_final WHERE entity_type='post' AND construct IN ({q})", list(items)):
+        old[int(eid)][con] = val
     new: dict[int, dict] = defaultdict(dict)
     for eid, con, val in ctx.conn.execute(
         """SELECT c.entity_id, c.construct, c.value FROM codes c JOIN code_runs r ON r.id=c.code_run_id
