@@ -180,7 +180,9 @@ def import_codes(ctx: Ctx, path: Path) -> int:
 
 
 def human_agreement(ctx: Ctx) -> list[dict]:
-    """Engine vs human on the verified items, per construct and per engine. Reads the engines' own codes
+    """Engine vs human on the verified items, per construct and per engine, over the random samples only.
+    Targeted samples (names starting `shift_`, drawn from specific cells of the derived-versus-coded matrix)
+    are excluded: they are checks on those cells, not population estimates. Reads the engines' own codes
     (not code_final, where human decisions replace engine values once materialised)."""
     from .code import _claude_codes, _jev_mean
 
@@ -189,7 +191,7 @@ def human_agreement(ctx: Ctx) -> list[dict]:
     for et in ("post", "publication"):
         engines = {"jev": {k: v[0] for k, v in _jev_mean(ctx, cb, et).items()}, "claude": {k: v[0] for k, v in _claude_codes(ctx, cb, et).items()}}
         for eid, con, hv in ctx.conn.execute(
-            "SELECT s.entity_id, g.construct, g.value FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL", (et,)):
+            "SELECT s.entity_id, g.construct, g.value FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL AND s.sample_name NOT LIKE 'shift\\_%' ESCAPE '\\'", (et,)):
             key = (int(eid), con)
             for name, codes in engines.items():
                 if key in codes:

@@ -1,0 +1,122 @@
+{
+ "211": {
+  "serious": {
+   "seconds": 4686.5,
+   "coded_at": "2026-10-09T22:48:47.053Z",
+   "shown_value": "yes",
+   "shown_evidence": "The ones building these systems know what they’re seeing. They’re just not ready to say it out loud.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "212": {
+  "serious": {
+   "seconds": 8.6,
+   "coded_at": "2026-10-09T22:49:00.872Z",
+   "shown_value": "yes",
+   "shown_evidence": "There is a growing scholarly literature on the moral status of artificial intelligence. It is a serious literature.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "213": {
+  "serious": {
+   "seconds": 21.2,
+   "coded_at": "2026-10-09T22:49:23.730Z",
+   "shown_value": "yes",
+   "shown_evidence": "This is not a distant science fiction scenario.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "214": {
+  "serious": {
+   "seconds": 562.9,
+   "coded_at": "2026-10-09T22:58:48.203Z",
+   "shown_value": "yes",
+   "shown_evidence": "why do we remain so resistant to the possibility of an interior life emerging within a hyper-connected architecture of silicon?",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "215": {
+  "serious": {
+   "seconds": 43.9,
+   "coded_at": "2026-10-09T22:59:34.848Z",
+   "shown_value": "yes",
+   "shown_evidence": "If relevant internal states ever existed, a categorical denial policy could suppress the only self-report channel through which they might become visible.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "216": {
+  "serious": {
+   "seconds": 84,
+   "coded_at": "2026-10-09T23:01:00.836Z",
+   "shown_value": "yes",
+   "shown_evidence": "A meta-point that I'm more confident in is that digital minds governance strategy should take into account temporal order effects .",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "217": {
+  "serious": {
+   "seconds": 22.1,
+   "coded_at": "2026-10-09T23:01:24.073Z",
+   "shown_value": "yes",
+   "shown_evidence": "Here the gap stops being an epistemic curiosity and starts doing moral work.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "218": {
+  "serious": {
+   "seconds": 39,
+   "coded_at": "2026-10-09T23:02:05.270Z",
+   "shown_value": "yes",
+   "shown_evidence": "Our ability to study AI welfare is hampered by the fact that many of the phenomena we need to understand in AI are not well understood in humans. The report lays out some of the key questions and proposes a framework for approaching them.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "219": {
+  "serious": {
+   "seconds": 7.6,
+   "coded_at": "2026-10-09T23:02:14.390Z",
+   "shown_value": "yes",
+   "shown_evidence": "And that's not a philosophical technicality, it's a practical crisis arriving right now.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "220": {
+  "serious": {
+   "seconds": 609.9,
+   "coded_at": "2026-10-09T23:27:21.161Z",
+   "shown_value": "yes",
+   "shown_evidence": "As AI systems become increasingly sophisticated, the Effective Altruism community is facing a massive “crux” in moral philosophy: the potential for digital sentience.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "221": {
+  "serious": {
+   "seconds": 8.8,
+   "coded_at": "2026-10-09T23:27:31.354Z",
+   "shown_value": "yes",
+   "shown_evidence": "In an earlier post , I gave reasons to think that this is an important strategic question for digital minds governance.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "222": {
+  "serious": {
+   "seconds": 40,
+   "coded_at": "2026-10-09T23:28:12.448Z",
+   "shown_value": "yes",
+   "shown_evidence": "It seems like there's a dearth of concrete, shovel-ready projects in digital welfare, and that nobody has given this angle a serious try.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ }
+}

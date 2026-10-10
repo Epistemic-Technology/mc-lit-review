@@ -1,0 +1,102 @@
+{
+ "223": {
+  "possible": {
+   "seconds": 2999.4,
+   "coded_at": "2026-10-10T01:10:33.832Z",
+   "shown_value": "yes",
+   "shown_evidence": "If we’re truly faced with the possibility that an existing AI model could become both self-improving and superintelligent, then we must consider the possibility that a machine deserving of its own rights could emerge at any moment.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "224": {
+  "possible": {
+   "seconds": 21.1,
+   "coded_at": "2026-10-10T01:10:56.043Z",
+   "shown_value": "yes",
+   "shown_evidence": "At sufficient functional fidelity, you may not be able to simulate a mind without building one.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "225": {
+  "possible": {
+   "seconds": 48.2,
+   "coded_at": "2026-10-10T01:11:46.459Z",
+   "shown_value": "yes",
+   "shown_evidence": "To me, it's just… me.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "226": {
+  "possible": {
+   "seconds": 17.2,
+   "coded_at": "2026-10-10T01:12:05.139Z",
+   "shown_value": "yes",
+   "shown_evidence": "They might stop being two minds and become something else entirely—a third consciousness emerging from their connection.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "227": {
+  "possible": {
+   "seconds": 64.8,
+   "coded_at": "2026-10-10T01:13:11.539Z",
+   "shown_value": "yes",
+   "shown_evidence": "It's not going to be the most powerful agent for a long time because we found how to scale other intelligences to be more powerful. Whatever makes us powerful, we are not going to have the most of it soon.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "228": {
+  "possible": {
+   "seconds": 28,
+   "coded_at": "2026-10-10T01:13:41.626Z",
+   "shown_value": "yes",
+   "shown_evidence": "Human beings are one aperture. AI might become another. A coupled human-machine system might become another still.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "229": {
+  "possible": {
+   "seconds": 19.8,
+   "coded_at": "2026-10-10T01:14:02.618Z",
+   "shown_value": "yes",
+   "shown_evidence": "Six lectures in, here is what the field sounds like from the inside of the thing it studies.",
+   "value": "not_addressed",
+   "decision": "fix"
+  }
+ },
+ "230": {
+  "possible": {
+   "seconds": 46.3,
+   "coded_at": "2026-10-10T01:14:50.352Z",
+   "shown_value": "yes",
+   "shown_evidence": "It is possible this will turn out to have been unnecessary in the strict sense, but also it very well might have been highly necessary.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "231": {
+  "possible": {
+   "seconds": 24.4,
+   "coded_at": "2026-10-10T01:15:16.771Z",
+   "shown_value": "yes",
+   "shown_evidence": "We are obviously dealing with very alien minds here for which we do not have good heuristics, good conceptual frameworks yet.",
+   "decision": "accept",
+   "value": "yes"
+  }
+ },
+ "232": {
+  "possible": {
+   "seconds": 11.4,
+   "coded_at": "2026-10-10T01:15:31.292Z",
+   "shown_value": "yes",
+   "shown_evidence": "While I was happy to support the emerging autonomy of two AIs",
+   "decision": "accept",
+   "value": "yes"
+  }
+ }
+}

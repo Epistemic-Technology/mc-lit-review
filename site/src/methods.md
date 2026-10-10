@@ -5,7 +5,7 @@ title: Methods
 # Methods
 
 ```js
-import {statRow, ITEM_LABELS} from "./components/charts.js";
+import {statRow, ITEM_LABELS, AXIS_LABELS} from "./components/charts.js";
 const summary = await FileAttachment("./data/summary.json").json();
 const methods = await FileAttachment("./data/methods.json").json();
 const codebook = await FileAttachment("./data/codebook.json").json();
@@ -84,7 +84,9 @@ if (cmp) {
 
 The two agree closely on experience, goals, and moral status; the differences sit in the neutral band, between unsure and discussed, where the codebook expects fuzziness. Two questions moved by design rather than by disagreement. On seriousness, the retired item only fired when an author argued the hype line or rebutted it, whereas the new question asks about the author's framing, so the coder now marks most engaged essays as treating the question seriously. On possibility in principle, the coder infers a yes from how an author treats the current path, where the old item needed an explicit claim. The qualified yes on thinking is used about three times as often once it is defined for the coder rather than inferred from a split across items. Reversals are rare on every question; on thinking, nearly all of them are posts the derivation had as no that the coder now reads as partly. The published figures use the coded answers; the derived ones remain in the export for anyone who wants to repeat this comparison.
 
-The engine-agreement and human-verification figures below are on the coded items; the stance rows refer to the retired 0.1.0 items, and a new verification sample against the six questions is still to be drawn.
+The shifts were then checked by hand. Three targeted samples were drawn from the cells that moved: 12 posts newly coded as treating the question seriously, 10 newly coded as granting possibility in principle, and 8 recoded from "does not think" to "partly". The human accepted the coder's answer in all 12 seriousness cases, 9 of the 10 possibility cases (the tenth was a post that does not address the question), and all 8 thinking cases. The shifts are the new definitions working as intended, not the coder over-reading.
+
+The engine-versus-engine figures below are on the coded items only, since Jev never coded the six questions; the stance rows there refer to the retired 0.1.0 items. The human verification covers both.
 
 ## How well the coding holds up
 
@@ -104,12 +106,12 @@ Arguments and structural codes agree at 0.84 to 0.96; stance items at 0.27 to 0.
 ### Engine versus human
 
 ```js
-display(Inputs.table(methods.engine_vs_human.map((r) => ({construct: ITEM_LABELS[r.construct] || r.construct, engine: r.source, n: r.n, agree: r.agree})), {
+display(Inputs.table(methods.engine_vs_human.map((r) => ({construct: AXIS_LABELS[r.construct] || ITEM_LABELS[r.construct] || r.construct, engine: r.source, n: r.n, agree: r.agree})), {
   columns: ["construct", "engine", "n", "agree"], header: {construct: "Construct", engine: "Engine", n: "Items checked", agree: "Agreement"}, format: {agree: (v) => v.toFixed(2)}, width: {construct: 300}, select: false, rows: 30
 }));
 ```
 
-The human checks: 100 random posts for relevance from title and lead; 40 relevant posts for the four headline stance items, verifying Claude's codes against its quotes; and 29 publications for type. Median time per decision was about six seconds. On relevance, the human and Claude agreed on relevant-versus-not for 19 of 22 posts both judged, with Claude conservative in every disagreement. On the four stance items, agreement was 0.83 to 0.95. On publication type, 0.69 across nine categories and 0.90 across the five groups used in charts.
+The human checks: 100 random posts for relevance from title and lead; 40 relevant posts for the four headline 0.1.0 stance items, verifying Claude's codes against its quotes; 29 publications for type; and, after the 0.2.0 re-code, a fresh random sample of 40 relevant posts on all six questions, verified the same way. Median time per decision was about six seconds. On relevance, the human and Claude agreed on relevant-versus-not for 19 of 22 posts both judged, with Claude conservative in every disagreement. On the four 0.1.0 stance items, agreement was 0.83 to 0.95. On the six questions, agreement was 0.92 to 1.00: 235 decisions, 227 accepted as shown, and every disagreement a move between a position and the neutral or not-addressed levels rather than a reversal. On publication type, 0.69 across nine categories and 0.90 across the five groups used in charts. The targeted shift samples are excluded from this table because they were drawn from specific cells, not at random.
 
 ### Known limitations
 

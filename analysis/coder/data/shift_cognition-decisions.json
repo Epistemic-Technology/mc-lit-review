@@ -1,0 +1,82 @@
+{
+ "233": {
+  "cognition_now": {
+   "seconds": 57.3,
+   "coded_at": "2026-10-10T01:16:35.346Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "This is the paradigmatic mode in its terminal form: a system that has read everything and therefore knows what is typical . ... It doesn't know that it does not know, because knowing that requires a self that persists through time and has something to lose.",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ },
+ "234": {
+  "cognition_now": {
+   "seconds": 22.4,
+   "coded_at": "2026-10-10T01:16:58.963Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "That it has a command of syntax, some pragmatics as it apes text patterns in its training data—but as for semantics, world knowledge, commensense physics, and a theory of mind, well, it is building the equivalent of a cargo-cult airstrip and control tower",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ },
+ "235": {
+  "cognition_now": {
+   "seconds": 5.1,
+   "coded_at": "2026-10-10T01:17:05.358Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "A system can be extraordinarily intelligent without experiencing anything at all.",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ },
+ "236": {
+  "cognition_now": {
+   "seconds": 38.4,
+   "coded_at": "2026-10-10T01:17:45.343Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "It has perceptions—every time a human gives it a prompt, it perceives that we want something from it—and it can provide appropriate responses to those perceptions using different forms of abstract pattern recognition. But its way of perceiving is nothing like ours, and therefore the process by which it generates a response is nothing like ours.",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ },
+ "237": {
+  "cognition_now": {
+   "seconds": 23.2,
+   "coded_at": "2026-10-10T01:18:11.072Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "When the AI identifies a logical inconsistency or a “Product Durability Gap” that hadn’t been explicitly named, it is surely performing a creative act.",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ },
+ "238": {
+  "cognition_now": {
+   "seconds": 11.2,
+   "coded_at": "2026-10-10T01:18:24.567Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "That's not passive reflection. That's co-intelligence .",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ },
+ "239": {
+  "cognition_now": {
+   "seconds": 16.9,
+   "coded_at": "2026-10-10T01:18:42.995Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "There is nobody in a LLM, and it still knows more than you.",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ },
+ "240": {
+  "cognition_now": {
+   "seconds": 30.4,
+   "coded_at": "2026-10-10T01:19:14.803Z",
+   "shown_value": "yes_qualified",
+   "shown_evidence": "It performs the human modelling repertoire stripped of organismic grounding, the pure lexic skeleton of cognition laid bare.",
+   "decision": "accept",
+   "value": "yes_qualified"
+  }
+ }
+}
