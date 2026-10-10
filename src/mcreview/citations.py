@@ -193,7 +193,7 @@ def fetch_titles(ctx: Ctx) -> None:
     cap = int(cfg.get("max_title_fetches_per_round", 1500))
     fast = dict(retries=1, timeout=float(cfg.get("title_fetch_timeout_seconds", 10)))
     rows = ctx.conn.execute(
-        f"SELECT id, kind, identifier, url_norm FROM refs WHERE title IS NULL AND title_fetched_at IS NULL AND {clause} "
+        f"SELECT id, kind, identifier, url_norm FROM refs WHERE (title IS NULL OR title_source IN ('anchor','brave')) AND title_fetched_at IS NULL AND {clause} "
         "AND kind IN ('arxiv','doi','web','book') AND (eligible IS NULL OR eligible=1 OR block_reason='no_title') "
         "ORDER BY citing_pubs DESC, citing_posts DESC, id LIMIT ?",
         params + (cap,),
@@ -240,10 +240,11 @@ def update_eligibility(ctx: Ctx) -> None:
     kinds = set(cfg["target_kinds"])
     blocked = set(cfg.get("blocked_domains") or [])
     title_pats = [re.compile(p, re.I) for p in (cfg.get("blocked_title_patterns") or [])]
-    rows = ctx.conn.execute("SELECT id, kind, domain, title, identifier FROM refs WHERE eligible IS NULL OR eligible=0 OR searched_round IS NULL").fetchall()
+    rows = ctx.conn.execute("SELECT id, kind, domain, title, title_source, identifier FROM refs WHERE eligible IS NULL OR eligible=0 OR searched_round IS NULL").fetchall()
     for row in rows:
         reason = None
-        title = refs_mod.clean_title(row["title"]) or ""
+        # anchor-text titles (titles.py) name a work for display but are not evidence enough to search by
+        title = (refs_mod.clean_title(row["title"]) or "") if row["title_source"] != "anchor" else ""
         if row["kind"] not in kinds:
             reason = f"kind:{row['kind']}"
         elif row["domain"] in blocked and row["kind"] not in ("substack_post", "book"):

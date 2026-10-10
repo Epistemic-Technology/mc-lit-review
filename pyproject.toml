@@ -9,6 +9,7 @@ dependencies = [
     "typer>=0.12",
     "python-dotenv>=1.0",
     "selectolax>=0.3",
+    "pypdf>=5.0",                 # metadata titles for cited PDFs (titles.py)
     "anthropic>=1.9.0",
     "pydantic>=2.13.5",
     "torch>=2.4",                 # direct dependency so [tool.uv.sources] can pin it to the CPU index

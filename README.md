@@ -20,6 +20,7 @@ uv run mcreview resolve              # confirm web-search hosts are Substack pub
 uv run mcreview fetch-bodies         # free post bodies -> text
 uv run mcreview cite-round           # phase 2: references -> backward chase + coupling search (one round)
 uv run mcreview run-all              # discover, resolve, bodies, then rounds until nothing new
+uv run mcreview titles               # name cited works the rounds left untitled (lab blogs, books, social, refused pages)
 uv run mcreview archive-meta         # optional context: archive metadata for publications with >= N corpus posts
 uv run mcreview check-validation     # were the publications in config/validation.yaml found unaided?
 uv run mcreview report               # unique yield per channel / term, top coupling references

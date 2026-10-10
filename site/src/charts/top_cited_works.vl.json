@@ -90,15 +90,21 @@
     }
   },
   "data": {
-    "name": "data-41a1de2637d31cecc0f8a644fccb1970"
+    "name": "data-f8c32438030b03406e349ead1d35a01c"
   },
   "datasets": {
-    "data-41a1de2637d31cecc0f8a644fccb1970": [
+    "data-f8c32438030b03406e349ead1d35a01c": [
       {
-        "posts": 81,
-        "pubs": 63,
+        "posts": 86,
+        "pubs": 67,
         "tier": "academic",
         "work": "Consciousness in Artificial Intelligence: Insights from the Science of…"
+      },
+      {
+        "posts": 53,
+        "pubs": 52,
+        "tier": "lab",
+        "work": "The Hugging Face incident and the road ahead"
       },
       {
         "posts": 70,
@@ -107,10 +113,40 @@
         "work": "Taking AI Welfare Seriously"
       },
       {
-        "posts": 34,
-        "pubs": 34,
+        "posts": 54,
+        "pubs": 49,
+        "tier": "academic",
+        "work": "On the Dangers of Stochastic Parrots"
+      },
+      {
+        "posts": 42,
+        "pubs": 40,
         "tier": "lab",
+        "work": "Exploring model welfare"
+      },
+      {
+        "posts": 43,
+        "pubs": 36,
+        "tier": "academic",
+        "work": "Verbalizable Representations Form a Global Workspace in Language Model…"
+      },
+      {
+        "posts": 38,
+        "pubs": 36,
+        "tier": "lab",
+        "work": "Claude’s Constitution"
+      },
+      {
+        "posts": 36,
+        "pubs": 36,
+        "tier": "substack",
         "work": "Brief independent investigation of agents’ behavior, reasoning and col…"
+      },
+      {
+        "posts": 34,
+        "pubs": 33,
+        "tier": "lab",
+        "work": "A global workspace in language models"
       },
       {
         "posts": 33,
@@ -119,16 +155,16 @@
         "work": "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It"
       },
       {
-        "posts": 32,
-        "pubs": 31,
+        "posts": 33,
+        "pubs": 32,
         "tier": "substack",
         "work": "The Rise and Fall of Agent Civilizations"
       },
       {
-        "posts": 34,
+        "posts": 38,
         "pubs": 29,
-        "tier": "lab",
-        "work": "Verbalizable Representations Form a Global Workspace in Language Model…"
+        "tier": "academic",
+        "work": "Emotion Concepts and their Function in a Large Language Model"
       },
       {
         "posts": 34,
@@ -137,10 +173,22 @@
         "work": "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …"
       },
       {
+        "posts": 33,
+        "pubs": 25,
+        "tier": "academic",
+        "work": "Could a Large Language Model be Conscious?"
+      },
+      {
         "posts": 26,
         "pubs": 25,
         "tier": "other",
         "work": "A warning about ‘model welfare"
+      },
+      {
+        "posts": 27,
+        "pubs": 24,
+        "tier": "academic",
+        "work": "Conscious artificial intelligence and biological naturalism"
       },
       {
         "posts": 25,
@@ -149,70 +197,22 @@
         "work": "Dario Amodei — We Must Pace the Frontier"
       },
       {
+        "posts": 29,
+        "pubs": 23,
+        "tier": "lab",
+        "work": "Claude 4 System Card"
+      },
+      {
         "posts": 28,
-        "pubs": 21,
+        "pubs": 23,
         "tier": "academic",
-        "work": "Large Language Models Report Subjective Experience Under Self-Referent…"
+        "work": "Identifying indicators of consciousness in AI systems"
       },
       {
-        "posts": 22,
-        "pubs": 21,
-        "tier": "press",
-        "work": "The Mythology Of Conscious AI"
-      },
-      {
-        "posts": 26,
-        "pubs": 20,
-        "tier": "other",
-        "work": "We must build AI for people; not to be a person."
-      },
-      {
-        "posts": 20,
-        "pubs": 19,
-        "tier": "academic",
-        "work": "The Chinese Room Argument"
-      },
-      {
-        "posts": 25,
-        "pubs": 18,
+        "posts": 27,
+        "pubs": 23,
         "tier": "lab",
-        "work": "Emotion Concepts and their Function in a Large Language Model"
-      },
-      {
-        "posts": 22,
-        "pubs": 18,
-        "tier": "other",
-        "work": "Humanist AI Code of Conduct"
-      },
-      {
-        "posts": 17,
-        "pubs": 17,
-        "tier": "other",
-        "work": "Hard problem of consciousness"
-      },
-      {
-        "posts": 24,
-        "pubs": 16,
-        "tier": "lab",
-        "work": "Emergent Introspective Awareness in Large Language Models"
-      },
-      {
-        "posts": 18,
-        "pubs": 15,
-        "tier": "other",
-        "work": "Chinese room"
-      },
-      {
-        "posts": 14,
-        "pubs": 14,
-        "tier": "lab",
-        "work": "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the…"
-      },
-      {
-        "posts": 14,
-        "pubs": 13,
-        "tier": "academic",
-        "work": "Inducing language models to assert their own consciousness restores hu…"
+        "work": "Eleos AI Research"
       }
     ]
   },
@@ -281,25 +281,25 @@
           "field": "work",
           "sort": [
             "Consciousness in Artificial Intelligence: Insights from the Science of…",
+            "The Hugging Face incident and the road ahead",
             "Taking AI Welfare Seriously",
+            "On the Dangers of Stochastic Parrots",
+            "Exploring model welfare",
+            "Verbalizable Representations Form a Global Workspace in Language Model…",
+            "Claude’s Constitution",
             "Brief independent investigation of agents’ behavior, reasoning and col…",
+            "A global workspace in language models",
             "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It",
             "The Rise and Fall of Agent Civilizations",
-            "Verbalizable Representations Form a Global Workspace in Language Model…",
-            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
-            "A warning about ‘model welfare",
-            "Dario Amodei — We Must Pace the Frontier",
-            "Large Language Models Report Subjective Experience Under Self-Referent…",
-            "The Mythology Of Conscious AI",
-            "We must build AI for people; not to be a person.",
-            "The Chinese Room Argument",
             "Emotion Concepts and their Function in a Large Language Model",
-            "Humanist AI Code of Conduct",
-            "Hard problem of consciousness",
-            "Emergent Introspective Awareness in Large Language Models",
-            "Chinese room",
-            "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the…",
-            "Inducing language models to assert their own consciousness restores hu…"
+            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
+            "Could a Large Language Model be Conscious?",
+            "A warning about ‘model welfare",
+            "Conscious artificial intelligence and biological naturalism",
+            "Dario Amodei — We Must Pace the Frontier",
+            "Claude 4 System Card",
+            "Identifying indicators of consciousness in AI systems",
+            "Eleos AI Research"
           ],
           "title": null,
           "type": "nominal"
@@ -324,25 +324,25 @@
           "field": "work",
           "sort": [
             "Consciousness in Artificial Intelligence: Insights from the Science of…",
+            "The Hugging Face incident and the road ahead",
             "Taking AI Welfare Seriously",
+            "On the Dangers of Stochastic Parrots",
+            "Exploring model welfare",
+            "Verbalizable Representations Form a Global Workspace in Language Model…",
+            "Claude’s Constitution",
             "Brief independent investigation of agents’ behavior, reasoning and col…",
+            "A global workspace in language models",
             "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It",
             "The Rise and Fall of Agent Civilizations",
-            "Verbalizable Representations Form a Global Workspace in Language Model…",
-            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
-            "A warning about ‘model welfare",
-            "Dario Amodei — We Must Pace the Frontier",
-            "Large Language Models Report Subjective Experience Under Self-Referent…",
-            "The Mythology Of Conscious AI",
-            "We must build AI for people; not to be a person.",
-            "The Chinese Room Argument",
             "Emotion Concepts and their Function in a Large Language Model",
-            "Humanist AI Code of Conduct",
-            "Hard problem of consciousness",
-            "Emergent Introspective Awareness in Large Language Models",
-            "Chinese room",
-            "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the…",
-            "Inducing language models to assert their own consciousness restores hu…"
+            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
+            "Could a Large Language Model be Conscious?",
+            "A warning about ‘model welfare",
+            "Conscious artificial intelligence and biological naturalism",
+            "Dario Amodei — We Must Pace the Frontier",
+            "Claude 4 System Card",
+            "Identifying indicators of consciousness in AI systems",
+            "Eleos AI Research"
           ],
           "type": "nominal"
         }

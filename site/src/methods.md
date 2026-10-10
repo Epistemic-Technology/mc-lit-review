@@ -15,6 +15,8 @@ const codebook = await FileAttachment("./data/codebook.json").json();
 
 Posts entered through documented routes only: a lexical search over a query bank (Brave web search with and without a `site:substack.com` filter, and Substack's own post search), then three rounds of citation expansion (every Substack post cited by a corpus post was fetched; every outside work cited by two or more corpus posts became a new search). Every post records how it was found. Bodies were fetched for free posts; paywalled posts keep their public preview only.
 
+Outbound links were normalised into cited works: tracking parameters dropped, arXiv versions and formats collapsed, DOIs read out of publisher URLs, Substack posts resolved across custom domains and `open.substack.com`. Works were named from the page itself (arXiv, Crossref, Open Library, the platform's own embed data for YouTube, X, Spotify and Reddit, PDF metadata, or the page title, retrying as a browser when the project's user agent was refused), then from the title a search engine had returned for the same URL, then from the anchor text posts used when two posts agreed or the anchor read as a title. A work still unnamed shows its URL slug, marked as such. Works that are one thing under several URLs (a preprint and its journal version, a lab blog and its paper, mirrors of a PDF) are merged by identifier and then by exact title; the sources page reports how many references that collapsed.
+
 ```js
 const p = summary.prisma;
 display(Inputs.table([

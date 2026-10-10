@@ -377,6 +377,19 @@ def topics_import(path: str = typer.Option("analysis/topic_labels.csv")) -> None
 
 
 @app.command()
+def titles(min_posts: int = typer.Option(2, help="Fetch over the network for works cited by at least this many posts (arXiv, DOI and ISBN references always)"),
+           workers: int = typer.Option(6, help="Concurrent fetches; one request per second per host"),
+           no_network: bool = typer.Option(False, "--no-network", help="Only the local strategies (Brave result titles, anchor text)"),
+           all_refs: bool = typer.Option(False, "--all", help="Every reference, not only those cited by relevant posts"),
+           limit: int | None = typer.Option(None, help="Cap on network fetches (for trials)")) -> None:
+    """Stage 6b: name cited works the citation rounds left untitled (lab blogs, books, social media, refused pages)."""
+    from . import titles as titles_mod
+
+    _run("titles", lambda ctx, **_: titles_mod.fill_titles(ctx, min_posts=min_posts, workers=workers, network=not no_network, only_relevant=not all_refs, limit=limit),
+         min_posts=min_posts, workers=workers, no_network=no_network, all_refs=all_refs, limit=limit)
+
+
+@app.command()
 def export(out: str | None = typer.Option(None, help="Output directory (default site/src/data)")) -> None:
     """Stage 7: write every aggregate and the post/publication tables the figures and site read (no bodies)."""
     from pathlib import Path

@@ -19,6 +19,7 @@ from .axes import AXES, LEVELS, axes_for
 from .codebook import Codebook
 from .config import CONFIG_DIR, PROJECT_ROOT, load_yaml
 from .context import Ctx
+from . import refs as refs_mod
 
 log = logging.getLogger(__name__)
 
@@ -277,30 +278,93 @@ def _tier_lookup(tiers_cfg: dict):
     return tier_for
 
 
+KIND_RANK = {"doi": 0, "arxiv": 1, "substack_post": 2, "wikipedia": 3, "book": 4, "web": 5, "homepage": 6, "maybe_substack_post": 7}
+TITLE_RANK = {"post": 0, "doi_csl": 1, "crossref": 1, "arxiv_page": 1, "wikipedia": 1, "openlibrary": 2, "page": 3, "pdf": 3, "oembed": 3, "brave": 4, "anchor": 5}
+
+
+def merge_works(works: list[dict]) -> list[dict]:
+    """Collapse references that are one cited work. Each work dict carries id, kind, identifier, url, domain,
+    title, title_source, target_post_id and the sets citing_posts/citing_pubs. Two passes: by work key
+    (DOI, arXiv id, ASIN, Wikipedia title, corpus post, or the URL after re-normalisation, so a publisher
+    page, its PDF and its doi.org link merge), then by title (preprint and journal version, lab blog and
+    paper, mirrors of a PDF). The surviving entry keeps the most canonical kind and the best-sourced title;
+    `aliases` lists the merged URLs."""
+    def better(a: dict, b: dict) -> dict:
+        return min((a, b), key=lambda w: (KIND_RANK.get(w["kind"], 9), -len(w["citing_posts"]), w["id"]))
+
+    def absorb(keep: dict, other: dict) -> dict:
+        prim = better(keep, other)
+        sec = other if prim is keep else keep
+        ta, tb = (prim.get("title"), prim.get("title_source")), (sec.get("title"), sec.get("title_source"))
+        title, source = min((ta, tb), key=lambda x: (x[0] is None, TITLE_RANK.get(x[1] or "", 8)))
+        merged = {**prim, "title": title, "title_source": source,
+                  "citing_posts": prim["citing_posts"] | sec["citing_posts"], "citing_pubs": prim["citing_pubs"] | sec["citing_pubs"],
+                  "aliases": sorted(set(prim.get("aliases", [])) | set(sec.get("aliases", [])) | {sec["url"]} - {prim["url"]})}
+        return merged
+
+    by_key: dict[str, dict] = {}
+    for w in works:
+        if w["kind"] in ("web", "doi", "arxiv", "book", "homepage"):   # current normalisation rules (e.g. arXiv DOIs -> arXiv) decide the canonical form
+            r = refs_mod.normalize(w["url"])
+            if r is not None and r.kind in ("web", "doi", "arxiv", "book", "homepage") and r.url_norm != w["url"]:
+                w = {**w, "url": r.url_norm, "kind": r.kind, "domain": r.domain, "aliases": [w["url"]]}
+        k = refs_mod.work_key(w["kind"], w.get("identifier"), w["url"], w.get("target_post_id"))
+        by_key[k] = absorb(by_key[k], w) if k in by_key else {**w, "aliases": w.get("aliases", [])}
+    by_title: dict[str, dict] = {}
+    out: list[dict] = []
+
+    def profile(w: dict) -> bool:
+        """Homepages and social profiles carry an organisation's or person's name, not a work's."""
+        path = w["url"].split("//", 1)[-1].split("/", 1)[1] if "/" in w["url"].split("//", 1)[-1] else ""
+        return w["kind"] == "homepage" or (w.get("tier") == "social" and ("/status/" not in path and "watch" not in path and "/comments/" not in path
+                                                                           and "/episode/" not in path and "/video/" not in path and path.count("/") < 2))
+
+    for w in by_key.values():
+        tk = refs_mod.title_key(w.get("title")) if w["kind"] != "wikipedia" and w.get("title_source") != "slug" and not profile(w) else None
+        if tk is None:
+            out.append(w)
+        elif tk in by_title:
+            by_title[tk] = absorb(by_title[tk], w)
+        else:
+            by_title[tk] = w
+    return out + list(by_title.values())
+
+
 def source_tables(ctx: Ctx, posts: list[dict]) -> dict:
     tiers_cfg = load_yaml("domain_tiers.yaml")
     tier_for = _tier_lookup(tiers_cfg)
     ids = [p["id"] for p in posts]
     group_of = {p["id"]: p["group"] for p in posts}
     q = ",".join("?" * len(ids))
-    works: dict[int, dict] = {}
+    raw: dict[int, dict] = {}
+    for r in ctx.conn.execute(
+        f"""SELECT pr.post_id, r.id, r.kind, r.domain, r.title, r.title_source, r.url_norm, r.identifier, r.target_post_id FROM post_refs pr JOIN refs r ON r.id=pr.ref_id WHERE pr.post_id IN ({q})""", ids):
+        if tier_for(r["kind"], r["domain"]) is None:
+            continue
+        w = raw.setdefault(int(r["id"]), {"id": int(r["id"]), "kind": r["kind"], "domain": r["domain"], "title": r["title"], "title_source": r["title_source"],
+                                           "url": r["url_norm"], "identifier": r["identifier"], "target_post_id": r["target_post_id"], "citing_posts": set(), "citing_pubs": set()})
+        w["citing_posts"].add(int(r["post_id"]))
+    pub_of = {p["id"]: p["publication_id"] for p in posts}
+    for w in raw.values():
+        w["citing_pubs"] = {pub_of[p] for p in w["citing_posts"]}
+    works = {}
     tier_posts: dict[str, set[int]] = defaultdict(set)
     tier_group: dict[str, Counter] = defaultdict(Counter)
-    for r in ctx.conn.execute(
-        f"""SELECT pr.post_id, r.id, r.kind, r.domain, r.title, r.url_norm, r.identifier, r.target_post_id FROM post_refs pr JOIN refs r ON r.id=pr.ref_id WHERE pr.post_id IN ({q})""", ids):
-        t = tier_for(r["kind"], r["domain"])
-        if t is None:
-            continue
-        w = works.setdefault(int(r["id"]), {"id": int(r["id"]), "kind": r["kind"], "tier": t, "domain": r["domain"], "title": r["title"], "url": r["url_norm"], "identifier": r["identifier"], "citing_posts": set(), "citing_pubs": set()})
-        w["citing_posts"].add(int(r["post_id"]))
-        tier_posts[t].add(int(r["post_id"]))
-        tier_group[t][group_of[int(r["post_id"])]] += 1
-    pub_of = {p["id"]: p["publication_id"] for p in posts}
-    for w in works.values():
-        w["citing_pubs"] = {pub_of[p] for p in w["citing_posts"]}
+    for w in raw.values():
+        w["tier"] = tier_for(w["kind"], w["domain"])
+    for w in merge_works(list(raw.values())):
+        w["tier"] = tier_for(w["kind"], w["domain"])
+        if not w.get("title"):   # display-only fallback from the URL; never stored
+            st = refs_mod.slug_title(w["url"])
+            if st:
+                w["title"], w["title_source"] = st, "slug"
+        works[w["id"]] = w
+        for pid in w["citing_posts"]:
+            tier_posts[w["tier"]].add(pid)
+            tier_group[w["tier"]][group_of[pid]] += 1
     top = sorted(works.values(), key=lambda w: (len(w["citing_pubs"]), len(w["citing_posts"])), reverse=True)
     def ser(w):
-        return {k: (len(v) if isinstance(v, set) else v) for k, v in w.items()}
+        return {k: (len(v) if isinstance(v, set) else v) for k, v in w.items() if k not in ("target_post_id", "identifier")}
     by_tier = {t: [ser(w) for w in top if w["tier"] == t][:25] for t in sorted(tier_posts)}
     # named people
     names = load_yaml("names.yaml")["people"]
@@ -316,7 +380,8 @@ def source_tables(ctx: Ctx, posts: list[dict]) -> dict:
     people = sorted([{"name": n, "group": g, "posts": len(mention_posts[n]), "share": round(len(mention_posts[n]) / (len(posts) or 1), 4), "by_group": dict(mention_group[n])}
                      for n, g, _ in compiled], key=lambda d: d["posts"], reverse=True)
     return {"tiers": {t: {"posts_citing": len(ps), "works": sum(1 for w in works.values() if w["tier"] == t), "by_group": dict(tier_group[t])} for t, ps in tier_posts.items()},
-            "top_works_by_tier": by_tier, "top_works": [ser(w) for w in top[:60]], "people": people, "n_posts": len(posts)}
+            "top_works_by_tier": by_tier, "top_works": [ser(w) for w in top[:60]], "people": people, "n_posts": len(posts),
+            "references_raw": len(raw), "works_merged": len(raw) - len(works)}
 
 
 def publication_tables(ctx: Ctx, posts: list[dict]) -> list[dict]:

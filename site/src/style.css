@@ -44,3 +44,6 @@ table.axes td, table.axes th { vertical-align: top; padding: 6px 10px 6px 0; }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
 .netlabel text { cursor: pointer; }
 .netlabel:hover text { text-decoration: underline; }
+
+/* Cited works whose title could not be recovered: the URL slug, shown as such */
+a.work-slug { color: var(--theme-foreground-muted); font-style: italic; }
