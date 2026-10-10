@@ -68,7 +68,8 @@ export async function vlChart(spec, {width} = {}) {
   if (width) s.width = Math.max(320, width);
   const el = document.createElement("div");
   el.className = "vl";
-  await embed(el, s, {actions: false, renderer: "svg"});
+  // href-encoded marks (names in the people chart) open in a new tab, like the site's other external links.
+  await embed(el, s, {actions: false, renderer: "svg", loader: {target: "_blank", rel: "noopener"}});
   return el;
 }
 

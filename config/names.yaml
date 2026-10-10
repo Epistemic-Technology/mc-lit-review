@@ -1,55 +1,57 @@
 # Named people counted by text mention in relevant posts (docs/plan.md stage 4). Each entry has a display name,
 # a group, and the regexes that count as a mention (case-sensitive; surnames alone only where unambiguous).
-# A post counts once per person however many times the name appears.
+# A post counts once per person however many times the name appears. `wikipedia` is the English Wikipedia article
+# title the site links the name to; omitted where the person has no article (checked 2026-10-09). Where Wikipedia
+# itself redirects the name to another article (Blake Lemoine -> LaMDA, Scott Alexander -> Slate Star Codex) we link there.
 
 people:
-  - {name: David Chalmers, group: philosopher, patterns: ["\\bChalmers\\b"]}
-  - {name: Daniel Dennett, group: philosopher, patterns: ["\\bDennett\\b"]}
-  - {name: John Searle, group: philosopher, patterns: ["\\bSearle\\b"]}
-  - {name: Thomas Nagel, group: philosopher, patterns: ["\\bNagel\\b"]}
-  - {name: Ned Block, group: philosopher, patterns: ["\\bNed Block\\b"]}
-  - {name: Jonathan Birch, group: philosopher, patterns: ["\\bJonathan Birch\\b", "\\bBirch's\\b", "\\bBirch\\b(?=.{0,80}(sentien|moral|precaution))"]}
-  - {name: Eric Schwitzgebel, group: philosopher, patterns: ["\\bSchwitzgebel\\b"]}
+  - {name: David Chalmers, group: philosopher, patterns: ["\\bChalmers\\b"], wikipedia: "David Chalmers"}
+  - {name: Daniel Dennett, group: philosopher, patterns: ["\\bDennett\\b"], wikipedia: "Daniel Dennett"}
+  - {name: John Searle, group: philosopher, patterns: ["\\bSearle\\b"], wikipedia: "John Searle"}
+  - {name: Thomas Nagel, group: philosopher, patterns: ["\\bNagel\\b"], wikipedia: "Thomas Nagel"}
+  - {name: Ned Block, group: philosopher, patterns: ["\\bNed Block\\b"], wikipedia: "Ned Block"}
+  - {name: Jonathan Birch, group: philosopher, patterns: ["\\bJonathan Birch\\b", "\\bBirch's\\b", "\\bBirch\\b(?=.{0,80}(sentien|moral|precaution))"], wikipedia: "Jonathan Birch (philosopher)"}
+  - {name: Eric Schwitzgebel, group: philosopher, patterns: ["\\bSchwitzgebel\\b"], wikipedia: "Eric Schwitzgebel"}
   - {name: Patrick Butlin, group: philosopher, patterns: ["\\bButlin\\b"]}
   - {name: Robert Long, group: philosopher, patterns: ["\\bRobert Long\\b", "\\bRob Long\\b"]}
-  - {name: Philip Goff, group: philosopher, patterns: ["\\bPhilip Goff\\b", "\\bGoff's\\b"]}
-  - {name: Keith Frankish, group: philosopher, patterns: ["\\bFrankish\\b"]}
-  - {name: Thomas Metzinger, group: philosopher, patterns: ["\\bMetzinger\\b"]}
+  - {name: Philip Goff, group: philosopher, patterns: ["\\bPhilip Goff\\b", "\\bGoff's\\b"], wikipedia: "Philip Goff (philosopher)"}
+  - {name: Keith Frankish, group: philosopher, patterns: ["\\bFrankish\\b"], wikipedia: "Keith Frankish"}
+  - {name: Thomas Metzinger, group: philosopher, patterns: ["\\bMetzinger\\b"], wikipedia: "Thomas Metzinger"}
   - {name: Joe Carlsmith, group: philosopher, patterns: ["\\bCarlsmith\\b"]}
-  - {name: Susan Schneider, group: philosopher, patterns: ["\\bSusan Schneider\\b"]}
-  - {name: Nick Bostrom, group: philosopher, patterns: ["\\bBostrom\\b"]}
-  - {name: Andy Clark, group: philosopher, patterns: ["\\bAndy Clark\\b"]}
-  - {name: Douglas Hofstadter, group: philosopher, patterns: ["\\bHofstadter\\b"]}
-  - {name: Alan Turing, group: scientist, patterns: ["\\bTuring\\b(?! [Tt]est)", "\\bTuring's\\b"]}
-  - {name: Anil Seth, group: scientist, patterns: ["\\bAnil Seth\\b", "\\bSeth's\\b"]}
-  - {name: Giulio Tononi, group: scientist, patterns: ["\\bTononi\\b"]}
-  - {name: Christof Koch, group: scientist, patterns: ["\\bChristof Koch\\b", "\\bKoch's\\b"]}
-  - {name: Michael Levin, group: scientist, patterns: ["\\bMichael Levin\\b", "\\bLevin's\\b"]}
-  - {name: Stanislas Dehaene, group: scientist, patterns: ["\\bDehaene\\b"]}
-  - {name: Michael Graziano, group: scientist, patterns: ["\\bGraziano\\b"]}
-  - {name: Karl Friston, group: scientist, patterns: ["\\bFriston\\b"]}
-  - {name: Roger Penrose, group: scientist, patterns: ["\\bPenrose\\b"]}
-  - {name: Geoffrey Hinton, group: ai_researcher, patterns: ["\\bHinton\\b"]}
-  - {name: Yann LeCun, group: ai_researcher, patterns: ["\\bLeCun\\b"]}
-  - {name: Ilya Sutskever, group: ai_researcher, patterns: ["\\bSutskever\\b"]}
-  - {name: Emily Bender, group: ai_researcher, patterns: ["\\bEmily Bender\\b", "\\bBender's\\b"]}
-  - {name: Gary Marcus, group: ai_researcher, patterns: ["\\bGary Marcus\\b", "\\bMarcus's\\b", "\\bMarcus'\\b"]}
-  - {name: Blake Lemoine, group: ai_researcher, patterns: ["\\bLemoine\\b"]}
+  - {name: Susan Schneider, group: philosopher, patterns: ["\\bSusan Schneider\\b"], wikipedia: "Susan Schneider"}
+  - {name: Nick Bostrom, group: philosopher, patterns: ["\\bBostrom\\b"], wikipedia: "Nick Bostrom"}
+  - {name: Andy Clark, group: philosopher, patterns: ["\\bAndy Clark\\b"], wikipedia: "Andy Clark"}
+  - {name: Douglas Hofstadter, group: philosopher, patterns: ["\\bHofstadter\\b"], wikipedia: "Douglas Hofstadter"}
+  - {name: Alan Turing, group: scientist, patterns: ["\\bTuring\\b(?! [Tt]est)", "\\bTuring's\\b"], wikipedia: "Alan Turing"}
+  - {name: Anil Seth, group: scientist, patterns: ["\\bAnil Seth\\b", "\\bSeth's\\b"], wikipedia: "Anil Seth"}
+  - {name: Giulio Tononi, group: scientist, patterns: ["\\bTononi\\b"], wikipedia: "Giulio Tononi"}
+  - {name: Christof Koch, group: scientist, patterns: ["\\bChristof Koch\\b", "\\bKoch's\\b"], wikipedia: "Christof Koch"}
+  - {name: Michael Levin, group: scientist, patterns: ["\\bMichael Levin\\b", "\\bLevin's\\b"], wikipedia: "Michael Levin (biologist)"}
+  - {name: Stanislas Dehaene, group: scientist, patterns: ["\\bDehaene\\b"], wikipedia: "Stanislas Dehaene"}
+  - {name: Michael Graziano, group: scientist, patterns: ["\\bGraziano\\b"], wikipedia: "Michael Graziano"}
+  - {name: Karl Friston, group: scientist, patterns: ["\\bFriston\\b"], wikipedia: "Karl J. Friston"}
+  - {name: Roger Penrose, group: scientist, patterns: ["\\bPenrose\\b"], wikipedia: "Roger Penrose"}
+  - {name: Geoffrey Hinton, group: ai_researcher, patterns: ["\\bHinton\\b"], wikipedia: "Geoffrey Hinton"}
+  - {name: Yann LeCun, group: ai_researcher, patterns: ["\\bLeCun\\b"], wikipedia: "Yann LeCun"}
+  - {name: Ilya Sutskever, group: ai_researcher, patterns: ["\\bSutskever\\b"], wikipedia: "Ilya Sutskever"}
+  - {name: Emily Bender, group: ai_researcher, patterns: ["\\bEmily Bender\\b", "\\bBender's\\b"], wikipedia: "Emily M. Bender"}
+  - {name: Gary Marcus, group: ai_researcher, patterns: ["\\bGary Marcus\\b", "\\bMarcus's\\b", "\\bMarcus'\\b"], wikipedia: "Gary Marcus"}
+  - {name: Blake Lemoine, group: ai_researcher, patterns: ["\\bLemoine\\b"], wikipedia: "LaMDA"}
   - {name: Kyle Fish, group: ai_researcher, patterns: ["\\bKyle Fish\\b"]}
-  - {name: Dario Amodei, group: industry, patterns: ["\\bAmodei\\b"]}
-  - {name: Sam Altman, group: industry, patterns: ["\\bAltman\\b"]}
-  - {name: Mustafa Suleyman, group: industry, patterns: ["\\bSuleyman\\b"]}
-  - {name: Demis Hassabis, group: industry, patterns: ["\\bHassabis\\b"]}
-  - {name: Elon Musk, group: industry, patterns: ["\\bMusk\\b"]}
-  - {name: Eliezer Yudkowsky, group: commentator, patterns: ["\\bYudkowsky\\b"]}
-  - {name: Richard Dawkins, group: commentator, patterns: ["\\bDawkins\\b"]}
-  - {name: Ted Chiang, group: commentator, patterns: ["\\bTed Chiang\\b", "\\bChiang's\\b"]}
-  - {name: Sam Harris, group: commentator, patterns: ["\\bSam Harris\\b"]}
-  - {name: Yuval Noah Harari, group: commentator, patterns: ["\\bHarari\\b"]}
-  - {name: Ray Kurzweil, group: commentator, patterns: ["\\bKurzweil\\b"]}
-  - {name: Erik Hoel, group: commentator, patterns: ["\\bErik Hoel\\b", "\\bHoel's\\b"]}
-  - {name: Scott Alexander, group: commentator, patterns: ["\\bScott Alexander\\b"]}
-  - {name: Dwarkesh Patel, group: commentator, patterns: ["\\bDwarkesh\\b"]}
-  - {name: Zvi Mowshowitz, group: commentator, patterns: ["\\bMowshowitz\\b", "\\bZvi\\b"]}
-  - {name: Ezra Klein, group: commentator, patterns: ["\\bEzra Klein\\b"]}
-  - {name: Pope Leo XIV, group: religious, patterns: ["\\bLeo XIV\\b", "\\bPope Leo\\b"]}
+  - {name: Dario Amodei, group: industry, patterns: ["\\bAmodei\\b"], wikipedia: "Dario Amodei"}
+  - {name: Sam Altman, group: industry, patterns: ["\\bAltman\\b"], wikipedia: "Sam Altman"}
+  - {name: Mustafa Suleyman, group: industry, patterns: ["\\bSuleyman\\b"], wikipedia: "Mustafa Suleyman"}
+  - {name: Demis Hassabis, group: industry, patterns: ["\\bHassabis\\b"], wikipedia: "Demis Hassabis"}
+  - {name: Elon Musk, group: industry, patterns: ["\\bMusk\\b"], wikipedia: "Elon Musk"}
+  - {name: Eliezer Yudkowsky, group: commentator, patterns: ["\\bYudkowsky\\b"], wikipedia: "Eliezer Yudkowsky"}
+  - {name: Richard Dawkins, group: commentator, patterns: ["\\bDawkins\\b"], wikipedia: "Richard Dawkins"}
+  - {name: Ted Chiang, group: commentator, patterns: ["\\bTed Chiang\\b", "\\bChiang's\\b"], wikipedia: "Ted Chiang"}
+  - {name: Sam Harris, group: commentator, patterns: ["\\bSam Harris\\b"], wikipedia: "Sam Harris"}
+  - {name: Yuval Noah Harari, group: commentator, patterns: ["\\bHarari\\b"], wikipedia: "Yuval Noah Harari"}
+  - {name: Ray Kurzweil, group: commentator, patterns: ["\\bKurzweil\\b"], wikipedia: "Ray Kurzweil"}
+  - {name: Erik Hoel, group: commentator, patterns: ["\\bErik Hoel\\b", "\\bHoel's\\b"], wikipedia: "Erik Hoel"}
+  - {name: Scott Alexander, group: commentator, patterns: ["\\bScott Alexander\\b"], wikipedia: "Slate Star Codex"}
+  - {name: Dwarkesh Patel, group: commentator, patterns: ["\\bDwarkesh\\b"], wikipedia: "Dwarkesh Patel"}
+  - {name: Zvi Mowshowitz, group: commentator, patterns: ["\\bMowshowitz\\b", "\\bZvi\\b"], wikipedia: "Zvi Mowshowitz"}
+  - {name: Ezra Klein, group: commentator, patterns: ["\\bEzra Klein\\b"], wikipedia: "Ezra Klein"}
+  - {name: Pope Leo XIV, group: religious, patterns: ["\\bLeo XIV\\b", "\\bPope Leo\\b"], wikipedia: "Pope Leo XIV"}

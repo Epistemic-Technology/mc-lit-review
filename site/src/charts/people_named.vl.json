@@ -90,10 +90,10 @@
     }
   },
   "data": {
-    "name": "data-8d1ea433820e168a746d1661ca88c4a7"
+    "name": "data-978186cf5b4b8a9d8a0d574ad0a1336b"
   },
   "datasets": {
-    "data-8d1ea433820e168a746d1661ca88c4a7": [
+    "data-978186cf5b4b8a9d8a0d574ad0a1336b": [
       {
         "by_group": {
           "academic": 122,
@@ -105,7 +105,8 @@
         "group": "philosopher",
         "name": "David Chalmers",
         "posts": 353,
-        "share": 0.1259
+        "share": 0.1259,
+        "url": "https://en.wikipedia.org/wiki/David_Chalmers"
       },
       {
         "by_group": {
@@ -118,7 +119,8 @@
         "group": "scientist",
         "name": "Alan Turing",
         "posts": 271,
-        "share": 0.0967
+        "share": 0.0967,
+        "url": "https://en.wikipedia.org/wiki/Alan_Turing"
       },
       {
         "by_group": {
@@ -131,7 +133,8 @@
         "group": "philosopher",
         "name": "John Searle",
         "posts": 219,
-        "share": 0.0781
+        "share": 0.0781,
+        "url": "https://en.wikipedia.org/wiki/John_Searle"
       },
       {
         "by_group": {
@@ -144,7 +147,8 @@
         "group": "industry",
         "name": "Sam Altman",
         "posts": 196,
-        "share": 0.0699
+        "share": 0.0699,
+        "url": "https://en.wikipedia.org/wiki/Sam_Altman"
       },
       {
         "by_group": {
@@ -157,7 +161,8 @@
         "group": "philosopher",
         "name": "Patrick Butlin",
         "posts": 193,
-        "share": 0.0689
+        "share": 0.0689,
+        "url": null
       },
       {
         "by_group": {
@@ -170,7 +175,8 @@
         "group": "industry",
         "name": "Dario Amodei",
         "posts": 165,
-        "share": 0.0589
+        "share": 0.0589,
+        "url": "https://en.wikipedia.org/wiki/Dario_Amodei"
       },
       {
         "by_group": {
@@ -183,7 +189,8 @@
         "group": "philosopher",
         "name": "Daniel Dennett",
         "posts": 149,
-        "share": 0.0532
+        "share": 0.0532,
+        "url": "https://en.wikipedia.org/wiki/Daniel_Dennett"
       },
       {
         "by_group": {
@@ -196,7 +203,8 @@
         "group": "scientist",
         "name": "Anil Seth",
         "posts": 149,
-        "share": 0.0532
+        "share": 0.0532,
+        "url": "https://en.wikipedia.org/wiki/Anil_Seth"
       },
       {
         "by_group": {
@@ -209,7 +217,8 @@
         "group": "industry",
         "name": "Elon Musk",
         "posts": 142,
-        "share": 0.0507
+        "share": 0.0507,
+        "url": "https://en.wikipedia.org/wiki/Elon_Musk"
       },
       {
         "by_group": {
@@ -222,7 +231,8 @@
         "group": "philosopher",
         "name": "Thomas Nagel",
         "posts": 131,
-        "share": 0.0467
+        "share": 0.0467,
+        "url": "https://en.wikipedia.org/wiki/Thomas_Nagel"
       },
       {
         "by_group": {
@@ -235,7 +245,8 @@
         "group": "philosopher",
         "name": "Nick Bostrom",
         "posts": 124,
-        "share": 0.0442
+        "share": 0.0442,
+        "url": "https://en.wikipedia.org/wiki/Nick_Bostrom"
       },
       {
         "by_group": {
@@ -248,7 +259,8 @@
         "group": "industry",
         "name": "Mustafa Suleyman",
         "posts": 123,
-        "share": 0.0439
+        "share": 0.0439,
+        "url": "https://en.wikipedia.org/wiki/Mustafa_Suleyman"
       },
       {
         "by_group": {
@@ -261,7 +273,8 @@
         "group": "ai_researcher",
         "name": "Geoffrey Hinton",
         "posts": 119,
-        "share": 0.0425
+        "share": 0.0425,
+        "url": "https://en.wikipedia.org/wiki/Geoffrey_Hinton"
       },
       {
         "by_group": {
@@ -274,7 +287,8 @@
         "group": "philosopher",
         "name": "Robert Long",
         "posts": 108,
-        "share": 0.0385
+        "share": 0.0385,
+        "url": null
       },
       {
         "by_group": {
@@ -287,7 +301,8 @@
         "group": "philosopher",
         "name": "Eric Schwitzgebel",
         "posts": 107,
-        "share": 0.0382
+        "share": 0.0382,
+        "url": "https://en.wikipedia.org/wiki/Eric_Schwitzgebel"
       },
       {
         "by_group": {
@@ -300,7 +315,8 @@
         "group": "philosopher",
         "name": "Jonathan Birch",
         "posts": 92,
-        "share": 0.0328
+        "share": 0.0328,
+        "url": "https://en.wikipedia.org/wiki/Jonathan_Birch_%28philosopher%29"
       },
       {
         "by_group": {
@@ -313,7 +329,8 @@
         "group": "scientist",
         "name": "Karl Friston",
         "posts": 91,
-        "share": 0.0325
+        "share": 0.0325,
+        "url": "https://en.wikipedia.org/wiki/Karl_J._Friston"
       },
       {
         "by_group": {
@@ -326,75 +343,323 @@
         "group": "ai_researcher",
         "name": "Blake Lemoine",
         "posts": 85,
-        "share": 0.0303
+        "share": 0.0303,
+        "url": "https://en.wikipedia.org/wiki/LaMDA"
       }
     ]
   },
   "height": 324,
   "layer": [
     {
-      "encoding": {
-        "tooltip": [
-          {
-            "field": "name",
-            "type": "nominal"
+      "layer": [
+        {
+          "encoding": {
+            "href": {
+              "field": "url",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "name",
+                "type": "nominal"
+              },
+              {
+                "field": "group",
+                "title": "Role",
+                "type": "nominal"
+              },
+              {
+                "field": "posts",
+                "title": "Posts",
+                "type": "quantitative"
+              },
+              {
+                "field": "share",
+                "format": ".0%",
+                "title": "Share",
+                "type": "quantitative"
+              }
+            ],
+            "x": {
+              "axis": {
+                "grid": true
+              },
+              "field": "posts",
+              "title": "Relevant posts mentioning the name",
+              "type": "quantitative"
+            },
+            "y": {
+              "axis": {
+                "labelColor": "transparent",
+                "labelPadding": 8
+              },
+              "field": "name",
+              "sort": [
+                "David Chalmers",
+                "Alan Turing",
+                "John Searle",
+                "Sam Altman",
+                "Patrick Butlin",
+                "Dario Amodei",
+                "Daniel Dennett",
+                "Anil Seth",
+                "Elon Musk",
+                "Thomas Nagel",
+                "Nick Bostrom",
+                "Mustafa Suleyman",
+                "Geoffrey Hinton",
+                "Robert Long",
+                "Eric Schwitzgebel",
+                "Jonathan Birch",
+                "Karl Friston",
+                "Blake Lemoine"
+              ],
+              "title": null,
+              "type": "nominal"
+            }
           },
-          {
-            "field": "group",
-            "title": "Role",
-            "type": "nominal"
+          "mark": {
+            "color": "#2a78d6",
+            "height": 14,
+            "type": "bar"
           },
-          {
-            "field": "posts",
-            "title": "Posts",
-            "type": "quantitative"
-          },
-          {
-            "field": "share",
-            "format": ".0%",
-            "title": "Share",
-            "type": "quantitative"
-          }
-        ],
-        "x": {
-          "axis": {
-            "grid": true
-          },
-          "field": "posts",
-          "title": "Relevant posts mentioning the name",
-          "type": "quantitative"
+          "transform": [
+            {
+              "filter": "isValid(datum.url)"
+            }
+          ]
         },
-        "y": {
-          "field": "name",
-          "sort": [
-            "David Chalmers",
-            "Alan Turing",
-            "John Searle",
-            "Sam Altman",
-            "Patrick Butlin",
-            "Dario Amodei",
-            "Daniel Dennett",
-            "Anil Seth",
-            "Elon Musk",
-            "Thomas Nagel",
-            "Nick Bostrom",
-            "Mustafa Suleyman",
-            "Geoffrey Hinton",
-            "Robert Long",
-            "Eric Schwitzgebel",
-            "Jonathan Birch",
-            "Karl Friston",
-            "Blake Lemoine"
-          ],
-          "title": null,
-          "type": "nominal"
+        {
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "name",
+                "type": "nominal"
+              },
+              {
+                "field": "group",
+                "title": "Role",
+                "type": "nominal"
+              },
+              {
+                "field": "posts",
+                "title": "Posts",
+                "type": "quantitative"
+              },
+              {
+                "field": "share",
+                "format": ".0%",
+                "title": "Share",
+                "type": "quantitative"
+              }
+            ],
+            "x": {
+              "axis": {
+                "grid": true
+              },
+              "field": "posts",
+              "title": "Relevant posts mentioning the name",
+              "type": "quantitative"
+            },
+            "y": {
+              "axis": {
+                "labelColor": "transparent",
+                "labelPadding": 8
+              },
+              "field": "name",
+              "sort": [
+                "David Chalmers",
+                "Alan Turing",
+                "John Searle",
+                "Sam Altman",
+                "Patrick Butlin",
+                "Dario Amodei",
+                "Daniel Dennett",
+                "Anil Seth",
+                "Elon Musk",
+                "Thomas Nagel",
+                "Nick Bostrom",
+                "Mustafa Suleyman",
+                "Geoffrey Hinton",
+                "Robert Long",
+                "Eric Schwitzgebel",
+                "Jonathan Birch",
+                "Karl Friston",
+                "Blake Lemoine"
+              ],
+              "title": null,
+              "type": "nominal"
+            }
+          },
+          "mark": {
+            "color": "#2a78d6",
+            "height": 14,
+            "type": "bar"
+          },
+          "transform": [
+            {
+              "filter": "!isValid(datum.url)"
+            }
+          ]
         }
-      },
-      "mark": {
-        "color": "#2a78d6",
-        "height": 14,
-        "type": "bar"
-      }
+      ]
+    },
+    {
+      "layer": [
+        {
+          "encoding": {
+            "href": {
+              "field": "url",
+              "type": "nominal"
+            },
+            "text": {
+              "field": "name",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "name",
+                "type": "nominal"
+              },
+              {
+                "field": "group",
+                "title": "Role",
+                "type": "nominal"
+              },
+              {
+                "field": "posts",
+                "title": "Posts",
+                "type": "quantitative"
+              },
+              {
+                "field": "share",
+                "format": ".0%",
+                "title": "Share",
+                "type": "quantitative"
+              }
+            ],
+            "x": {
+              "value": 0
+            },
+            "y": {
+              "axis": {
+                "labelColor": "transparent",
+                "labelPadding": 8
+              },
+              "field": "name",
+              "sort": [
+                "David Chalmers",
+                "Alan Turing",
+                "John Searle",
+                "Sam Altman",
+                "Patrick Butlin",
+                "Dario Amodei",
+                "Daniel Dennett",
+                "Anil Seth",
+                "Elon Musk",
+                "Thomas Nagel",
+                "Nick Bostrom",
+                "Mustafa Suleyman",
+                "Geoffrey Hinton",
+                "Robert Long",
+                "Eric Schwitzgebel",
+                "Jonathan Birch",
+                "Karl Friston",
+                "Blake Lemoine"
+              ],
+              "title": null,
+              "type": "nominal"
+            }
+          },
+          "mark": {
+            "align": "right",
+            "color": "#2a78d6",
+            "cursor": "pointer",
+            "dx": -8,
+            "fontSize": 12,
+            "type": "text"
+          },
+          "transform": [
+            {
+              "filter": "isValid(datum.url)"
+            }
+          ]
+        },
+        {
+          "encoding": {
+            "text": {
+              "field": "name",
+              "type": "nominal"
+            },
+            "tooltip": [
+              {
+                "field": "name",
+                "type": "nominal"
+              },
+              {
+                "field": "group",
+                "title": "Role",
+                "type": "nominal"
+              },
+              {
+                "field": "posts",
+                "title": "Posts",
+                "type": "quantitative"
+              },
+              {
+                "field": "share",
+                "format": ".0%",
+                "title": "Share",
+                "type": "quantitative"
+              }
+            ],
+            "x": {
+              "value": 0
+            },
+            "y": {
+              "axis": {
+                "labelColor": "transparent",
+                "labelPadding": 8
+              },
+              "field": "name",
+              "sort": [
+                "David Chalmers",
+                "Alan Turing",
+                "John Searle",
+                "Sam Altman",
+                "Patrick Butlin",
+                "Dario Amodei",
+                "Daniel Dennett",
+                "Anil Seth",
+                "Elon Musk",
+                "Thomas Nagel",
+                "Nick Bostrom",
+                "Mustafa Suleyman",
+                "Geoffrey Hinton",
+                "Robert Long",
+                "Eric Schwitzgebel",
+                "Jonathan Birch",
+                "Karl Friston",
+                "Blake Lemoine"
+              ],
+              "title": null,
+              "type": "nominal"
+            }
+          },
+          "mark": {
+            "align": "right",
+            "color": "#52514e",
+            "dx": -8,
+            "fontSize": 12,
+            "type": "text"
+          },
+          "transform": [
+            {
+              "filter": "!isValid(datum.url)"
+            }
+          ]
+        }
+      ]
     },
     {
       "encoding": {
@@ -442,7 +707,7 @@
     }
   ],
   "title": {
-    "subtitle": "People mentioned by name in relevant posts.",
+    "subtitle": "People mentioned by name in relevant posts. Names link to Wikipedia.",
     "text": "Who gets named"
   },
   "width": 480

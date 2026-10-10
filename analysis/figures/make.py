@@ -366,11 +366,19 @@ def people():
     src = load("sources")
     df = pd.DataFrame(src["people"][:18])
     order = df["name"].tolist()
-    bars = alt.Chart(df).mark_bar(height=14, color=T.BLUE).encode(
-        y=alt.Y("name:N", sort=order, title=None), x=alt.X("posts:Q", title="Relevant posts mentioning the name", axis=alt.Axis(grid=True)),
-        tooltip=[alt.Tooltip("name:N"), alt.Tooltip("group:N", title="Role"), alt.Tooltip("posts:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share")])
+    tooltip = [alt.Tooltip("name:N"), alt.Tooltip("group:N", title="Role"), alt.Tooltip("posts:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share")]
+    # Names are drawn as a text layer (not axis labels) so each can carry a link to the person's Wikipedia article.
+    # People without one (`url` null) get separate layers with no href: a null href still renders as a broken anchor.
+    linked, plain = alt.Chart(df).transform_filter("isValid(datum.url)"), alt.Chart(df).transform_filter("!isValid(datum.url)")
+    y = alt.Y("name:N", sort=order, title=None, axis=alt.Axis(labelColor="transparent", labelPadding=8))   # invisible labels reserve the margin
+    x = alt.X("posts:Q", title="Relevant posts mentioning the name", axis=alt.Axis(grid=True))
+    bars = alt.layer(linked.mark_bar(height=14, color=T.BLUE).encode(y=y, x=x, href="url:N", tooltip=tooltip),
+                     plain.mark_bar(height=14, color=T.BLUE).encode(y=y, x=x, tooltip=tooltip))
+    names = alt.layer(linked.mark_text(align="right", dx=-8, fontSize=12, color=T.BLUE, cursor="pointer").encode(y=y, x=alt.value(0), text="name:N", href="url:N", tooltip=tooltip),
+                      plain.mark_text(align="right", dx=-8, fontSize=12, color=T.INK2).encode(y=y, x=alt.value(0), text="name:N", tooltip=tooltip))
     labels = alt.Chart(df).mark_text(align="left", dx=5, fontSize=11, color=T.INK2).encode(y=alt.Y("name:N", sort=order), x="posts:Q", text=alt.Text("posts:Q", format=",d"))
-    chart = alt.layer(bars, labels).properties(width=WIDTH - 120, height=18 * len(df), title=alt.Title("Who gets named", subtitle="People mentioned by name in relevant posts."))
+    chart = alt.layer(bars, names, labels).properties(width=WIDTH - 120, height=18 * len(df),
+                                                      title=alt.Title("Who gets named", subtitle="People mentioned by name in relevant posts. Names link to Wikipedia."))
     save(chart, "people_named")
 
 

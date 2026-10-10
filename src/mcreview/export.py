@@ -13,7 +13,7 @@ import re
 import statistics
 from collections import Counter, defaultdict
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
 from .axes import AXES, LEVELS, axes_for
 from .codebook import Codebook
@@ -369,6 +369,7 @@ def source_tables(ctx: Ctx, posts: list[dict]) -> dict:
     # named people
     names = load_yaml("names.yaml")["people"]
     compiled = [(n["name"], n["group"], [re.compile(p) for p in n["patterns"]]) for n in names]
+    wikipedia = {n["name"]: "https://en.wikipedia.org/wiki/" + quote(n["wikipedia"].replace(" ", "_")) for n in names if n.get("wikipedia")}
     mention_posts: dict[str, set[int]] = defaultdict(set)
     mention_group: dict[str, Counter] = defaultdict(Counter)
     for pid, body in ctx.conn.execute(f"SELECT id, body_text FROM posts WHERE id IN ({q})", ids):
@@ -377,7 +378,8 @@ def source_tables(ctx: Ctx, posts: list[dict]) -> dict:
             if any(p.search(text) for p in pats):
                 mention_posts[name].add(int(pid))
                 mention_group[name][group_of[int(pid)]] += 1
-    people = sorted([{"name": n, "group": g, "posts": len(mention_posts[n]), "share": round(len(mention_posts[n]) / (len(posts) or 1), 4), "by_group": dict(mention_group[n])}
+    people = sorted([{"name": n, "group": g, "posts": len(mention_posts[n]), "share": round(len(mention_posts[n]) / (len(posts) or 1), 4), "by_group": dict(mention_group[n]),
+                      "url": wikipedia.get(n)}
                      for n, g, _ in compiled], key=lambda d: d["posts"], reverse=True)
     return {"tiers": {t: {"posts_citing": len(ps), "works": sum(1 for w in works.values() if w["tier"] == t), "by_group": dict(tier_group[t])} for t, ps in tier_posts.items()},
             "top_works_by_tier": by_tier, "top_works": [ser(w) for w in top[:60]], "people": people, "n_posts": len(posts),
