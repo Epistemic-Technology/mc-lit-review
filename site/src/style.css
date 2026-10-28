@@ -47,3 +47,11 @@ table.axes td, table.axes th { vertical-align: top; padding: 6px 10px 6px 0; }
 
 /* Cited works whose title could not be recovered: the URL slug, shown as such */
 a.work-slug { color: var(--theme-foreground-muted); font-style: italic; }
+
+/* Changes of mind: one block per post with the coder's evidence excerpt */
+.revision { margin: 0 0 20px; }
+.revision .meta { font-size: 13px; color: var(--theme-foreground-muted); }
+.revision .title { font-size: 16px; margin-top: 2px; }
+.revision .subtitle { color: var(--theme-foreground-muted); font-size: 14px; }
+.revision blockquote { margin: 6px 0 0; padding: 2px 0 2px 12px; border-left: 3px solid var(--theme-foreground-faintest); font-size: 14px; color: var(--theme-foreground-muted); }
+.pill.dir { color: #fff; }

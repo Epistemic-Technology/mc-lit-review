@@ -41,10 +41,13 @@ display(await vlChart(whoSpec, {width: Math.min(width, 700) - 220}));
 ## Where to go
 
 - **[Positions](./positions)**: the six questions with filters, how positions differ by who is writing, and the claims behind them.
-- **[Arguments and sources](./arguments)**: which arguments appear, which get traction, what gets cited, who gets named.
+- **[Arguments and sources](./arguments)**: which arguments appear, what gets cited, who gets named.
+- **[Features of the systems](./features)**: which features of the AI systems themselves authors point to as evidence, in which direction, and how that mix has shifted.
 - **[Topic map](./topics)**: the relevant posts laid out by similarity, with labelled clusters.
 - **[Citation network](./network)**: which publications cite which.
 - **[Over time](./timeline)**: how the mix of positions has shifted by quarter.
+- **[Notable posts](./notable)**: posts that beat their own publication's norm, and the most-engaged posts overall.
+- **[Changes of mind](./revisions)**: posts whose author reports having once thought differently about machine minds, with the passage that says so.
 - **[Browse posts](./posts)**: every relevant post with its codes, filterable and downloadable.
 - **[Publications](./publications)**: one page per publication, with its posts and how it sits in the discourse.
 - **[Methods](./methods)**: how the corpus was built and coded, and how well the coding holds up.

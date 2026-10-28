@@ -4,180 +4,190 @@ title: Methods
 
 # Methods
 
+## Division of labor
+
+This project made significant use of [Claude Code](https://claude.com/claude-code) running Claude Fable 5.1 for study design, writing code, and analysis. In addition, [Jev](https://typesafe.ai) and Claude Opus 5.5 were used for coding (categorization).
+
+Mike:
+
+- Overall study conception and design. Specifically, the idea to do a systematic statistical study of opinions about machine cognition as expressed by Substack posts between January 2024 and October 2026.
+- Specified the methodology of obtaining posts: initial keyword searches via [Brave](https://brave.com/search/api/) and then expanding the candidate pool of posts using bibliographic coupling. This methodology was chosen to avoid biasing the sample to known hubs of discussion on Substack.
+- Specified the overall pipeline: A large pool of candidate posts -> Jev for initial filtering -> LLM for final round.
+- Specified the overall approach of using SQLite + Python for the analysis and website.
+- Sanity-checked classifications by reading and manually classifying posts and publications.
+- Wrote this methodology page.
+- Wrote the Substack post.
+- Inspected the database structure and key parts of the code.
+- Specified the overall design and structure of the site, and offered iterative instructions on improving functionality.
+
+Claude:
+
+- Wrote all of the code, including for retrieval, analysis, and the website.
+- Made most of the detailed study design decisions, including that Mike should manually spot check posts and publications.
+- Chose the Observable framework for the website.
+- Final classification of posts and publications (Claude Opus).
+
+Jev:
+
+- Initial triage of posts.
+
+## Costs
+
+- Brave Search API: $49.71 for 11,790 search requests
+- Jev: $48.11 for 122,864 requests
+- Claude Opus 5.5: $1,805.78 in API costs (covered by $200 Claude Max plan)
+- Human coding time (classification): 594 minutes
+
+Total: $1,903.60 ($97.82 out of pocket)
+
+## Building the corpus
+
 ```js
-import {statRow, ITEM_LABELS, AXIS_LABELS} from "./components/charts.js";
 const summary = await FileAttachment("./data/summary.json").json();
-const methods = await FileAttachment("./data/methods.json").json();
-const codebook = await FileAttachment("./data/codebook.json").json();
-```
-
-## How the corpus was built
-
-Posts entered through documented routes only: a lexical search over a query bank (Brave web search with and without a `site:substack.com` filter, and Substack's own post search), then three rounds of citation expansion (every Substack post cited by a corpus post was fetched; every outside work cited by two or more corpus posts became a new search). Every post records how it was found. Bodies were fetched for free posts; paywalled posts keep their public preview only.
-
-Outbound links were normalised into cited works: tracking parameters dropped, arXiv versions and formats collapsed, DOIs read out of publisher URLs, Substack posts resolved across custom domains and `open.substack.com`. Works were named from the page itself (arXiv, Crossref, Open Library, the platform's own embed data for YouTube, X, Spotify and Reddit, PDF metadata, or the page title, retrying as a browser when the project's user agent was refused), then from the title a search engine had returned for the same URL, then from the anchor text posts used when two posts agreed or the anchor read as a title. A work still unnamed shows its URL slug, marked as such. Works that are one thing under several URLs (a preprint and its journal version, a lab blog and its paper, mirrors of a PDF) are merged by identifier and then by exact title; the sources page reports how many references that collapsed.
-
-```js
 const p = summary.prisma;
-display(Inputs.table([
-  {step: "Posts gathered (2026-09-27)", posts: p.corpus},
-  {step: "Dated 2024-01-01 or later", posts: p.after_date},
-  {step: "English or undetected language", posts: p.after_language},
-  {step: "Body fetched (free posts)", posts: p.after_body},
-  {step: "At least 400 characters", posts: p.after_min_chars},
-  {step: "After excluding two aggregator publications", posts: p.after_exclusions},
-  {step: "Screened by Jev (decision model), three repeats", posts: p.jev_coded},
-  {step: "Coded by Claude (relevance mass ≥ 0.05 in the Jev screen)", posts: p.claude_coded},
-  {step: "Relevant: central or substantial", posts: p.relevant}
-], {columns: ["step", "posts"], header: {step: "Stage", posts: "Posts"}, width: {step: 480}}));
-```
-
-## How posts were coded
-
-Two engines read every post against one codebook. **Jev** (TypeSafe's decision model) screened all posts for relevance and produced structural codes, three times with option order permuted; its confidence is a calibrated probability. **Claude Opus 5.5** coded every post Jev rated at all likely to be relevant, returning for each construct a value and a verbatim evidence quote. Claude is the coder of record for stance and arguments; where it disagrees with Jev on relevance, Claude's judgment stands.
-
-The codebook has ${codebook.constructs.length} post-level constructs: a four-level relevance gate, genre, the object of the claim, ${codebook.constructs.filter((c) => c.group === "stance").length} stance items each coded on a six-value scale (asserts, denies, agnostic, discusses without committing, reports others only, not addressed), and ${codebook.constructs.filter((c) => c.group === "argument").length} argument types coded present or absent. Publications were typed into nine communities from name, tagline, author bio and post titles, after a crawl of each publication's archive back to 2024.
-
-### From fourteen claims to six questions
-
-The stance items proved too granular to read: most were not addressed in most posts, and when a post committed on two related items it almost always answered them the same way (current cognition and understanding agree 95% of the time, current consciousness and emotions 91%, future moral worth and precaution 98%). The site therefore reports six derived questions, computed deterministically from the coded items without re-coding. Agency (goals of one's own) is kept apart from thinking even though the two agree when both are coded, because a third of the posts that commit on agency commit on no other cognition claim, and many grant goals while unsure about experience. Each question has a primary item whose committed answer wins; related items are consulted when it is silent; asserting that we cannot know counts as unsure on experience; and a post that only discusses any contributing item counts as discussed. The qualified-yes level captures the one real nuance per question: thinking in some respects but not others, possibility only after a major advance, and moral status for future AI or as a precaution. Posts that only report others' positions count as not addressed, since the question asks for the author's own view.
-
-```js
-display(html`<table class="axes">
-  <thead><tr><th>Question</th><th>Asks</th><th>Qualified yes means</th><th>Built from (primary first)</th></tr></thead>
-  <tbody>${codebook.axes.map((a) => html`<tr><td><b>${a.label}</b></td><td>${a.question}</td><td>${a.qualified || ""}</td><td>${a.items.map((i) => ITEM_LABELS[i] || i).join("; ")}</td></tr>`)}</tbody>
-</table>`);
-```
-
-### Codebook 0.2.0: the six questions coded directly
-
-Once the derived questions proved readable, codebook 0.2.0 made them the instrument: each question is a construct with its own options, with a shared level scheme and a question-specific qualified yes. Claude re-coded the six questions on every relevant post on 2026-10-08. Nothing else changed; relevance, genre, object, and the thirteen argument types keep their 0.1.0 codes, and the fourteen retired items stay in the data.
-
-The re-code is a check on the derivation. Below, each post's derived answer is compared with its coded answer. Exact agreement counts the full six-level match; polarity agreement collapses yes and qualified yes to "pro", no to "con", unsure and discussed to "neutral", and is computed over posts that both sides treat as addressing the question. Reversals are posts where one side says yes and the other no.
-
-```js
-const cmp = methods.axes_derived_vs_coded;
-if (cmp) {
-  display(html`<p class="caption">${cmp.n.toLocaleString()} relevant posts with both a derived and a coded answer on every question.</p>`);
-  display(Inputs.table(cmp.axes.map((a) => ({question: a.label, exact: a.exact, coarse: a.coarse, n_both: a.n_both, polarity: a.polarity, reversals: a.reversals, na_derived: a.na_derived, na_coded: a.na_coded})), {
-    columns: ["question", "exact", "polarity", "n_both", "reversals", "na_derived", "na_coded"],
-    header: {question: "Question", exact: "Exact agreement", polarity: "Polarity agreement", n_both: "Both address it", reversals: "Reversals", na_derived: "Not addressed (derived)", na_coded: "Not addressed (coded)"},
-    format: {exact: (v) => v.toFixed(2), polarity: (v) => (v == null ? "" : v.toFixed(2)), n_both: (v) => v.toLocaleString(), na_derived: (v) => v.toLocaleString(), na_coded: (v) => v.toLocaleString()},
-    width: {question: 240}, select: false, rows: 8
-  }));
-} else {
-  display(html`<p class="caption">The 0.2.0 re-code has not been exported yet.</p>`);
-}
+// Posts that entered at round 0 (the keyword searches) are not in the export; the figure is
+// SELECT COUNT(*) FROM posts WHERE entry_round = 0 on the database behind summary.json.
+const SEARCH_POSTS = 16275;
+const stages = [
+  {stage: "Keyword search", detail: "Brave web search and Substack post search over the query bank", n: SEARCH_POSTS},
+  {stage: "Citation expansion", detail: "Substack posts cited by corpus posts, plus bibliographic coupling: posts citing the works corpus posts share", n: p.corpus},
+  {stage: "Eligible", detail: "Dated 2024 or later, English, body fetched, at least 400 characters, two aggregators excluded", n: p.after_exclusions},
+  {stage: "Jev screen", detail: "Passed Jev's relevance screen (three repeats) and sent to Claude", n: p.claude_coded},
+  {stage: "Claude coding", detail: "Coded by Claude Opus 5.5 as central or substantial", n: p.relevant}
+].map((s, i, a) => ({...s, i, prev: i ? a[i - 1].n : null, delta: i ? s.n - a[i - 1].n : null, x1: -s.n / 2, x2: s.n / 2}));
+const fmt = (n) => n.toLocaleString("en-US");
+const signed = (d) => (d > 0 ? "+" : "−") + fmt(Math.abs(d));
 ```
 
 ```js
-const cmpAxis = cmp ? view(Inputs.select(new Map(cmp.axes.map((a) => [a.label, a.name])), {label: "Confusion matrix for"})) : null;
-```
-
-```js
-if (cmp) {
-  const a = cmp.axes.find((x) => x.name === cmpAxis);
-  const lv = cmp.levels, short = {yes: "Yes", yes_qualified: "Yes, qualified", unsure: "Unsure", discussed: "Discussed", no: "No", not_addressed: "Not addressed"};
-  const cell = Object.fromEntries(a.matrix.map((m) => [`${m.derived}|${m.coded}`, m.n]));
-  display(html`<table class="axes"><thead><tr><th>Derived ↓ · Coded →</th>${lv.map((c) => html`<th>${short[c]}</th>`)}</tr></thead>
-    <tbody>${lv.map((d) => html`<tr><td><b>${short[d]}</b></td>${lv.map((c) => html`<td style="text-align:right;${d === c ? "font-weight:600" : ""}">${cell[`${d}|${c}`] || ""}</td>`)}</tr>`)}</tbody></table>`);
-}
-```
-
-The two agree closely on experience, goals, and moral status; the differences sit in the neutral band, between unsure and discussed, where the codebook expects fuzziness. Two questions moved by design rather than by disagreement. On seriousness, the retired item only fired when an author argued the hype line or rebutted it, whereas the new question asks about the author's framing, so the coder now marks most engaged essays as treating the question seriously. On possibility in principle, the coder infers a yes from how an author treats the current path, where the old item needed an explicit claim. The qualified yes on thinking is used about three times as often once it is defined for the coder rather than inferred from a split across items. Reversals are rare on every question; on thinking, nearly all of them are posts the derivation had as no that the coder now reads as partly. The published figures use the coded answers; the derived ones remain in the export for anyone who wants to repeat this comparison.
-
-The shifts were then checked by hand. Three targeted samples were drawn from the cells that moved: 12 posts newly coded as treating the question seriously, 10 newly coded as granting possibility in principle, and 8 recoded from "does not think" to "partly". The human accepted the coder's answer in all 12 seriousness cases, 9 of the 10 possibility cases (the tenth was a post that does not address the question), and all 8 thinking cases. The shifts are the new definitions working as intended, not the coder over-reading.
-
-The engine-versus-engine figures below are on the coded items only, since Jev never coded the six questions; the stance rows there refer to the retired 0.1.0 items. The human verification covers both.
-
-## How well the coding holds up
-
-This is a one-person project. There is no inter-rater study; reliability rests on three things: agreement between the two engines at scale, a human verification of a sample, and publication of every code and quote so any reader can audit any post.
-
-### Engine versus engine
-
-```js
-display(Inputs.table(methods.jev_vs_claude_posts.map((r) => ({construct: ITEM_LABELS[r.construct] || r.construct, n: r.n, agree: r.agree, c9: r["agree@0.9"], cov9: r["cov@0.9"]})), {
-  columns: ["construct", "n", "agree", "c9", "cov9"], header: {construct: "Construct", n: "Posts", agree: "Agreement", c9: "Agreement where Jev ≥ 0.9 confident", cov9: "Share of posts there"},
-  format: {agree: (v) => v.toFixed(2), c9: (v) => (isNaN(v) ? "" : v.toFixed(2)), cov9: (v) => `${Math.round(v * 100)}%`}, width: {construct: 300}, select: false, rows: 40, sort: "agree", reverse: true
+display(Plot.plot({
+  width: Math.min(width, 760), height: 56 * stages.length + 24,
+  marginLeft: 150, marginRight: 110, marginTop: 8, marginBottom: 8,
+  x: {axis: null, domain: [-p.corpus / 2, p.corpus / 2]},
+  y: {domain: stages.map((s) => s.stage), label: null, tickSize: 0},
+  marks: [
+    Plot.barX(stages, {x1: "x1", x2: "x2", y: "stage", fill: "var(--series-1)", insetTop: 5, insetBottom: 5, rx: 4,
+      tip: true, title: (d) => `${d.stage}\n${d.detail}\n${fmt(d.n)} posts${d.delta == null ? "" : ` (${signed(d.delta)} from the previous stage)`}`}),
+    Plot.text(stages, {x: "x2", y: "stage", text: (d) => fmt(d.n), dx: 8, textAnchor: "start", fill: "var(--theme-foreground)", fontSize: 13, fontWeight: 600}),
+    Plot.text(stages.filter((d) => d.delta != null), {x: "x2", y: "stage", text: (d) => signed(d.delta), dx: 8, dy: 15, textAnchor: "start", fill: "var(--theme-foreground-muted)", fontSize: 11})
+  ]
 }));
+display(html`<p class="caption">Posts at each stage of the pipeline. Keyword searches found ${fmt(SEARCH_POSTS)} posts; citation expansion grew the pool to ${fmt(p.corpus)}; eligibility filters, Jev's relevance screen and Claude's coding narrowed it to ${fmt(p.relevant)} relevant posts.</p>`);
 ```
 
-Arguments and structural codes agree at 0.84 to 0.96; stance items at 0.27 to 0.69, with Jev's characteristic error being to attribute a position where Claude finds the claim not addressed. That is why Claude, not Jev, is the coder of record for stance.
+The goals in building this corpus were to (1) cast a wide net, so that I captured relevant posts even if they had not yet reached a wide audience, (2) not privilege any particular author or set of authors, (3) not cause undue load on Substack's servers, (4) keep costs within reasonable limits, and (5) accomplish this all with a one-person research team in a short time.
 
-### Engine versus human
+Initial posts were gathered by querying Substack's public API and through Brave searches scoped to `substack.com`. This was a keyword search, with a pool of keywords such as:
 
-```js
-display(Inputs.table(methods.engine_vs_human.map((r) => ({construct: AXIS_LABELS[r.construct] || ITEM_LABELS[r.construct] || r.construct, engine: r.source, n: r.n, agree: r.agree})), {
-  columns: ["construct", "engine", "n", "agree"], header: {construct: "Construct", engine: "Engine", n: "Items checked", agree: "Agreement"}, format: {agree: (v) => v.toFixed(2)}, width: {construct: 300}, select: false, rows: 30
-}));
-```
+- machine consciousness
+- AI sentience
+- does AI understand
+- machine self-awareness
+- AI welfare
+- model welfare
+- LLM cognition
+- stochastic parrots
+- Chinese room
+- computational theory of mind
+- functionalism AI
+- integrated information theory AI
+- Chalmers AI consciousness
+- Butlin Long consciousness report
+- Claude consciousness
 
-The human checks: 100 random posts for relevance from title and lead; 40 relevant posts for the four headline 0.1.0 stance items, verifying Claude's codes against its quotes; 29 publications for type; and, after the 0.2.0 re-code, a fresh random sample of 40 relevant posts on all six questions, verified the same way. Median time per decision was about six seconds. On relevance, the human and Claude agreed on relevant-versus-not for 19 of 22 posts both judged, with Claude conservative in every disagreement. On the four 0.1.0 stance items, agreement was 0.83 to 0.95. On the six questions, agreement was 0.92 to 1.00: 235 decisions, 227 accepted as shown, and every disagreement a move between a position and the neutral or not-addressed levels rather than a reversal. On publication type, 0.69 across nine categories and 0.90 across the five groups used in charts. The targeted shift samples are excluded from this table because they were drawn from specific cells, not at random.
+There were 91 search terms in all, covering a wide range of concepts, arguments, and thinkers related to machine cognition.
 
-### Known limitations
+That gave us ${fmt(SEARCH_POSTS)} initial posts. From those, I expanded in two ways: following links in those posts, and searching for other posts with the same citations as those posts (bibliographic coupling). This resulted in a collection of ${fmt(p.corpus)} posts. Some of those were excluded (outside of our date range, less than 400 characters, or not in English, for example), which narrowed the collection down to ${fmt(p.after_exclusions)} posts. Jev, a classifier service aimed at just this sort of task, was then used to judge the relevance of posts and do initial categorization (though in nearly every case the categorization was overridden by Claude or me. Jev-codings only survived in a couple of rare misses in the other coding methods). Jev's pass reduced the collection to ${fmt(p.claude_coded)} posts. Claude further reduced that to ${fmt(p.relevant)} posts. That is our final corpus.
 
-- **Recall at the gate.** In the relevance sample, 4 of 12 human-relevant posts had been screened out by Jev at the original threshold; lowering it recovered a 2 percent yield from 1,749 more posts. Some relevant posts with oblique titles remain unfound; the residual loss is estimated from the sample, not measured.
-- **Time.** Substack's search returns almost only recent posts, so volume over time is not analysable. Composition over time uses only posts found through web search and citation, which still lean recent.
-- **Paywalls.** ${summary.paywalled} relevant posts are paywalled and were coded from their public preview.
-- **Closed models.** Both engines are hosted, closed models pinned by version. Every raw response is stored; the codebook, prompts, and gold sample are published so the coding can be rerun with any classifier.
-- **One coder.** The human sample is small; its numbers are a sanity check on direction and magnitude, not a validation.
+For every post, the following was collected:
 
-## What it cost
+- Title, subtitle, and description
+- Publication date
+- Post type (newsletter, podcast, video, or note) and section within the publication
+- Word count and language
+- Audience and whether the post is paywalled
+- Reaction, comment, and restack counts as of the crawl
+- Full body text for free posts; the public preview only for paywalled posts
+- Bylines (one or more authors, with name, handle, and bio)
+- Tags
+- Every outbound link, with its anchor text, normalised to a cited work (a Substack post, arXiv paper, DOI, Wikipedia article, book, or web page) and, where it could be recovered, the work's title
+- How the post was found: which search query or which citing post led to it
 
-```js
-const cost = methods.costs;
-const usd = (v) => (v == null ? "" : `$${v.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`);
-const mtok = (v) => `${(v / 1e6).toFixed(1)}M`;
-const claudeRuns = cost.runs.filter((r) => r.engine === "claude");
-const jevRuns = cost.runs.filter((r) => r.engine === "jev");
-display(statRow([
-  ["Charged", usd(cost.totals.charged_usd), "Jev API, all runs"],
-  ["Claude, list-price equivalent", usd(cost.totals.subscription_list_price_usd), `not charged: ${cost.totals.subscription_hours.toLocaleString()} h on a Claude Code subscription`],
-  ["Search requests", cost.brave_requests.toLocaleString(), cost.brave_usd != null ? `Brave Search API, ${usd(cost.brave_usd)}` : "Brave Search API; Substack's own search is free"],
-  ["Human coding", `${(cost.human_minutes / 60).toFixed(1)} h`, `${cost.human.reduce((a, h) => a + h.decisions, 0).toLocaleString()} decisions`]
-]));
-```
+And for every publication:
 
-Three things cost money or time at scale: the two coding engines, web search, and the human checks. Everything else (Substack's public endpoints, embeddings, clustering, the citation network) ran locally or against free endpoints.
+- Name and tagline
+- Substack subdomain and custom domain, if any
+- Primary author's name and handle, plus any further authors and their roles
+- Language and type
+- Date the publication was created on Substack and the date of its first post
+- Free subscriber count, as the order of magnitude Substack reports
+- Archive metadata (titles, dates, and engagement counts, but not bodies) for every post since 2024, for publications with enough corpus posts to need an engagement baseline
 
-**Engines.** Jev is billed per input token and was charged as recorded. Claude ran through the Claude Code command-line tool on a claude.ai subscription rather than the API: nothing was charged per token, but each call consumed subscription usage, and the tool reports what the same traffic would have cost at API list price, recorded here as the list-price equivalent. Every call also carries the tool's own context (about 12,000 tokens), which inflates the token counts against a pure API run. The batch API at half price would have been the cheapest paid route; the subscription was free at the margin and already paid for.
+Two runs of this pipeline were completed: an initial run on 2026-09-27 and a final run on 2026-10-13 to bring the corpus up to date.
 
-```js
-display(Inputs.table(cost.runs.map((r) => ({id: r.id, engine: r.engine, model: r.model, transport: r.transport === "cli" ? "Claude Code (subscription)" : "API", target: r.target, version: r.codebook_version, items: r.n_items, input: r.input_tokens, output: r.output_tokens, cost: r.cost_usd, charged: r.charged ? "charged" : "list-price equivalent", hours: r.hours, date: (r.started_at || "").slice(0, 10)})), {
-  columns: ["date", "engine", "transport", "target", "version", "items", "input", "output", "cost", "charged", "hours"],
-  header: {date: "Date", engine: "Engine", transport: "Transport", target: "Target", version: "Codebook", items: "Items", input: "Input tokens", output: "Output tokens", cost: "Cost (USD)", charged: "Basis", hours: "Wall-clock h"},
-  format: {input: mtok, output: mtok, cost: usd, hours: (v) => (v == null ? "" : v.toFixed(1)), items: (v) => v.toLocaleString()}, layout: "auto", select: false, rows: 20
-}));
-```
+## Coding
 
-```js
-display(html`<p class="caption">Per engine: ${Object.entries(cost.totals.by_engine).map(([e, t]) => `${e}: ${t.items.toLocaleString()} items, ${mtok(t.input_tokens)} input tokens, ${usd(t.cost_usd)}`).join(" · ")}. Models: ${[...new Set(cost.runs.map((r) => r.model))].join(", ")}.</p>`);
-```
+For each post, I evaluated the following:
 
-**Search.** Brave's Search API is billed per request, one page of twenty results. Substack's own search endpoints are free and were called at a polite rate.
+Relevance:
 
-```js
-display(Inputs.table(cost.search.map((s) => ({backend: s.backend, variant: s.variant, queries: s.queries, requests: s.requests, results: s.results})), {
-  columns: ["backend", "variant", "queries", "requests", "results"], header: {backend: "Backend", variant: "Query kind", queries: "Distinct queries", requests: "Requests (pages)", results: "Results stored"},
-  format: {queries: (v) => v.toLocaleString(), requests: (v) => v.toLocaleString(), results: (v) => v.toLocaleString()}, select: false, rows: 10
-}));
-display(html`<p class="caption">${cost.brave_requests.toLocaleString()} Brave requests in all${cost.brave_price_per_1000 ? `, at $${cost.brave_price_per_1000} per thousand: ${usd(cost.brave_usd)}` : "; the per-request price depends on the plan and is not recorded here"}. Citation coupling (the "coupling" kinds) accounts for most of them.</p>`);
-```
+- Is the post about machine minds? (central, substantial, passing, irrelevant)
+- Is the post about AI, but not minds? (yes/no)
 
-**Human time.** One person verified engine codes against their evidence quotes in a browser tool; the times are the tool's own measurements per decision, including reading.
+Type:
 
-```js
-display(Inputs.table(cost.human.map((h) => ({sample: h.sample_name, items: h.items, decisions: h.decisions, minutes: h.minutes, per: h.seconds_per_decision})), {
-  columns: ["sample", "items", "decisions", "minutes", "per"], header: {sample: "Sample", items: "Items", decisions: "Decisions", minutes: "Minutes", per: "Seconds per decision"}, select: false, rows: 10
-}));
-```
+- Genre (essay, roundup, fiction, model transcript, interview or podcast, other)
+- Target of discussion (LLMs, AI in general, a named model or lab)
+- Substantially author's own view (vs. reporting that of others)? (yes/no)
 
-**Wall-clock time** by pipeline stage, summed over completed runs. Coding dominates; the archive crawl and body fetches are bounded by the one-request-per-second politeness rule, not by compute.
+Stances:
 
-```js
-display(Inputs.table(cost.stages.filter((s) => s.hours >= 0.1).map((s) => ({stage: s.stage, runs: s.runs, hours: s.hours})), {columns: ["stage", "runs", "hours"], header: {stage: "Stage", runs: "Runs", hours: "Hours"}, select: false, rows: 20}));
-display(html`<p class="caption">${cost.http.fetch_log.toLocaleString()} page fetches logged; ${cost.http.http_cache.toLocaleString()} responses cached.</p>`);
-```
+Each question is answered on the same scale: yes, qualified yes (where defined), no, unsure, discussed without taking a position, reports others' views only, or not addressed. The answer is always the author's own position, not a view they report.
 
-Codebook version ${codebook.version}. Data generated ${summary.generated_at.slice(0, 10)}.
+| Question | Yes means | Qualified yes means |
+|---|---|---|
+| **Experience now.** Do current LLMs have consciousness, feelings, or the capacity to suffer? | They do, even minimally. | — |
+| **Cognition now.** Do current LLMs genuinely think, reason, understand, or know? | They do, not merely simulate it. | In some respects but not others. |
+| **Agency now.** Do current LLMs have goals or preferences of their own? | They do, including emergent or misaligned ones. | — |
+| **Possible in principle.** Could AI ever be conscious or genuinely think? | Yes, and the current approach could get there. | Yes, but only with a major advance beyond current architectures. |
+| **Moral status.** Do AI systems' interests matter morally? | Current systems' interests matter now. | Not now, but future AI's could, or we should act with precaution as if they might. |
+| **Serious question.** Is AI consciousness a serious question rather than hype? | It deserves careful thought, whatever the answer. | — |
+
+
+Change of view:
+
+- Does the author report that their own view on whether machines have minds has changed, and in which direction? (toward minds, away from minds, no change) The post must state both the earlier view and the present one. This question was added after the others, and tightened once: the first version also counted conversions that happened inside the post's own experiment or conversation, present views with no stated earlier view, and changes on neighbouring questions (terminology, which argument counts, whether the question matters). Reading every post it had flagged showed most of them to be of those kinds, so the rule was narrowed and those posts re-coded. The results are on the [Changes of mind](./revisions) page.
+
+Features of the systems:
+
+- Fourteen questions, one per feature of the AI systems themselves: the next-token prediction objective; the architecture (transformer, no recurrence, frozen weights); the training data; post-training and system prompts; memory and continuity; body, senses and world contact; many simultaneous instances; what the model says about itself; interpretability findings; behaviour under evaluation (scheming, blackmail, distress); agentic action in the world (tools, code, computer use, autonomous tasks); what it succeeds at; what it fails at; scale and brain comparison. For each, does the author point to the feature as bearing on whether the system has a mind, and in which direction (toward a mind, against, both ways or no direction, not cited)? A feature mentioned without being connected to minds is not cited. These were added after the stance questions, because the argument codes bundle a feature with an inference and had no place for what models now do in the world. Capabilities began as one question; reading its quotes showed two different sceptical moves under one code, conceding the performance and denying it is evidence, and denying the performance, so it was split into successes and failures, each still coded with a direction. The results are on the [Features of the systems](./features) page.
+
+Initially, I coded 14 more granular questions:
+
+Each was a claim the author could assert, deny, be agnostic about, discuss without concluding, report others' views on only, or not address. The question each one fed into after the recode is given in parentheses.
+
+1. Current LLM-based systems are conscious or have subjective experience. (Experience now)
+2. Current LLM-based systems have emotions, feelings, or can suffer. (Experience now)
+3. We cannot know, or cannot currently determine, whether AI systems are conscious. (Experience now)
+4. Current LLM-based systems genuinely think, reason, or exhibit cognition, not merely simulate it. (Cognition now)
+5. Current LLM-based systems genuinely understand language or the world. (Cognition now)
+6. Current LLM-based systems have beliefs or knowledge in a genuine sense. (Cognition now)
+7. Current LLM-based systems have genuine goals, preferences, or agency of their own. (Agency now)
+8. LLM-based or other AI systems could in principle be conscious or have subjective experience. (Possible in principle)
+9. AI systems could in principle genuinely think, reason, or exhibit cognition. (Possible in principle)
+10. Current architectures are in principle insufficient for consciousness or genuine cognition; a major advance would be needed first. (Possible in principle)
+11. Current LLM-based systems have moral worth: their interests or welfare matter morally. (Moral status)
+12. Future AI systems could have moral worth, and this deserves preparation now. (Moral status)
+13. Regardless of whether AI systems are conscious, we should act with precaution as if they might be. (Moral status)
+14. Talk of AI consciousness is hype, marketing, anthropomorphism, or manipulation rather than a serious question. (Serious question, inverted)
+
+These questions proved to be too detailed: they made it hard to see patterns and contrasts in positions between different posts. Initially the questions were narrowed by programmatically combining the 14 original questions, and then they were fully recoded by Claude, with human sanity-checking.
+
+## Human role in coding
+
+I spent approximately 10 hours reading and coding publications and individual posts. Overall, I coded 29 publications and 209 posts. This was done through a web interface constructed by Claude. These numbers are small enough that they don't have a significant impact on the overall picture. Rather, they gave me confidence in the sanity of Claude and Jev's judgments. They were also used as feedback. Where I diverged from the models, this was used to adjust how they would do their coding.
+
+## Note on statistical practice
+
+This is purely exploratory research. I'm not pretending to test any hypotheses with this data, and so there are no error bars, confidence intervals, and so on. While I hope the visualizations are interesting and the classifications are informative, they aren't meant to make statistically-valid claims.
+

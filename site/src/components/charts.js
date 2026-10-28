@@ -37,6 +37,20 @@ export const ARG_LABELS = {
   arg_panpsychism_illusionism: "Panpsychism or illusionism"
 };
 
+export const FEATURE_LABELS = {
+  feat_prediction_objective: "Next-token prediction objective", feat_architecture: "Architecture (transformer, no recurrence)",
+  feat_training_data: "Trained on human text", feat_post_training: "Post-training shapes what it says",
+  feat_memory_continuity: "Memory and continuity", feat_embodiment: "Body, senses, world contact",
+  feat_instances: "Many instances, copyable", feat_self_report: "What it says about itself",
+  feat_internals: "Interpretability findings", feat_eval_behaviour: "Behaviour under evaluation",
+  feat_agentic_action: "Agentic action in the world", feat_capability_success: "What it succeeds at", feat_capability_failure: "What it fails at",
+  feat_scale: "Scale and brain comparison"
+};
+export const DIRECTION_LABELS = {for: "Points toward a mind", against: "Points against a mind", both_or_neutral: "Both ways or no direction"};
+export function directionColors() {
+  return {for: cssVar("--axis-yes"), against: cssVar("--axis-no"), both_or_neutral: cssVar("--axis-discussed")};
+}
+
 export function cssVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }

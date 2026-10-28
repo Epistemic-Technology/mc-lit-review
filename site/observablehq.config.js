@@ -11,9 +11,12 @@ export default {
     {name: "Overview", path: "/"},
     {name: "Positions", path: "/positions"},
     {name: "Arguments and sources", path: "/arguments"},
+    {name: "Features of the systems", path: "/features"},
     {name: "Topic map", path: "/topics"},
     {name: "Citation network", path: "/network"},
     {name: "Over time", path: "/timeline"},
+    {name: "Notable posts", path: "/notable"},
+    {name: "Changes of mind", path: "/revisions"},
     {name: "Browse posts", path: "/posts"},
     {name: "Publications", path: "/publications"},
     {name: "Methods", path: "/methods"}

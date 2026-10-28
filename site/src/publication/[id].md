@@ -36,13 +36,15 @@ display(mine.length >= 3 ? axesDiverging(axesTable(mine), {width: Math.min(width
 
 ```js
 const lv = (v) => (v && v !== "not_addressed" ? LEVEL_LABELS[v] : "");
-display(Inputs.table(mine.map((p) => ({date: p.date, title: p.title, genre: GENRE_LABELS[p.genre] || p.genre, experience: lv(p.axes.experience_now), cognition: lv(p.axes.cognition_now), moral: lv(p.axes.moral_status), arguments: p.arguments.map((a) => ARG_LABELS[a] || a).join("; "), topic: p.cluster_label || "", reactions: p.reactions, url: p.url})), {
-  columns: ["date", "title", "genre", "experience", "cognition", "moral", "topic", "arguments", "reactions"],
-  header: {date: "Date", title: "Post", genre: "Genre", experience: "Experience now?", cognition: "Thinks now?", moral: "Moral status?", topic: "Topic", arguments: "Arguments", reactions: "Reactions"},
+display(Inputs.table(mine.map((p) => ({date: p.date, title: p.title, genre: GENRE_LABELS[p.genre] || p.genre, experience: lv(p.axes.experience_now), cognition: lv(p.axes.cognition_now), moral: lv(p.axes.moral_status), arguments: p.arguments.map((a) => ARG_LABELS[a] || a).join("; "), topic: p.cluster_label || "", reactions: p.reactions, over: p.over_performance, url: p.url})), {
+  columns: ["date", "title", "genre", "experience", "cognition", "moral", "topic", "arguments", "reactions", "over"],
+  header: {date: "Date", title: "Post", genre: "Genre", experience: "Experience now?", cognition: "Thinks now?", moral: "Moral status?", topic: "Topic", arguments: "Arguments", reactions: "Reactions", over: "× the norm"},
   width: {title: 300, arguments: 260, topic: 200}, layout: "auto", select: false, rows: 30,
-  format: {title: (v, i, d) => html`<a href="${d[i].url}" target="_blank" rel="noopener">${v}</a>`}
+  format: {title: (v, i, d) => html`<a href="${d[i].url}" target="_blank" rel="noopener">${v}</a>`, over: (v) => (v == null ? "" : `${v >= 10 ? Math.round(v) : v.toFixed(1)}×`)}
 }));
 ```
+
+<div class="caption">"× the norm" compares a post's reactions with the mean of this publication's other newsletter and podcast posts since 2024${pub.norm_posts ? ` (${pub.norm_posts.toLocaleString()} posts, mean ${pub.baseline_reactions} reactions)` : ""}; blank when the publication has fewer than ten other posts. See <a href="../notable">Notable posts</a>.</div>
 
 ## Cited by and cites
 
