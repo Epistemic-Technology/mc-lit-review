@@ -44,16 +44,17 @@ def init() -> None:
     ctx.finish()
 
 
-def _discover(brave: bool = True, substack_posts: bool = True, substack_pubs: bool = True, max_queries: int | None = None, refresh: bool = False) -> None:
+def _discover(brave: bool = True, substack_posts: bool = True, substack_pubs: bool = True, max_queries: int | None = None, refresh: bool = False,
+              since: str | None = None) -> None:
     def fn(ctx: Ctx, **_):
         if brave:
-            disc.brave(ctx, max_queries, refresh)
+            disc.brave(ctx, max_queries, refresh, since)
         if substack_posts:
             disc.substack_posts(ctx, max_queries, refresh)
         if substack_pubs:
             disc.substack_pubs(ctx, max_queries, refresh)
 
-    _run("discover", fn, brave=brave, substack_posts=substack_posts, substack_pubs=substack_pubs, max_queries=max_queries, refresh=refresh)
+    _run("discover", fn, brave=brave, substack_posts=substack_posts, substack_pubs=substack_pubs, max_queries=max_queries, refresh=refresh, since=since)
 
 
 def _resolve(limit: int | None = None) -> None:
@@ -64,10 +65,10 @@ def _fetch_bodies(limit: int | None = None) -> None:
     _run("fetch_bodies", lambda ctx, limit=None: bodies_mod.fetch_bodies(ctx, limit), limit=limit)
 
 
-def _cite_round(round_no: int | None = None) -> int:
+def _cite_round(round_no: int | None = None, fresh_since: str | None = None) -> int:
     def fn(ctx: Ctx, **_):
         r = round_no if round_no is not None else citations.next_round_number(ctx)
-        ctx.conn.execute("UPDATE runs SET args_json=? WHERE id=?", (json.dumps({"round": r}), ctx.run_id))
+        ctx.conn.execute("UPDATE runs SET args_json=? WHERE id=?", (json.dumps({"round": r, "fresh_since": fresh_since}), ctx.run_id))
         max_rounds = int(ctx.settings["citation"]["max_rounds"])
         if round_no is None and r > max_rounds:
             # max_rounds is a property of the corpus, not of one run-all invocation: a resumed run-all
@@ -75,7 +76,7 @@ def _cite_round(round_no: int | None = None) -> int:
             log.info("round %d exceeds citation.max_rounds=%d; not started", r, max_rounds)
             ctx.conn.execute("UPDATE runs SET status='skipped' WHERE id=?", (ctx.run_id,))
             return 0
-        added = citations.run_round(ctx, r)
+        added = citations.run_round(ctx, r, fresh_since)
         log.info("round %d added %d posts", r, added)
         return added
 
@@ -89,9 +90,10 @@ def discover(
     substack_pubs: bool = typer.Option(True, help="Substack publication search (needs cookie; context only)"),
     max_queries: int | None = typer.Option(None, help="Cap on query terms per channel (for smoke tests)"),
     refresh: bool = typer.Option(False, help="Re-run queries that already have results"),
+    since: str | None = typer.Option(None, help="Brave: date-filtered update pass from this date (YYYY-MM-DD) to today, as separate query rows"),
 ) -> None:
     """Phase 1: lexical search. Posts found here enter the corpus at round 0. Queries already run are skipped unless --refresh."""
-    _discover(brave, substack_posts, substack_pubs, max_queries, refresh)
+    _discover(brave, substack_posts, substack_pubs, max_queries, refresh, since)
 
 
 @app.command()
@@ -114,9 +116,11 @@ def cite_round(round_no: int | None = typer.Option(None, "--round", help="Round 
 
 @app.command("archive-meta")
 def archive_meta(min_posts: int | None = None, limit: int | None = None,
-                 relevant_only: bool = typer.Option(False, help="Publications with a relevant post in code_final, regardless of min_posts")) -> None:
+                 relevant_only: bool = typer.Option(False, help="Publications with a relevant post in code_final, regardless of min_posts"),
+                 refresh: bool = typer.Option(False, help="With --relevant-only: revisit harvested publications, newest first, stopping at the first page with nothing new")) -> None:
     """Optional context: archive metadata (no bodies) for publications with >= min_posts corpus posts."""
-    _run("archive_meta", lambda ctx, **_: harvest_mod.archive_meta(ctx, min_posts, limit, relevant_only), min_posts=min_posts, limit=limit, relevant_only=relevant_only)
+    _run("archive_meta", lambda ctx, **_: harvest_mod.archive_meta(ctx, min_posts, limit, relevant_only, refresh),
+         min_posts=min_posts, limit=limit, relevant_only=relevant_only, refresh=refresh)
 
 
 @app.command("enrich-pubs")
@@ -152,6 +156,74 @@ def run_all(max_queries: int | None = typer.Option(None, help="Cap on query term
         _fetch_bodies()
     # one final reference extraction so the refs table covers the last round's bodies
     _run("cite_refs_final", lambda ctx: (citations.extract_references(ctx), citations.link_substack_targets(ctx), citations.update_eligibility(ctx)))
+
+
+@app.command()
+def update(
+    since: str = typer.Option(..., help="Start of the update window (YYYY-MM-DD); a week before the previous gathering run is a safe choice"),
+    gather: bool = typer.Option(True, help="Lexical search for the window, bodies, citation rounds"),
+    analyse: bool = typer.Option(True, help="Subset, Jev and Claude coding, publications, embeddings, topic assignment, network, titles, export"),
+) -> None:
+    """Bring the corpus up to the present without disturbing what is already there.
+
+    Gathering: Brave with a date filter from --since to today (new query rows, same channel), Substack post
+    search re-run (it is recency-ranked), then citation rounds numbered after the corpus's last round: new
+    posts' references, backward chasing, coupling for newly shared references, and in the first round a
+    date-filtered coupling pass over the references already searched. Analysis: every stage is incremental
+    (posts and publications already coded, embedded or laid out are skipped) and the topic map attaches new
+    posts to the existing clusters rather than re-clustering. Safe to re-run after an interruption."""
+    from .config import Settings
+
+    if gather:
+        max_rounds = int(Settings()["citation"]["max_rounds"])
+        _discover(refresh=False, since=since)                 # Brave: window queries are new rows -> run
+        _discover(brave=False, refresh=True)                   # Substack post and publication search: re-run
+        _resolve()
+        _fetch_bodies()
+        ctx = Ctx("update_rounds", {"since": since})
+        base = citations.next_round_number(ctx)
+        ctx.finish()
+        for i in range(max_rounds):
+            r = base + i
+            added = _cite_round(r, fresh_since=since if i == 0 else None)
+            _resolve()
+            _fetch_bodies()
+            if not added:
+                log.info("update: round %d added nothing; stopping citation rounds", r)
+                break
+        _run("cite_refs_final", lambda ctx: (citations.extract_references(ctx), citations.link_substack_targets(ctx), citations.update_eligibility(ctx)))
+    if analyse:
+        from pathlib import Path
+
+        from . import code as code_mod
+        from . import embeddings as emb
+        from . import enrich as enrich_mod
+        from . import export as export_mod
+        from . import network as net
+        from . import subset as subset_mod
+        from . import titles as titles_mod
+        from .codebook import Codebook
+
+        cb = Codebook()
+        _run("subset", lambda ctx: subset_mod.build(ctx))
+        for engine, only_relevant in (("jev", False), ("claude", True)):
+            probe = Ctx("update_probe", {"engine": engine})
+            cons = code_mod.constructs_coded_before(probe, engine, cb) or None
+            probe.finish()
+            _run("code", lambda ctx, **_: code_mod.code_posts(ctx, engine, only_relevant=only_relevant, constructs=cons),
+                 engine=engine, target="posts", limit=None, repeats=None, only_relevant=only_relevant, final_relevant=False, batch=False, dry_run=False, constructs=cons)
+        _run("code_final", lambda ctx: code_mod.materialise(ctx))
+        _run("enrich_pubs", lambda ctx, **_: enrich_mod.enrich_publications(ctx, None, True), limit=None, profiles=True)
+        _run("archive_meta", lambda ctx, **_: harvest_mod.archive_meta(ctx, None, None, True, False), min_posts=None, limit=None, relevant_only=True, refresh=False)
+        _run("archive_meta", lambda ctx, **_: harvest_mod.archive_meta(ctx, None, None, True, True), min_posts=None, limit=None, relevant_only=True, refresh=True)
+        for engine in ("jev", "claude"):
+            _run("code", lambda ctx, **_: code_mod.code_publications(ctx, engine), engine=engine, target="publications", limit=None, dry_run=False)
+        _run("code_final", lambda ctx: code_mod.materialise(ctx))
+        _run("titles", lambda ctx, **_: titles_mod.fill_titles(ctx), min_posts=2, workers=6, no_network=False, all_refs=False, limit=None)
+        _run("embed", lambda ctx, **_: emb.embed(ctx, None), limit=None)
+        _run("topics_assign", lambda ctx: emb.assign_new_posts(ctx))
+        _run("network", lambda ctx: net.build(ctx))
+        _run("export", lambda ctx, **_: export_mod.export(ctx, None), out=None)
 
 
 @app.command("check-validation")
@@ -231,7 +303,7 @@ def codebook_cmd(render: bool = typer.Option(True, help="Write docs/codebook.md 
 
     cb = Codebook()
     typer.echo(f"codebook v{cb.version}: {len(cb.constructs)} post constructs "
-               f"({', '.join(f'{g}={len(cb.by_group(g))}' for g in ('relevance','structure','stance','argument'))}), "
+               f"({', '.join(f'{g}={len(cb.by_group(g))}' for g in dict.fromkeys(x.group for x in cb.constructs))}), "
                f"{len(cb.publication_constructs)} publication constructs")
     if render:
         out = PROJECT_ROOT / "docs" / "codebook.md"
@@ -343,11 +415,14 @@ def embed(limit: int | None = typer.Option(None, help="Cap on posts (smoke tests
 
 
 @app.command()
-def topics() -> None:
-    """Stage 5a: UMAP + HDBSCAN over the embeddings; writes topics and post_layout."""
+def topics(assign: bool = typer.Option(False, help="Attach new posts to the existing clusters (nearest neighbours) instead of re-clustering")) -> None:
+    """Stage 5a: UMAP + HDBSCAN over the embeddings; writes topics and post_layout. --assign keeps the clusters and their labels."""
     from . import embeddings as emb
 
-    _run("topics", lambda ctx: emb.topics(ctx))
+    if assign:
+        _run("topics_assign", lambda ctx: emb.assign_new_posts(ctx))
+    else:
+        _run("topics", lambda ctx: emb.topics(ctx))
 
 
 @app.command("topics-label")

@@ -8,18 +8,33 @@ from .http import Client, Response
 ENDPOINT = "https://api.search.brave.com/res/v1/web/search"
 
 
-def search(client: Client, api_key: str, query: str, offset: int = 0, count: int = 20) -> Response:
-    url = ENDPOINT + "?" + urlencode({"q": query, "count": count, "offset": offset, "text_decorations": 0})
-    return client.get(url, headers={"X-Subscription-Token": api_key, "Accept": "application/json"})
+def _url(query: str, offset: int, count: int = 20, freshness: str | None = None) -> str:
+    params: dict = {"q": query, "count": count, "offset": offset, "text_decorations": 0}
+    if freshness:
+        params["freshness"] = freshness   # pd | pw | pm | py | YYYY-MM-DDtoYYYY-MM-DD (Brave's date filter)
+    return ENDPOINT + "?" + urlencode(params)
 
 
-def cached_search(ctx, query: str, offset: int = 0, refresh: bool = False) -> tuple[Response, bool]:
+def freshness_window(since: str, until: str | None = None) -> str:
+    """Brave `freshness` value for an inclusive date range; `until` defaults to today (UTC)."""
+    from datetime import datetime, timezone
+
+    return f"{since}to{until or datetime.now(timezone.utc).date().isoformat()}"
+
+
+def search(client: Client, api_key: str, query: str, offset: int = 0, count: int = 20, freshness: str | None = None) -> Response:
+    return client.get(_url(query, offset, count, freshness), headers={"X-Subscription-Token": api_key, "Accept": "application/json"})
+
+
+def cached_search(ctx, query: str, offset: int = 0, refresh: bool = False, freshness: str | None = None) -> tuple[Response, bool]:
     """Brave search through the exact-URL cache. Returns (response, from_cache).
 
-    Only successful responses are cached. `ctx` is a Ctx (imported lazily to avoid a cycle)."""
+    Only successful responses are cached. `ctx` is a Ctx (imported lazily to avoid a cycle). A `freshness`
+    window is part of the URL, so a date-filtered update query never reuses an all-time response (or an
+    earlier window's) and later analysis re-runs never re-spend it."""
     from . import db
 
-    url = ENDPOINT + "?" + urlencode({"q": query, "count": 20, "offset": offset, "text_decorations": 0})
+    url = _url(query, offset, 20, freshness)
     use_cache = bool(ctx.settings.get("brave_cache", default=True)) and not refresh
     if use_cache:
         row = ctx.conn.execute("SELECT status, raw_ref FROM http_cache WHERE url=?", (url,)).fetchone()

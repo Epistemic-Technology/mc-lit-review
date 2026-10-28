@@ -182,6 +182,58 @@ def topics(ctx: Ctx) -> None:
     ctx.counts["posts_laid_out"] = len(pids)
 
 
+def assign_new_posts(ctx: Ctx, k: int = 10) -> int:
+    """Incremental topic map: place posts that have an embedding but no layout row without re-clustering.
+
+    Re-running UMAP + HDBSCAN renumbers the clusters and orphans the hand-checked labels, so an update keeps
+    the existing clusters and attaches each new post to them the way the peripheral points were attached:
+    the cluster is the similarity-weighted majority among its `k` nearest laid-out posts (cosine, in the
+    embedding space), cluster_prob is 0 (peripheral, not core), and the map position is the similarity-weighted
+    mean of those neighbours' positions. topics.size grows by the posts attached; core_size, top terms,
+    exemplars and labels are left as they were. Returns the number of posts placed."""
+    model_name = ctx.settings.analysis["embeddings"]["model"]
+    ids = population_ids(ctx, ctx.settings.analysis["embeddings"].get("population", "relevant"))
+    laid = {int(r["post_id"]): (float(r["x"]), float(r["y"]), int(r["cluster"])) for r in ctx.conn.execute("SELECT post_id, x, y, cluster FROM post_layout")}
+    if not laid:
+        raise RuntimeError("no topic map yet; run `mcreview topics` first")
+    todo = [i for i in ids if i not in laid]
+    if not todo:
+        log.info("topic map: nothing to assign")
+        return 0
+    base_ids, B = load_vectors(ctx, model_name, list(laid))
+    new_ids, N = load_vectors(ctx, model_name, todo)
+    missing = len(todo) - len(new_ids)
+    if missing:
+        log.warning("topic map: %d new posts have no embedding yet (run `mcreview embed`)", missing)
+    if not new_ids:
+        return 0
+    Bn = B / np.maximum(np.linalg.norm(B, axis=1, keepdims=True), 1e-9)
+    Nn = N / np.maximum(np.linalg.norm(N, axis=1, keepdims=True), 1e-9)
+    sims = Nn @ Bn.T                                   # new x laid
+    k = max(1, min(int(k), len(base_ids)))
+    rows = []
+    counts: Counter = Counter()
+    for i, pid in enumerate(new_ids):
+        nn = np.argpartition(-sims[i], k - 1)[:k]
+        w = np.clip(sims[i, nn], 1e-6, None)
+        votes: dict[int, float] = {}
+        for j, wj in zip(nn, w):
+            c = laid[base_ids[j]][2]
+            votes[c] = votes.get(c, 0.0) + float(wj)
+        cluster = max(votes, key=votes.get)
+        x = float(sum(laid[base_ids[j]][0] * wj for j, wj in zip(nn, w)) / w.sum())
+        y = float(sum(laid[base_ids[j]][1] * wj for j, wj in zip(nn, w)) / w.sum())
+        rows.append((pid, x, y, cluster, 0.0, ctx.run_id))
+        counts[cluster] += 1
+    ctx.conn.executemany("INSERT OR REPLACE INTO post_layout(post_id, x, y, cluster, cluster_prob, run_id) VALUES (?,?,?,?,?,?)", rows)
+    ctx.conn.executemany("UPDATE topics SET size=size+? WHERE cluster=?", [(n, c) for c, n in counts.items()])
+    ctx.commit()
+    ctx.counts["posts_assigned"] = len(rows)
+    ctx.counts["clusters_touched"] = len(counts)
+    log.info("topic map: %d posts attached to %d existing clusters", len(rows), len(counts))
+    return len(rows)
+
+
 def export_topic_labels(ctx: Ctx, path) -> None:
     """Editable CSV: one row per cluster with the suggested label, description, terms and central titles.
     Edit the `label` and `description` columns, then `mcreview topics-import`."""

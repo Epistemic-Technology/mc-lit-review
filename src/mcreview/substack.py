@@ -112,6 +112,22 @@ def classify_url(url: str) -> tuple[str | None, str | None, str | None]:
     return "pub_page", host, None
 
 
+def canonical_post_url(host: str, slug: str) -> str:
+    """The post page itself. Search results sometimes point at a post's comments page (/p/<slug>/comments,
+    /p/<slug>/comment/<id>, ?comments=true); classify_url resolves those to the same slug, and this is the URL to store."""
+    return f"https://{host}/p/{slug}"
+
+
+COMMENTS_TITLE_RE = re.compile(r"^\s*Comments\s+-\s+")
+
+
+def clean_result_title(title: str | None) -> str | None:
+    """A search result for a post's comments page is titled 'Comments - <post title>'; drop the prefix."""
+    if not title:
+        return title
+    return COMMENTS_TITLE_RE.sub("", title) or None
+
+
 # ------------------------------------------------------------------ endpoints
 
 def fetch_homepage_pub(client: Client, host: str) -> tuple[Response, dict[str, Any] | None]:

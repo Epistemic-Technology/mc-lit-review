@@ -107,11 +107,44 @@ def finish_code_run(ctx: Ctx, code_run_id: int) -> None:
 
 # ---------------------------------------------------------------- selection
 
-def _coded(ctx: Ctx, engine: str, model: str, version: str, entity_type: str, repeat_no: int) -> set[int]:
-    return {int(r[0]) for r in ctx.conn.execute(
-        """SELECT DISTINCT c.entity_id FROM codes c JOIN code_runs r ON r.id=c.code_run_id
-           WHERE r.engine=? AND r.model=? AND r.codebook_version=? AND c.entity_type=? AND c.repeat_no=?""",
-        (engine, model, version, entity_type, repeat_no))}
+def _coded(ctx: Ctx, engine: str, model: str, version: str, entity_type: str, repeat_no: int,
+           constructs: list[str] | None = None, cb: Codebook | None = None) -> set[int]:
+    """Entities already coded at `version`; with `constructs`, only those holding a code for every one of them, so a
+    run restricted to a construct added in this version is not skipped for entities coded on the others.
+
+    With `cb`, a code counts for a construct at any version the codebook accepts for it (Codebook.accepts), not
+    only at `version`: a post coded on the unchanged constructs at 0.1.0, the six questions at 0.2.0 and
+    view_revised at 0.3.0 is complete under 0.3.0 and is not re-coded when new posts are added."""
+    sql = """SELECT c.entity_id, c.construct, r.codebook_version, c.value FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+             WHERE r.engine=? AND r.model=? AND c.entity_type=? AND c.repeat_no=?"""
+    args: list = [engine, model, entity_type, repeat_no]
+    if cb is None:
+        sql += " AND r.codebook_version=?"
+        args.append(version)
+    if constructs:
+        sql += f" AND c.construct IN ({','.join('?' * len(constructs))})"
+        args += list(constructs)
+    current = {c.name for c in (cb.publication_constructs if entity_type == "publication" else cb.constructs)} if cb else None
+    have: dict[int, set[str]] = defaultdict(set)
+    for eid, con, ver, val in ctx.conn.execute(sql, args):
+        if cb is None or (con in current and cb.accepts(con, ver, entity_type, val)):
+            have[int(eid)].add(con)
+    if not constructs:
+        # A full-codebook run codes entities this engine has never coded; constructs added later and coded on
+        # a subset (the six questions on the relevant set) are filled in with an explicit --construct run.
+        return set(have)
+    need = set(constructs)
+    return {eid for eid, cons in have.items() if need <= cons}
+
+
+def constructs_coded_before(ctx: Ctx, engine: str, cb: Codebook) -> list[str] | None:
+    """Current (non-retired) post constructs this engine has produced codes for at an accepted version, or None
+    when that is every current construct. An update codes new posts on these, so an engine that never coded
+    a later construct (Jev and the six questions) is not sent back over the whole corpus to fill it in."""
+    seen = {(con, ver) for con, ver in ctx.conn.execute(
+        "SELECT DISTINCT c.construct, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id WHERE r.engine=? AND c.entity_type='post'", (engine,))}
+    out = [c.name for c in cb.constructs if any(con == c.name and cb.accepts(con, ver) for con, ver in seen)]
+    return None if len(out) == len(cb.constructs) else out
 
 
 def jev_relevance(ctx: Ctx, cb: Codebook) -> dict[int, float]:
@@ -135,8 +168,9 @@ def final_relevant_ids(ctx: Ctx) -> set[int]:
 
 
 def select_posts(ctx: Ctx, engine: str, model: str, cb: Codebook, repeat_no: int, only_relevant: bool,
-                 limit: int | None, post_ids: list[int] | None, final_relevant: bool = False) -> list:
-    done = _coded(ctx, engine, model, cb.version, "post", repeat_no)
+                 limit: int | None, post_ids: list[int] | None, final_relevant: bool = False,
+                 constructs: list[str] | None = None) -> list:
+    done = _coded(ctx, engine, model, cb.version, "post", repeat_no, constructs, cb)
     sql = "SELECT p.id, p.title, p.subtitle, p.body_text FROM analysis_subset s JOIN posts p ON p.id=s.post_id"
     args: list = []
     if post_ids:
@@ -171,7 +205,7 @@ def code_posts(ctx: Ctx, engine_name: str, limit: int | None = None, repeats: in
     work: list[tuple[int, int]] = []           # (repeat_no, post_id)
     rows_by_id: dict[int, object] = {}
     for rep in range(n_rep):
-        rows = select_posts(ctx, engine_name, model, cb, rep, only_relevant, limit, post_ids, final_relevant)
+        rows = select_posts(ctx, engine_name, model, cb, rep, only_relevant, limit, post_ids, final_relevant, constructs)
         for r in rows:
             rows_by_id[int(r["id"])] = r
             work.append((rep, int(r["id"])))
@@ -306,7 +340,7 @@ def _jev_mean(ctx: Ctx, cb: Codebook, entity_type: str) -> dict[tuple[int, str],
     for eid, con, dist, conf, val, prob, ver in ctx.conn.execute(
         """SELECT c.entity_id, c.construct, c.distribution_json, c.confidence, c.value, c.probability, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id
            WHERE r.engine='jev' AND c.entity_type=?""", (entity_type,)):
-        if not cb.accepts(con, ver, entity_type):
+        if not cb.accepts(con, ver, entity_type, val):
             continue
         d = json.loads(dist) if dist else {val: prob or 1.0}
         acc[(int(eid), con)].append((d, conf))
@@ -328,7 +362,7 @@ def _claude_codes(ctx: Ctx, cb: Codebook, entity_type: str) -> dict[tuple[int, s
     for eid, con, val, ev, ver in ctx.conn.execute(
         """SELECT c.entity_id, c.construct, c.value, c.evidence, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id
            WHERE r.engine='claude' AND c.entity_type=? ORDER BY c.coded_at""", (entity_type,)):
-        if cb.accepts(con, ver, entity_type):
+        if cb.accepts(con, ver, entity_type, val):
             out[(int(eid), con)] = (val, ev)   # latest wins
     return out
 
@@ -351,7 +385,7 @@ def materialise(ctx: Ctx) -> None:
         # a construct unchanged since then (the human judged the post, not the rubric wording).
         for eid, con, val, gver in ctx.conn.execute(
             "SELECT s.entity_id, g.construct, g.value, g.codebook_version FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL", (et,)):
-            if et == "publication" or cb.accepts(con, gver, et):
+            if et == "publication" or cb.accepts(con, gver, et, val):
                 gold[(int(eid), con)] = val
         for key in set(jev) | set(cl) | set(gold):
             eid, con = key

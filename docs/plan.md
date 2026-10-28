@@ -57,6 +57,11 @@ Railway deployment itself, git commit (nothing committed yet). The gathering pip
 and its decisions are in `../PLAN.md`; the research questions are in the Obsidian note "questions for
 Substack machine cognition study"; the Jev research is in `jev.md`.
 
+Update (2026-10-13): `mcreview update --since 2026-09-20` brought the corpus from the 2026-09-27 gathering run to
+the present (README, "Updating the corpus"). Clusters, labels and existing codes were kept; new posts were
+attached to the existing topic clusters by nearest neighbours rather than re-clustered. Counts below describe
+the 2026-09-27 corpus; the site's Methods page carries the current ones.
+
 ## 1. Principles (carried over from gathering)
 
 - **Every code is a measurement.** Each label on a post records which engine produced it, with which

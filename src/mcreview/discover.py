@@ -63,7 +63,10 @@ def _accept_brave_result(kind: str | None, host: str | None, variant: str, title
     return kind == "post" or "substack" in (title + " " + desc).lower()
 
 
-def brave(ctx: Ctx, max_queries: int | None = None, refresh: bool = False) -> None:
+def brave(ctx: Ctx, max_queries: int | None = None, refresh: bool = False, since: str | None = None) -> None:
+    """Phase-1 Brave queries. With `since`, an update pass: every query is re-run with Brave's date filter from
+    `since` to today, recorded as its own query row (variant suffixed `@since`) so provenance keeps the two
+    passes apart; results still enter as source 'brave' at round 0, like any lexical hit."""
     key = ctx.brave_key
     if not key:
         log.warning("BRAVE_API_KEY not set; skipping Brave discovery")
@@ -85,12 +88,13 @@ def brave(ctx: Ctx, max_queries: int | None = None, refresh: bool = False) -> No
                 ctx.commit()
                 return
             n_queries += 1
-            qid = db.get_or_create_query(ctx.conn, "brave", variant, facet, term, q)
+            freshness = brave_api.freshness_window(since) if since else None
+            qid = db.get_or_create_query(ctx.conn, "brave", f"{variant}@{since}" if since else variant, facet, term, q)
             if not refresh and _already_run(ctx, qid):
                 ctx.bump("brave_queries_skipped")
                 continue
             for page in range(pages):
-                r, cached = brave_api.cached_search(ctx, q, offset=page, refresh=refresh)
+                r, cached = brave_api.cached_search(ctx, q, offset=page, refresh=refresh, freshness=freshness)
                 ctx.bump("brave_cache_hits" if cached else "brave_requests")
                 if not r.ok:
                     log.warning("brave %s page %d -> HTTP %d", q, page, r.status)
@@ -110,7 +114,7 @@ def brave(ctx: Ctx, max_queries: int | None = None, refresh: bool = False) -> No
                         if slug:
                             post_id = db.upsert_post(
                                 ctx.conn, pub_id, slug, ctx.run_id,
-                                {"canonical_url": url if kind == "post" else None, "title": title, "metadata_source": "stub", "entry_round": 0},
+                                {"canonical_url": substack.canonical_post_url(host, slug), "title": substack.clean_result_title(title), "metadata_source": "stub", "entry_round": 0},
                             )
                             db.add_discovery(ctx.conn, "post", post_id, "brave", ctx.run_id, qid, rank, page, 0)
                             ctx.bump("brave_posts")

@@ -513,6 +513,13 @@ def upsert_publication(
         )
         return int(cur.lastrowid)
     pid = int(row["id"])
+    if fields.get("substack_id") is not None and row["substack_id"] is None:
+        other = get_publication_by_substack_id(conn, int(fields["substack_id"]))
+        if other is not None and int(other["id"]) != pid:
+            # The host row is the same publication as one already known by Substack id under another host
+            # (custom domain vs subdomain). Keep the row that carries the id; fold this one into it.
+            merge_publications(conn, int(other["id"]), pid)
+            pid = int(other["id"])
     sets, vals = [], []
     for k, v in fields.items():
         sets.append(f"{k}=COALESCE(?, {k})")

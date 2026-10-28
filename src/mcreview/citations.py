@@ -259,7 +259,12 @@ def update_eligibility(ctx: Ctx) -> None:
 
 # ------------------------------------------------------------------ 5. coupling search
 
-def coupling(ctx: Ctx, round_no: int) -> int:
+def coupling(ctx: Ctx, round_no: int, fresh_since: str | None = None) -> int:
+    """Coupling search. Normally over eligible references not yet searched (all-time results). With
+    `fresh_since` (an update pass), over every eligible reference already searched in an earlier round, with
+    Brave's date filter from `fresh_since` to today: posts citing the corpus's shared references that were
+    published after the corpus was gathered. Fresh queries get their own query rows (variant suffixed
+    `@since`) and their own cache entries; searched_round is left as it was."""
     cfg = _cfg(ctx)
     key = ctx.brave_key
     if not key:
@@ -267,21 +272,36 @@ def coupling(ctx: Ctx, round_no: int) -> int:
         return 0
     clause, params = _threshold_clause(ctx)
     pages = int(cfg["brave_pages_per_query"])
-    already = ctx.conn.execute("SELECT COUNT(*) FROM refs WHERE searched_round=?", (round_no,)).fetchone()[0]
-    rows = ctx.conn.execute(
-        f"SELECT id, kind, identifier, url_norm, title, citing_posts FROM refs WHERE eligible=1 AND searched_round IS NULL AND {clause} "
-        "ORDER BY citing_pubs DESC, citing_posts DESC, id LIMIT ?",
-        params + (max(0, int(cfg["max_targets_per_round"]) - int(already)),),
-    ).fetchall()
+    freshness = brave_api.freshness_window(fresh_since) if fresh_since else None
+    if fresh_since:
+        rows = ctx.conn.execute(
+            f"SELECT id, kind, identifier, url_norm, title, citing_posts FROM refs WHERE eligible=1 AND searched_round IS NOT NULL AND searched_round<? AND {clause} "
+            "ORDER BY citing_pubs DESC, citing_posts DESC, id LIMIT ?",
+            (round_no,) + params + (int(cfg["max_targets_per_round"]),),
+        ).fetchall()
+    else:
+        already = ctx.conn.execute("SELECT COUNT(*) FROM refs WHERE searched_round=?", (round_no,)).fetchone()[0]
+        rows = ctx.conn.execute(
+            f"SELECT id, kind, identifier, url_norm, title, citing_posts FROM refs WHERE eligible=1 AND searched_round IS NULL AND {clause} "
+            "ORDER BY citing_pubs DESC, citing_posts DESC, id LIMIT ?",
+            params + (max(0, int(cfg["max_targets_per_round"]) - int(already)),),
+        ).fetchall()
     new_posts = 0
     for row in rows:
         for variant, q in refs_mod.coupling_queries(row["kind"], row["identifier"], row["url_norm"], row["title"]):
-            if brave_api.query_text_already_run(ctx, q):
-                ctx.bump("coupling_queries_deduped")
-                continue
-            qid = db.get_or_create_query(ctx.conn, "brave", variant, "citation", row["url_norm"], q)
+            if fresh_since:
+                variant = f"{variant}@{fresh_since}"
+                qid = db.get_or_create_query(ctx.conn, "brave", variant, "citation", row["url_norm"], q)
+                if ctx.conn.execute("SELECT 1 FROM search_results WHERE query_id=? LIMIT 1", (qid,)).fetchone():
+                    ctx.bump("coupling_fresh_skipped")   # resumed update: this window already searched
+                    continue
+            else:
+                if brave_api.query_text_already_run(ctx, q):
+                    ctx.bump("coupling_queries_deduped")
+                    continue
+                qid = db.get_or_create_query(ctx.conn, "brave", variant, "citation", row["url_norm"], q)
             for page in range(pages):
-                r, cached = brave_api.cached_search(ctx, q, offset=page)
+                r, cached = brave_api.cached_search(ctx, q, offset=page, freshness=freshness)
                 ctx.bump("coupling_cache_hits" if cached else "coupling_requests")
                 if not r.ok:
                     log.warning("brave %s page %d -> HTTP %d", q, page, r.status)
@@ -301,7 +321,8 @@ def coupling(ctx: Ctx, round_no: int) -> int:
                         ).fetchone()
                         pub_id = db.upsert_publication(ctx.conn, host, ctx.run_id, confirmed=True)
                         post_id = db.upsert_post(ctx.conn, pub_id, slug, ctx.run_id,
-                                                 {"canonical_url": url, "title": res.get("title"), "metadata_source": "stub", "entry_round": round_no})
+                                                 {"canonical_url": substack.canonical_post_url(host, slug), "title": substack.clean_result_title(res.get("title")),
+                                                  "metadata_source": "stub", "entry_round": round_no})
                         db.add_discovery(ctx.conn, "post", post_id, "coupling", ctx.run_id, qid, rank, page, round_no, detail=f"ref:{row['id']}")
                         if not existed:
                             new_posts += 1
@@ -312,10 +333,13 @@ def coupling(ctx: Ctx, round_no: int) -> int:
                     )
                 if not more or not results:
                     break
-        ctx.conn.execute("UPDATE refs SET searched_round=? WHERE id=?", (round_no, row["id"]))
-        ctx.bump("coupling_targets")
+        if fresh_since:
+            ctx.bump("coupling_fresh_targets")
+        else:
+            ctx.conn.execute("UPDATE refs SET searched_round=? WHERE id=?", (round_no, row["id"]))
+            ctx.bump("coupling_targets")
         ctx.commit()
-    ctx.bump("coupling_new_posts", new_posts)
+    ctx.bump("coupling_fresh_new_posts" if fresh_since else "coupling_new_posts", new_posts)
     return new_posts
 
 
@@ -337,8 +361,9 @@ def next_round_number(ctx: Ctx) -> int:
     return int(row[0] or 0) + 1
 
 
-def run_round(ctx: Ctx, round_no: int) -> int:
-    """One citation round. Returns the number of posts newly added (backward + coupling)."""
+def run_round(ctx: Ctx, round_no: int, fresh_since: str | None = None) -> int:
+    """One citation round. Returns the number of posts newly added (backward + coupling). With `fresh_since`
+    (the first round of an update), the already-searched coupling targets are searched again for the window."""
     extract_references(ctx)
     link_substack_targets(ctx)
     added = backward(ctx, round_no)
@@ -347,4 +372,6 @@ def run_round(ctx: Ctx, round_no: int) -> int:
     fetch_titles(ctx)
     update_eligibility(ctx)
     added += coupling(ctx, round_no)
+    if fresh_since:
+        added += coupling(ctx, round_no, fresh_since)
     return added
