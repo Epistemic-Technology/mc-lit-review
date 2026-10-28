@@ -90,34 +90,34 @@
     }
   },
   "data": {
-    "name": "data-69d9e29974ebb65bb6e7738253b8ed44"
+    "name": "data-bdd1d04fa7ead2ea200cee4ccd7ace29"
   },
   "datasets": {
-    "data-69d9e29974ebb65bb6e7738253b8ed44": [
+    "data-bdd1d04fa7ead2ea200cee4ccd7ace29": [
       {
         "group": "General and culture",
         "key": "general",
-        "posts": 1006
-      },
-      {
-        "group": "Academic",
-        "key": "academic",
-        "posts": 674
+        "posts": 1518
       },
       {
         "group": "AI field",
         "key": "ai_field",
-        "posts": 673
+        "posts": 986
+      },
+      {
+        "group": "Academic",
+        "key": "academic",
+        "posts": 833
       },
       {
         "group": "Religion and spirituality",
         "key": "religion",
-        "posts": 239
+        "posts": 390
       },
       {
         "group": "Journalism and politics",
         "key": "journalism",
-        "posts": 211
+        "posts": 333
       }
     ]
   },
@@ -170,8 +170,8 @@
           "field": "group",
           "sort": [
             "General and culture",
-            "Academic",
             "AI field",
+            "Academic",
             "Religion and spirituality",
             "Journalism and politics"
           ],
@@ -199,8 +199,8 @@
           "field": "group",
           "sort": [
             "General and culture",
-            "Academic",
             "AI field",
+            "Academic",
             "Religion and spirituality",
             "Journalism and politics"
           ],

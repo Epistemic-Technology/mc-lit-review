@@ -90,75 +90,75 @@
     }
   },
   "data": {
-    "name": "data-8c55e2ff66ab918a8990771621a57bcc"
+    "name": "data-0c78827965208930b9dccaf776650c9f"
   },
   "datasets": {
-    "data-8c55e2ff66ab918a8990771621a57bcc": [
+    "data-0c78827965208930b9dccaf776650c9f": [
       {
         "experience": "No",
-        "n": 58,
+        "n": 75,
         "other": "Yes",
-        "share": 0.0617678381256656
+        "share": 0.058639562157935886
       },
       {
         "experience": "No",
-        "n": 81,
+        "n": 104,
         "other": "Partly",
-        "share": 0.08626198083067092
+        "share": 0.08131352619233777
       },
       {
         "experience": "Yes",
-        "n": 225,
+        "n": 279,
         "other": "Yes",
-        "share": 0.23961661341853036
+        "share": 0.2181391712275215
       },
       {
         "experience": "No",
-        "n": 365,
+        "n": 531,
         "other": "No",
-        "share": 0.3887113951011715
+        "share": 0.4151681000781861
       },
       {
         "experience": "Unsure",
-        "n": 130,
+        "n": 177,
         "other": "Yes",
-        "share": 0.13844515441959532
+        "share": 0.1383893666927287
       },
       {
         "experience": "Unsure",
-        "n": 33,
+        "n": 46,
         "other": "Unsure",
-        "share": 0.03514376996805112
+        "share": 0.03596559812353401
       },
       {
         "experience": "Unsure",
-        "n": 13,
+        "n": 17,
         "other": "No",
-        "share": 0.013844515441959531
+        "share": 0.013291634089132134
       },
       {
         "experience": "No",
-        "n": 13,
+        "n": 15,
         "other": "Unsure",
-        "share": 0.013844515441959531
+        "share": 0.011727912431587178
       },
       {
         "experience": "Unsure",
-        "n": 16,
+        "n": 30,
         "other": "Partly",
-        "share": 0.01703940362087327
+        "share": 0.023455824863174355
       },
       {
         "experience": "Yes",
         "n": 4,
         "other": "Partly",
-        "share": 0.004259850905218318
+        "share": 0.003127443315089914
       },
       {
         "experience": "Yes",
         "n": 1,
         "other": "No",
-        "share": 0.0010649627263045794
+        "share": 0.0007818608287724785
       }
     ]
   },
@@ -237,7 +237,7 @@
       "encoding": {
         "color": {
           "condition": {
-            "test": "(datum.n > 112.67999999999999)",
+            "test": "(datum.n > 153.48)",
             "value": "#fcfcfb"
           },
           "value": "#0b0b0b"
@@ -276,7 +276,7 @@
   ],
   "title": {
     "subtitle": [
-      "Posts with a position on both questions (939). The off-diagonal 'thinks, but not conscious' cells",
+      "Posts with a position on both questions (1,279). The off-diagonal 'thinks, but not conscious' cells",
       "are a real camp; the reverse is nearly empty."
     ],
     "text": "Thinking without experience"

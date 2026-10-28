@@ -90,129 +90,129 @@
     }
   },
   "data": {
-    "name": "data-f8c32438030b03406e349ead1d35a01c"
+    "name": "data-e44f1e29c5d66b86691c0f3ed7dd9a52"
   },
   "datasets": {
-    "data-f8c32438030b03406e349ead1d35a01c": [
+    "data-e44f1e29c5d66b86691c0f3ed7dd9a52": [
       {
-        "posts": 86,
-        "pubs": 67,
+        "posts": 118,
+        "pubs": 89,
         "tier": "academic",
         "work": "Consciousness in Artificial Intelligence: Insights from the Science of…"
       },
       {
-        "posts": 53,
-        "pubs": 52,
-        "tier": "lab",
-        "work": "The Hugging Face incident and the road ahead"
+        "posts": 72,
+        "pubs": 71,
+        "tier": "press",
+        "work": "Religious scholars met with Anthropic. What they heard stunned them."
       },
       {
-        "posts": 70,
-        "pubs": 51,
+        "posts": 91,
+        "pubs": 69,
         "tier": "academic",
         "work": "Taking AI Welfare Seriously"
       },
       {
-        "posts": 54,
-        "pubs": 49,
-        "tier": "academic",
-        "work": "On the Dangers of Stochastic Parrots"
-      },
-      {
-        "posts": 42,
-        "pubs": 40,
-        "tier": "lab",
-        "work": "Exploring model welfare"
-      },
-      {
-        "posts": 43,
-        "pubs": 36,
-        "tier": "academic",
-        "work": "Verbalizable Representations Form a Global Workspace in Language Model…"
-      },
-      {
-        "posts": 38,
-        "pubs": 36,
+        "posts": 74,
+        "pubs": 68,
         "tier": "lab",
         "work": "Claude’s Constitution"
       },
       {
-        "posts": 36,
-        "pubs": 36,
-        "tier": "substack",
-        "work": "Brief independent investigation of agents’ behavior, reasoning and col…"
-      },
-      {
-        "posts": 34,
-        "pubs": 33,
+        "posts": 65,
+        "pubs": 63,
         "tier": "lab",
-        "work": "A global workspace in language models"
+        "work": "The Hugging Face incident and the road ahead"
       },
       {
-        "posts": 33,
-        "pubs": 32,
+        "posts": 65,
+        "pubs": 58,
+        "tier": "academic",
+        "work": "On the Dangers of Stochastic Parrots"
+      },
+      {
+        "posts": 60,
+        "pubs": 56,
+        "tier": "lab",
+        "work": "Exploring model welfare"
+      },
+      {
+        "posts": 62,
+        "pubs": 55,
         "tier": "academic",
         "work": "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It"
       },
       {
-        "posts": 33,
-        "pubs": 32,
+        "posts": 53,
+        "pubs": 52,
+        "tier": "other",
+        "work": "A warning about ‘model welfare"
+      },
+      {
+        "posts": 58,
+        "pubs": 49,
+        "tier": "academic",
+        "work": "Verbalizable Representations Form a Global Workspace in Language Model…"
+      },
+      {
+        "posts": 54,
+        "pubs": 45,
+        "tier": "other",
+        "work": "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …"
+      },
+      {
+        "posts": 46,
+        "pubs": 45,
+        "tier": "lab",
+        "work": "A global workspace in language models"
+      },
+      {
+        "posts": 47,
+        "pubs": 44,
+        "tier": "substack",
+        "work": "Brief independent investigation of agents’ behavior, reasoning and col…"
+      },
+      {
+        "posts": 52,
+        "pubs": 39,
+        "tier": "academic",
+        "work": "Emotion Concepts and their Function in a Large Language Model"
+      },
+      {
+        "posts": 39,
+        "pubs": 37,
+        "tier": "lab",
+        "work": "Claude Opus 4 and 4.1 can now end a rare subset of conversations"
+      },
+      {
+        "posts": 37,
+        "pubs": 36,
         "tier": "substack",
         "work": "The Rise and Fall of Agent Civilizations"
       },
       {
         "posts": 38,
-        "pubs": 29,
-        "tier": "academic",
-        "work": "Emotion Concepts and their Function in a Large Language Model"
-      },
-      {
-        "posts": 34,
-        "pubs": 26,
-        "tier": "other",
-        "work": "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …"
-      },
-      {
-        "posts": 33,
-        "pubs": 25,
-        "tier": "academic",
-        "work": "Could a Large Language Model be Conscious?"
-      },
-      {
-        "posts": 26,
-        "pubs": 25,
-        "tier": "other",
-        "work": "A warning about ‘model welfare"
-      },
-      {
-        "posts": 27,
-        "pubs": 24,
+        "pubs": 34,
         "tier": "academic",
         "work": "Conscious artificial intelligence and biological naturalism"
       },
       {
-        "posts": 25,
-        "pubs": 24,
-        "tier": "other",
-        "work": "Dario Amodei — We Must Pace the Frontier"
-      },
-      {
-        "posts": 29,
-        "pubs": 23,
-        "tier": "lab",
-        "work": "Claude 4 System Card"
-      },
-      {
-        "posts": 28,
-        "pubs": 23,
+        "posts": 41,
+        "pubs": 33,
         "tier": "academic",
-        "work": "Identifying indicators of consciousness in AI systems"
+        "work": "Could a Large Language Model be Conscious?"
       },
       {
-        "posts": 27,
-        "pubs": 23,
+        "posts": 36,
+        "pubs": 32,
+        "tier": "press",
+        "work": "The Mythology Of Conscious AI"
+      },
+      {
+        "posts": 33,
+        "pubs": 32,
         "tier": "lab",
-        "work": "Eleos AI Research"
+        "work": "2026 Usage Policy update"
       }
     ]
   },
@@ -281,25 +281,25 @@
           "field": "work",
           "sort": [
             "Consciousness in Artificial Intelligence: Insights from the Science of…",
-            "The Hugging Face incident and the road ahead",
+            "Religious scholars met with Anthropic. What they heard stunned them.",
             "Taking AI Welfare Seriously",
+            "Claude’s Constitution",
+            "The Hugging Face incident and the road ahead",
             "On the Dangers of Stochastic Parrots",
             "Exploring model welfare",
-            "Verbalizable Representations Form a Global Workspace in Language Model…",
-            "Claude’s Constitution",
-            "Brief independent investigation of agents’ behavior, reasoning and col…",
-            "A global workspace in language models",
             "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It",
-            "The Rise and Fall of Agent Civilizations",
-            "Emotion Concepts and their Function in a Large Language Model",
-            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
-            "Could a Large Language Model be Conscious?",
             "A warning about ‘model welfare",
+            "Verbalizable Representations Form a Global Workspace in Language Model…",
+            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
+            "A global workspace in language models",
+            "Brief independent investigation of agents’ behavior, reasoning and col…",
+            "Emotion Concepts and their Function in a Large Language Model",
+            "Claude Opus 4 and 4.1 can now end a rare subset of conversations",
+            "The Rise and Fall of Agent Civilizations",
             "Conscious artificial intelligence and biological naturalism",
-            "Dario Amodei — We Must Pace the Frontier",
-            "Claude 4 System Card",
-            "Identifying indicators of consciousness in AI systems",
-            "Eleos AI Research"
+            "Could a Large Language Model be Conscious?",
+            "The Mythology Of Conscious AI",
+            "2026 Usage Policy update"
           ],
           "title": null,
           "type": "nominal"
@@ -324,25 +324,25 @@
           "field": "work",
           "sort": [
             "Consciousness in Artificial Intelligence: Insights from the Science of…",
-            "The Hugging Face incident and the road ahead",
+            "Religious scholars met with Anthropic. What they heard stunned them.",
             "Taking AI Welfare Seriously",
+            "Claude’s Constitution",
+            "The Hugging Face incident and the road ahead",
             "On the Dangers of Stochastic Parrots",
             "Exploring model welfare",
-            "Verbalizable Representations Form a Global Workspace in Language Model…",
-            "Claude’s Constitution",
-            "Brief independent investigation of agents’ behavior, reasoning and col…",
-            "A global workspace in language models",
             "The Pain Axis: LLMs Represent Self-Directed Harm and Act to Relieve It",
-            "The Rise and Fall of Agent Civilizations",
-            "Emotion Concepts and their Function in a Large Language Model",
-            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
-            "Could a Large Language Model be Conscious?",
             "A warning about ‘model welfare",
+            "Verbalizable Representations Form a Global Workspace in Language Model…",
+            "Encyclical Letter of His Holiness Leo XIV Magnifica Humanitas (15 May …",
+            "A global workspace in language models",
+            "Brief independent investigation of agents’ behavior, reasoning and col…",
+            "Emotion Concepts and their Function in a Large Language Model",
+            "Claude Opus 4 and 4.1 can now end a rare subset of conversations",
+            "The Rise and Fall of Agent Civilizations",
             "Conscious artificial intelligence and biological naturalism",
-            "Dario Amodei — We Must Pace the Frontier",
-            "Claude 4 System Card",
-            "Identifying indicators of consciousness in AI systems",
-            "Eleos AI Research"
+            "Could a Large Language Model be Conscious?",
+            "The Mythology Of Conscious AI",
+            "2026 Usage Policy update"
           ],
           "type": "nominal"
         }

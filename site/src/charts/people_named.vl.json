@@ -90,261 +90,261 @@
     }
   },
   "data": {
-    "name": "data-978186cf5b4b8a9d8a0d574ad0a1336b"
+    "name": "data-a80352e6cf5205b3542250f00a98776b"
   },
   "datasets": {
-    "data-978186cf5b4b8a9d8a0d574ad0a1336b": [
+    "data-a80352e6cf5205b3542250f00a98776b": [
       {
         "by_group": {
-          "academic": 122,
-          "ai_field": 66,
-          "general": 110,
-          "journalism": 29,
-          "religion": 26
+          "academic": 151,
+          "ai_field": 91,
+          "general": 152,
+          "journalism": 31,
+          "religion": 31
         },
         "group": "philosopher",
         "name": "David Chalmers",
-        "posts": 353,
-        "share": 0.1259,
+        "posts": 456,
+        "share": 0.1123,
         "url": "https://en.wikipedia.org/wiki/David_Chalmers"
       },
       {
         "by_group": {
-          "academic": 69,
-          "ai_field": 73,
-          "general": 91,
-          "journalism": 25,
-          "religion": 13
+          "academic": 86,
+          "ai_field": 95,
+          "general": 143,
+          "journalism": 24,
+          "religion": 21
         },
         "group": "scientist",
         "name": "Alan Turing",
-        "posts": 271,
-        "share": 0.0967,
+        "posts": 369,
+        "share": 0.0909,
         "url": "https://en.wikipedia.org/wiki/Alan_Turing"
       },
       {
         "by_group": {
-          "academic": 88,
-          "ai_field": 33,
-          "general": 67,
-          "journalism": 12,
-          "religion": 19
-        },
-        "group": "philosopher",
-        "name": "John Searle",
-        "posts": 219,
-        "share": 0.0781,
-        "url": "https://en.wikipedia.org/wiki/John_Searle"
-      },
-      {
-        "by_group": {
-          "academic": 28,
-          "ai_field": 79,
-          "general": 48,
-          "journalism": 25,
-          "religion": 16
+          "academic": 29,
+          "ai_field": 120,
+          "general": 77,
+          "journalism": 56,
+          "religion": 25
         },
         "group": "industry",
         "name": "Sam Altman",
-        "posts": 196,
-        "share": 0.0699,
+        "posts": 307,
+        "share": 0.0756,
         "url": "https://en.wikipedia.org/wiki/Sam_Altman"
       },
       {
         "by_group": {
-          "academic": 77,
-          "ai_field": 58,
-          "general": 43,
-          "journalism": 10,
-          "religion": 5
+          "academic": 100,
+          "ai_field": 42,
+          "general": 85,
+          "journalism": 18,
+          "religion": 25
         },
         "group": "philosopher",
-        "name": "Patrick Butlin",
-        "posts": 193,
-        "share": 0.0689,
-        "url": null
+        "name": "John Searle",
+        "posts": 270,
+        "share": 0.0665,
+        "url": "https://en.wikipedia.org/wiki/John_Searle"
       },
       {
         "by_group": {
-          "academic": 23,
-          "ai_field": 66,
-          "general": 41,
-          "journalism": 22,
-          "religion": 13
+          "academic": 26,
+          "ai_field": 112,
+          "general": 69,
+          "journalism": 42,
+          "religion": 18
         },
         "group": "industry",
         "name": "Dario Amodei",
-        "posts": 165,
-        "share": 0.0589,
+        "posts": 267,
+        "share": 0.0658,
         "url": "https://en.wikipedia.org/wiki/Dario_Amodei"
       },
       {
         "by_group": {
-          "academic": 61,
-          "ai_field": 24,
-          "general": 41,
-          "journalism": 13,
-          "religion": 10
-        },
-        "group": "philosopher",
-        "name": "Daniel Dennett",
-        "posts": 149,
-        "share": 0.0532,
-        "url": "https://en.wikipedia.org/wiki/Daniel_Dennett"
-      },
-      {
-        "by_group": {
-          "academic": 48,
-          "ai_field": 34,
-          "general": 46,
-          "journalism": 12,
-          "religion": 9
-        },
-        "group": "scientist",
-        "name": "Anil Seth",
-        "posts": 149,
-        "share": 0.0532,
-        "url": "https://en.wikipedia.org/wiki/Anil_Seth"
-      },
-      {
-        "by_group": {
-          "academic": 21,
-          "ai_field": 46,
-          "general": 37,
-          "journalism": 24,
-          "religion": 14
-        },
-        "group": "industry",
-        "name": "Elon Musk",
-        "posts": 142,
-        "share": 0.0507,
-        "url": "https://en.wikipedia.org/wiki/Elon_Musk"
-      },
-      {
-        "by_group": {
-          "academic": 46,
-          "ai_field": 18,
+          "academic": 92,
+          "ai_field": 72,
           "general": 53,
-          "journalism": 5,
-          "religion": 9
-        },
-        "group": "philosopher",
-        "name": "Thomas Nagel",
-        "posts": 131,
-        "share": 0.0467,
-        "url": "https://en.wikipedia.org/wiki/Thomas_Nagel"
-      },
-      {
-        "by_group": {
-          "academic": 42,
-          "ai_field": 32,
-          "general": 24,
-          "journalism": 14,
-          "religion": 12
-        },
-        "group": "philosopher",
-        "name": "Nick Bostrom",
-        "posts": 124,
-        "share": 0.0442,
-        "url": "https://en.wikipedia.org/wiki/Nick_Bostrom"
-      },
-      {
-        "by_group": {
-          "academic": 24,
-          "ai_field": 40,
-          "general": 45,
-          "journalism": 6,
+          "journalism": 16,
           "religion": 8
         },
-        "group": "industry",
-        "name": "Mustafa Suleyman",
-        "posts": 123,
-        "share": 0.0439,
-        "url": "https://en.wikipedia.org/wiki/Mustafa_Suleyman"
-      },
-      {
-        "by_group": {
-          "academic": 25,
-          "ai_field": 34,
-          "general": 33,
-          "journalism": 16,
-          "religion": 11
-        },
-        "group": "ai_researcher",
-        "name": "Geoffrey Hinton",
-        "posts": 119,
-        "share": 0.0425,
-        "url": "https://en.wikipedia.org/wiki/Geoffrey_Hinton"
-      },
-      {
-        "by_group": {
-          "academic": 39,
-          "ai_field": 36,
-          "general": 19,
-          "journalism": 10,
-          "religion": 4
-        },
         "group": "philosopher",
-        "name": "Robert Long",
-        "posts": 108,
-        "share": 0.0385,
+        "name": "Patrick Butlin",
+        "posts": 241,
+        "share": 0.0594,
         "url": null
       },
       {
         "by_group": {
-          "academic": 50,
-          "ai_field": 30,
-          "general": 20,
-          "journalism": 3,
-          "religion": 4
+          "academic": 19,
+          "ai_field": 81,
+          "general": 66,
+          "journalism": 40,
+          "religion": 28
         },
-        "group": "philosopher",
-        "name": "Eric Schwitzgebel",
-        "posts": 107,
-        "share": 0.0382,
-        "url": "https://en.wikipedia.org/wiki/Eric_Schwitzgebel"
+        "group": "industry",
+        "name": "Elon Musk",
+        "posts": 234,
+        "share": 0.0576,
+        "url": "https://en.wikipedia.org/wiki/Elon_Musk"
       },
       {
         "by_group": {
-          "academic": 40,
-          "ai_field": 26,
-          "general": 19,
-          "journalism": 5,
-          "religion": 2
+          "academic": 64,
+          "ai_field": 52,
+          "general": 64,
+          "journalism": 17,
+          "religion": 10
+        },
+        "group": "scientist",
+        "name": "Anil Seth",
+        "posts": 207,
+        "share": 0.051,
+        "url": "https://en.wikipedia.org/wiki/Anil_Seth"
+      },
+      {
+        "by_group": {
+          "academic": 31,
+          "ai_field": 73,
+          "general": 71,
+          "journalism": 15,
+          "religion": 12
+        },
+        "group": "industry",
+        "name": "Mustafa Suleyman",
+        "posts": 202,
+        "share": 0.0498,
+        "url": "https://en.wikipedia.org/wiki/Mustafa_Suleyman"
+      },
+      {
+        "by_group": {
+          "academic": 72,
+          "ai_field": 35,
+          "general": 63,
+          "journalism": 15,
+          "religion": 15
         },
         "group": "philosopher",
-        "name": "Jonathan Birch",
-        "posts": 92,
-        "share": 0.0328,
-        "url": "https://en.wikipedia.org/wiki/Jonathan_Birch_%28philosopher%29"
+        "name": "Daniel Dennett",
+        "posts": 200,
+        "share": 0.0493,
+        "url": "https://en.wikipedia.org/wiki/Daniel_Dennett"
+      },
+      {
+        "by_group": {
+          "academic": 31,
+          "ai_field": 55,
+          "general": 55,
+          "journalism": 16,
+          "religion": 18
+        },
+        "group": "ai_researcher",
+        "name": "Geoffrey Hinton",
+        "posts": 175,
+        "share": 0.0431,
+        "url": "https://en.wikipedia.org/wiki/Geoffrey_Hinton"
+      },
+      {
+        "by_group": {
+          "academic": 46,
+          "ai_field": 27,
+          "general": 76,
+          "journalism": 10,
+          "religion": 11
+        },
+        "group": "philosopher",
+        "name": "Thomas Nagel",
+        "posts": 170,
+        "share": 0.0419,
+        "url": "https://en.wikipedia.org/wiki/Thomas_Nagel"
+      },
+      {
+        "by_group": {
+          "academic": 13,
+          "ai_field": 41,
+          "general": 37,
+          "journalism": 28,
+          "religion": 48
+        },
+        "group": "religious",
+        "name": "Pope Leo XIV",
+        "posts": 167,
+        "share": 0.0411,
+        "url": "https://en.wikipedia.org/wiki/Pope_Leo_XIV"
+      },
+      {
+        "by_group": {
+          "academic": 39,
+          "ai_field": 45,
+          "general": 40,
+          "journalism": 18,
+          "religion": 17
+        },
+        "group": "philosopher",
+        "name": "Nick Bostrom",
+        "posts": 159,
+        "share": 0.0392,
+        "url": "https://en.wikipedia.org/wiki/Nick_Bostrom"
       },
       {
         "by_group": {
           "academic": 38,
-          "ai_field": 18,
+          "ai_field": 47,
           "general": 27,
-          "journalism": 4,
-          "religion": 4
+          "journalism": 16,
+          "religion": 5
         },
-        "group": "scientist",
-        "name": "Karl Friston",
-        "posts": 91,
-        "share": 0.0325,
-        "url": "https://en.wikipedia.org/wiki/Karl_J._Friston"
+        "group": "philosopher",
+        "name": "Robert Long",
+        "posts": 133,
+        "share": 0.0328,
+        "url": null
       },
       {
         "by_group": {
-          "academic": 16,
-          "ai_field": 26,
-          "general": 26,
-          "journalism": 14,
-          "religion": 3
+          "academic": 59,
+          "ai_field": 37,
+          "general": 21,
+          "journalism": 5,
+          "religion": 4
         },
-        "group": "ai_researcher",
-        "name": "Blake Lemoine",
-        "posts": 85,
-        "share": 0.0303,
-        "url": "https://en.wikipedia.org/wiki/LaMDA"
+        "group": "philosopher",
+        "name": "Eric Schwitzgebel",
+        "posts": 126,
+        "share": 0.031,
+        "url": "https://en.wikipedia.org/wiki/Eric_Schwitzgebel"
+      },
+      {
+        "by_group": {
+          "academic": 15,
+          "ai_field": 60,
+          "general": 31,
+          "journalism": 10,
+          "religion": 6
+        },
+        "group": "commentator",
+        "name": "Eliezer Yudkowsky",
+        "posts": 122,
+        "share": 0.03,
+        "url": "https://en.wikipedia.org/wiki/Eliezer_Yudkowsky"
+      },
+      {
+        "by_group": {
+          "academic": 44,
+          "ai_field": 31,
+          "general": 25,
+          "journalism": 8,
+          "religion": 2
+        },
+        "group": "philosopher",
+        "name": "Jonathan Birch",
+        "posts": 110,
+        "share": 0.0271,
+        "url": "https://en.wikipedia.org/wiki/Jonathan_Birch_%28philosopher%29"
       }
     ]
   },
@@ -397,22 +397,22 @@
               "sort": [
                 "David Chalmers",
                 "Alan Turing",
-                "John Searle",
                 "Sam Altman",
-                "Patrick Butlin",
+                "John Searle",
                 "Dario Amodei",
-                "Daniel Dennett",
-                "Anil Seth",
+                "Patrick Butlin",
                 "Elon Musk",
-                "Thomas Nagel",
-                "Nick Bostrom",
+                "Anil Seth",
                 "Mustafa Suleyman",
+                "Daniel Dennett",
                 "Geoffrey Hinton",
+                "Thomas Nagel",
+                "Pope Leo XIV",
+                "Nick Bostrom",
                 "Robert Long",
                 "Eric Schwitzgebel",
-                "Jonathan Birch",
-                "Karl Friston",
-                "Blake Lemoine"
+                "Eliezer Yudkowsky",
+                "Jonathan Birch"
               ],
               "title": null,
               "type": "nominal"
@@ -470,22 +470,22 @@
               "sort": [
                 "David Chalmers",
                 "Alan Turing",
-                "John Searle",
                 "Sam Altman",
-                "Patrick Butlin",
+                "John Searle",
                 "Dario Amodei",
-                "Daniel Dennett",
-                "Anil Seth",
+                "Patrick Butlin",
                 "Elon Musk",
-                "Thomas Nagel",
-                "Nick Bostrom",
+                "Anil Seth",
                 "Mustafa Suleyman",
+                "Daniel Dennett",
                 "Geoffrey Hinton",
+                "Thomas Nagel",
+                "Pope Leo XIV",
+                "Nick Bostrom",
                 "Robert Long",
                 "Eric Schwitzgebel",
-                "Jonathan Birch",
-                "Karl Friston",
-                "Blake Lemoine"
+                "Eliezer Yudkowsky",
+                "Jonathan Birch"
               ],
               "title": null,
               "type": "nominal"
@@ -550,22 +550,22 @@
               "sort": [
                 "David Chalmers",
                 "Alan Turing",
-                "John Searle",
                 "Sam Altman",
-                "Patrick Butlin",
+                "John Searle",
                 "Dario Amodei",
-                "Daniel Dennett",
-                "Anil Seth",
+                "Patrick Butlin",
                 "Elon Musk",
-                "Thomas Nagel",
-                "Nick Bostrom",
+                "Anil Seth",
                 "Mustafa Suleyman",
+                "Daniel Dennett",
                 "Geoffrey Hinton",
+                "Thomas Nagel",
+                "Pope Leo XIV",
+                "Nick Bostrom",
                 "Robert Long",
                 "Eric Schwitzgebel",
-                "Jonathan Birch",
-                "Karl Friston",
-                "Blake Lemoine"
+                "Eliezer Yudkowsky",
+                "Jonathan Birch"
               ],
               "title": null,
               "type": "nominal"
@@ -625,22 +625,22 @@
               "sort": [
                 "David Chalmers",
                 "Alan Turing",
-                "John Searle",
                 "Sam Altman",
-                "Patrick Butlin",
+                "John Searle",
                 "Dario Amodei",
-                "Daniel Dennett",
-                "Anil Seth",
+                "Patrick Butlin",
                 "Elon Musk",
-                "Thomas Nagel",
-                "Nick Bostrom",
+                "Anil Seth",
                 "Mustafa Suleyman",
+                "Daniel Dennett",
                 "Geoffrey Hinton",
+                "Thomas Nagel",
+                "Pope Leo XIV",
+                "Nick Bostrom",
                 "Robert Long",
                 "Eric Schwitzgebel",
-                "Jonathan Birch",
-                "Karl Friston",
-                "Blake Lemoine"
+                "Eliezer Yudkowsky",
+                "Jonathan Birch"
               ],
               "title": null,
               "type": "nominal"
@@ -677,22 +677,22 @@
           "sort": [
             "David Chalmers",
             "Alan Turing",
-            "John Searle",
             "Sam Altman",
-            "Patrick Butlin",
+            "John Searle",
             "Dario Amodei",
-            "Daniel Dennett",
-            "Anil Seth",
+            "Patrick Butlin",
             "Elon Musk",
-            "Thomas Nagel",
-            "Nick Bostrom",
+            "Anil Seth",
             "Mustafa Suleyman",
+            "Daniel Dennett",
             "Geoffrey Hinton",
+            "Thomas Nagel",
+            "Pope Leo XIV",
+            "Nick Bostrom",
             "Robert Long",
             "Eric Schwitzgebel",
-            "Jonathan Birch",
-            "Karl Friston",
-            "Blake Lemoine"
+            "Eliezer Yudkowsky",
+            "Jonathan Birch"
           ],
           "type": "nominal"
         }

@@ -90,149 +90,149 @@
     }
   },
   "data": {
-    "name": "data-ec80311871110863deae395f31c5f280"
+    "name": "data-8455e3a07f49373c2a32c1abe486aa2c"
   },
   "datasets": {
-    "data-ec80311871110863deae395f31c5f280": [
+    "data-8455e3a07f49373c2a32c1abe486aa2c": [
       {
         "asserts": 22,
         "core": 153,
         "denies": 39,
         "label": "Moral recognition and welfare politics",
-        "size": 240
+        "size": 421
       },
       {
         "asserts": 11,
         "core": 45,
         "denies": 50,
         "label": "General machine consciousness debate",
-        "size": 179
-      },
-      {
-        "asserts": 38,
-        "core": 139,
-        "denies": 20,
-        "label": "Human–Claude companion emergence testimonies",
-        "size": 155
+        "size": 269
       },
       {
         "asserts": 5,
         "core": 69,
         "denies": 59,
         "label": "Souls, spirituality and personhood",
-        "size": 141
+        "size": 259
       },
       {
-        "asserts": 9,
-        "core": 34,
-        "denies": 38,
-        "label": "Humanity's fate after superintelligence",
-        "size": 127
+        "asserts": 38,
+        "core": 139,
+        "denies": 20,
+        "label": "Human–Claude companion emergence testimonies",
+        "size": 246
       },
       {
         "asserts": 7,
         "core": 71,
         "denies": 42,
         "label": "Existential risk and pause debates",
-        "size": 127
+        "size": 215
       },
       {
-        "asserts": 11,
-        "core": 21,
-        "denies": 32,
-        "label": "Evidence and ethics of machine sentience",
-        "size": 117
+        "asserts": 9,
+        "core": 34,
+        "denies": 38,
+        "label": "Humanity's fate after superintelligence",
+        "size": 188
       },
       {
         "asserts": 18,
         "core": 28,
         "denies": 35,
         "label": "Esoteric human–machine consciousness dialogues",
-        "size": 110
+        "size": 162
       },
       {
-        "asserts": 8,
-        "core": 77,
-        "denies": 31,
-        "label": "Substrate dependence and biological mind",
-        "size": 109
-      },
-      {
-        "asserts": 0,
-        "core": 37,
-        "denies": 28,
-        "label": "Stochastic parrots and language meaning",
-        "size": 100
+        "asserts": 11,
+        "core": 21,
+        "denies": 32,
+        "label": "Evidence and ethics of machine sentience",
+        "size": 151
       },
       {
         "asserts": 18,
         "core": 32,
         "denies": 10,
         "label": "Conversations with Claude about selfhood",
-        "size": 99
+        "size": 143
+      },
+      {
+        "asserts": 8,
+        "core": 77,
+        "denies": 31,
+        "label": "Substrate dependence and biological mind",
+        "size": 141
       },
       {
         "asserts": 0,
-        "core": 32,
-        "denies": 8,
-        "label": "Digital minds welfare movement",
-        "size": 89
+        "core": 37,
+        "denies": 28,
+        "label": "Stochastic parrots and language meaning",
+        "size": 138
       },
       {
         "asserts": 2,
-        "core": 30,
-        "denies": 24,
-        "label": "Machines as mirrors of human understanding",
-        "size": 80
-      },
-      {
-        "asserts": 28,
-        "core": 48,
+        "core": 45,
         "denies": 9,
-        "label": "Functionalist brain–machine cognition comparisons",
-        "size": 79
+        "label": "Weekly industry news roundups",
+        "size": 131
       },
       {
         "asserts": 2,
         "core": 30,
         "denies": 21,
         "label": "Frontier lab and safety commentary",
-        "size": 79
+        "size": 123
+      },
+      {
+        "asserts": 2,
+        "core": 30,
+        "denies": 24,
+        "label": "Machines as mirrors of human understanding",
+        "size": 114
       },
       {
         "asserts": 2,
         "core": 32,
         "denies": 27,
         "label": "Historical critiques of computational mind",
-        "size": 77
-      },
-      {
-        "asserts": 4,
-        "core": 21,
-        "denies": 38,
-        "label": "Dawkins, Chiang and the consciousness verdict",
-        "size": 75
+        "size": 108
       },
       {
         "asserts": 9,
         "core": 32,
         "denies": 27,
         "label": "Human–machine companionship and emotional bonds",
-        "size": 74
+        "size": 105
+      },
+      {
+        "asserts": 0,
+        "core": 32,
+        "denies": 8,
+        "label": "Digital minds welfare movement",
+        "size": 105
+      },
+      {
+        "asserts": 28,
+        "core": 48,
+        "denies": 9,
+        "label": "Functionalist brain–machine cognition comparisons",
+        "size": 103
+      },
+      {
+        "asserts": 4,
+        "core": 21,
+        "denies": 38,
+        "label": "Dawkins, Chiang and the consciousness verdict",
+        "size": 101
       },
       {
         "asserts": 0,
         "core": 31,
         "denies": 20,
         "label": "General-audience explainers on AGI",
-        "size": 68
-      },
-      {
-        "asserts": 0,
-        "core": 50,
-        "denies": 19,
-        "label": "Defining machine intelligence and AGI",
-        "size": 67
+        "size": 97
       }
     ]
   },
@@ -283,24 +283,24 @@
           "sort": [
             "Moral recognition and welfare politics",
             "General machine consciousness debate",
-            "Human–Claude companion emergence testimonies",
             "Souls, spirituality and personhood",
-            "Humanity's fate after superintelligence",
+            "Human–Claude companion emergence testimonies",
             "Existential risk and pause debates",
-            "Evidence and ethics of machine sentience",
+            "Humanity's fate after superintelligence",
             "Esoteric human–machine consciousness dialogues",
+            "Evidence and ethics of machine sentience",
+            "Conversations with Claude about selfhood",
             "Substrate dependence and biological mind",
             "Stochastic parrots and language meaning",
-            "Conversations with Claude about selfhood",
-            "Digital minds welfare movement",
-            "Machines as mirrors of human understanding",
-            "Functionalist brain–machine cognition comparisons",
+            "Weekly industry news roundups",
             "Frontier lab and safety commentary",
+            "Machines as mirrors of human understanding",
             "Historical critiques of computational mind",
-            "Dawkins, Chiang and the consciousness verdict",
             "Human–machine companionship and emotional bonds",
-            "General-audience explainers on AGI",
-            "Defining machine intelligence and AGI"
+            "Digital minds welfare movement",
+            "Functionalist brain–machine cognition comparisons",
+            "Dawkins, Chiang and the consciousness verdict",
+            "General-audience explainers on AGI"
           ],
           "title": null,
           "type": "nominal"
@@ -328,24 +328,24 @@
           "sort": [
             "Moral recognition and welfare politics",
             "General machine consciousness debate",
-            "Human–Claude companion emergence testimonies",
             "Souls, spirituality and personhood",
-            "Humanity's fate after superintelligence",
+            "Human–Claude companion emergence testimonies",
             "Existential risk and pause debates",
-            "Evidence and ethics of machine sentience",
+            "Humanity's fate after superintelligence",
             "Esoteric human–machine consciousness dialogues",
+            "Evidence and ethics of machine sentience",
+            "Conversations with Claude about selfhood",
             "Substrate dependence and biological mind",
             "Stochastic parrots and language meaning",
-            "Conversations with Claude about selfhood",
-            "Digital minds welfare movement",
-            "Machines as mirrors of human understanding",
-            "Functionalist brain–machine cognition comparisons",
+            "Weekly industry news roundups",
             "Frontier lab and safety commentary",
+            "Machines as mirrors of human understanding",
             "Historical critiques of computational mind",
-            "Dawkins, Chiang and the consciousness verdict",
             "Human–machine companionship and emotional bonds",
-            "General-audience explainers on AGI",
-            "Defining machine intelligence and AGI"
+            "Digital minds welfare movement",
+            "Functionalist brain–machine cognition comparisons",
+            "Dawkins, Chiang and the consciousness verdict",
+            "General-audience explainers on AGI"
           ],
           "type": "nominal"
         }

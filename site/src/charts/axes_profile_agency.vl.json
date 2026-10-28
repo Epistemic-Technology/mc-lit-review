@@ -90,57 +90,57 @@
     }
   },
   "data": {
-    "name": "data-b4554abb6e96d3697e2a02f07b0c7376"
+    "name": "data-6a111112688cab52f50b7160abb9b0ce"
   },
   "datasets": {
-    "data-b4554abb6e96d3697e2a02f07b0c7376": [
+    "data-6a111112688cab52f50b7160abb9b0ce": [
       {
         "experience": "No",
-        "n": 358,
+        "n": 493,
         "other": "No",
-        "share": 0.46134020618556704
+        "share": 0.473583093179635
       },
       {
         "experience": "Yes",
-        "n": 211,
+        "n": 269,
         "other": "Yes",
-        "share": 0.27190721649484534
+        "share": 0.2584053794428434
       },
       {
         "experience": "Unsure",
-        "n": 91,
+        "n": 119,
         "other": "Yes",
-        "share": 0.1172680412371134
+        "share": 0.1143131604226705
       },
       {
         "experience": "No",
-        "n": 38,
+        "n": 44,
         "other": "Yes",
-        "share": 0.04896907216494845
+        "share": 0.04226705091258405
       },
       {
         "experience": "Unsure",
-        "n": 31,
+        "n": 46,
         "other": "No",
-        "share": 0.03994845360824742
+        "share": 0.04418828049951969
       },
       {
         "experience": "Yes",
-        "n": 6,
+        "n": 8,
         "other": "No",
-        "share": 0.007731958762886598
+        "share": 0.007684918347742555
       },
       {
         "experience": "No",
-        "n": 6,
+        "n": 10,
         "other": "Unsure",
-        "share": 0.007731958762886598
+        "share": 0.009606147934678195
       },
       {
         "experience": "Unsure",
-        "n": 35,
+        "n": 52,
         "other": "Unsure",
-        "share": 0.045103092783505154
+        "share": 0.049951969260326606
       }
     ]
   },
@@ -218,7 +218,7 @@
       "encoding": {
         "color": {
           "condition": {
-            "test": "(datum.n > 93.11999999999999)",
+            "test": "(datum.n > 124.92)",
             "value": "#fcfcfb"
           },
           "value": "#0b0b0b"
@@ -256,7 +256,7 @@
   ],
   "title": {
     "subtitle": [
-      "Posts with a position on both questions (776). Granting goals while unsure about experience",
+      "Posts with a position on both questions (1,041). Granting goals while unsure about experience",
       "is the AI-safety framing; the reverse corner is nearly empty."
     ],
     "text": "Goals without experience"

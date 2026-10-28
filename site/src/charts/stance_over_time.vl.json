@@ -90,7 +90,7 @@
     }
   },
   "datasets": {
-    "data-3c0d2f760122048b67608267f7572481": [
+    "data-1494583655053a7fdd6345584c189ab8": [
       {
         "count": 23,
         "date": "2025-02-15T00:00:00",
@@ -254,69 +254,69 @@
       {
         "count": 106,
         "date": "2026-05-15T00:00:00",
-        "n": 235,
+        "n": 236,
         "option": "denies",
         "quarter": "2026Q2",
-        "share": 0.451063829787234
-      },
-      {
-        "count": 46,
-        "date": "2026-05-15T00:00:00",
-        "n": 235,
-        "option": "agnostic",
-        "quarter": "2026Q2",
-        "share": 0.19574468085106383
+        "share": 0.4491525423728814
       },
       {
         "count": 47,
         "date": "2026-05-15T00:00:00",
-        "n": 235,
+        "n": 236,
+        "option": "agnostic",
+        "quarter": "2026Q2",
+        "share": 0.19915254237288135
+      },
+      {
+        "count": 47,
+        "date": "2026-05-15T00:00:00",
+        "n": 236,
         "option": "discusses",
         "quarter": "2026Q2",
-        "share": 0.2
+        "share": 0.19915254237288135
       },
       {
         "count": 36,
         "date": "2026-05-15T00:00:00",
-        "n": 235,
+        "n": 236,
         "option": "asserts",
         "quarter": "2026Q2",
-        "share": 0.15319148936170213
+        "share": 0.15254237288135594
+      },
+      {
+        "count": 102,
+        "date": "2026-08-15T00:00:00",
+        "n": 350,
+        "option": "denies",
+        "quarter": "2026Q3",
+        "share": 0.2914285714285714
+      },
+      {
+        "count": 101,
+        "date": "2026-08-15T00:00:00",
+        "n": 350,
+        "option": "agnostic",
+        "quarter": "2026Q3",
+        "share": 0.2885714285714286
       },
       {
         "count": 93,
         "date": "2026-08-15T00:00:00",
-        "n": 294,
-        "option": "denies",
-        "quarter": "2026Q3",
-        "share": 0.3163265306122449
-      },
-      {
-        "count": 77,
-        "date": "2026-08-15T00:00:00",
-        "n": 294,
-        "option": "agnostic",
-        "quarter": "2026Q3",
-        "share": 0.2619047619047619
-      },
-      {
-        "count": 77,
-        "date": "2026-08-15T00:00:00",
-        "n": 294,
+        "n": 350,
         "option": "discusses",
         "quarter": "2026Q3",
-        "share": 0.2619047619047619
+        "share": 0.26571428571428574
       },
       {
-        "count": 47,
+        "count": 54,
         "date": "2026-08-15T00:00:00",
-        "n": 294,
+        "n": 350,
         "option": "asserts",
         "quarter": "2026Q3",
-        "share": 0.1598639455782313
+        "share": 0.15428571428571428
       }
     ],
-    "data-977fb137ea5faadf3684974e18ab895c": [
+    "data-7fd39bcbb00df69c362b01109ce289b6": [
       {
         "date": "2025-02-15T00:00:00",
         "n": 38,
@@ -344,12 +344,12 @@
       },
       {
         "date": "2026-05-15T00:00:00",
-        "n": 235,
+        "n": 236,
         "quarter": "2026Q2"
       },
       {
         "date": "2026-08-15T00:00:00",
-        "n": 294,
+        "n": 350,
         "quarter": "2026Q3"
       }
     ],
@@ -370,7 +370,7 @@
   "layer": [
     {
       "data": {
-        "name": "data-3c0d2f760122048b67608267f7572481"
+        "name": "data-1494583655053a7fdd6345584c189ab8"
       },
       "encoding": {
         "color": {
@@ -509,7 +509,7 @@
     },
     {
       "data": {
-        "name": "data-977fb137ea5faadf3684974e18ab895c"
+        "name": "data-7fd39bcbb00df69c362b01109ce289b6"
       },
       "encoding": {
         "text": {
@@ -535,7 +535,7 @@
   ],
   "title": {
     "subtitle": [
-      "Quarterly composition, 2025Q1 to 2026Q3, among the 1,513 relevant posts found through web search or citation.",
+      "Quarterly composition, 2025Q1 to 2026Q3, among the 2,101 relevant posts found through web search or citation.",
       "Substack's own search is recency-skewed and excluded; quarters with fewer than 15 posts are omitted. Grey figures: posts per quarter."
     ],
     "text": "Stance over time, on current LLM consciousness"
