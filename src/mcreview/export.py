@@ -28,7 +28,32 @@ UNBIASED = {"brave", "cited_by", "coupling"}   # substack_posts is recency-skewe
 GROUPS = {"academic_philosophy": "academic", "academic_science": "academic", "ai_industry": "ai_field", "rationalist_ea": "ai_field",
           "culture_general": "general", "other": "general", "business_finance": "general", "journalism_politics": "journalism",
           "religion_spirituality": "religion"}
+# Features of AI systems pointed to (codebook 0.4.0, group `feature`): display labels and the families the
+# site and figures group them into. Direction options: for / against / both_or_neutral; not_cited is the abstain.
+FEATURE_LABELS = {
+    "feat_prediction_objective": "Next-token prediction objective", "feat_architecture": "Architecture (transformer, no recurrence)",
+    "feat_training_data": "Trained on human text", "feat_post_training": "Post-training shapes what it says",
+    "feat_memory_continuity": "Memory and continuity", "feat_embodiment": "Body, senses, world contact",
+    "feat_instances": "Many instances, copyable", "feat_self_report": "What it says about itself",
+    "feat_internals": "Interpretability findings", "feat_eval_behaviour": "Behaviour under evaluation",
+    "feat_agentic_action": "Agentic action in the world", "feat_capability_success": "What it succeeds at",
+    "feat_capability_failure": "What it fails at", "feat_scale": "Scale and brain comparison",
+}
+FEATURE_FAMILIES = {
+    "built": {"label": "How it is built", "features": ["feat_prediction_objective", "feat_architecture", "feat_training_data", "feat_post_training", "feat_scale"]},
+    "lacks": {"label": "What it lacks", "features": ["feat_memory_continuity", "feat_embodiment", "feat_instances"]},
+    "inside": {"label": "What it says and what is inside", "features": ["feat_self_report", "feat_internals"]},
+    "does": {"label": "What it does", "features": ["feat_capability_success", "feat_capability_failure", "feat_eval_behaviour", "feat_agentic_action"]},
+}
+FEATURE_DIRECTIONS = ("for", "against", "both_or_neutral")
 GROUP_LABELS = {"academic": "Academic", "ai_field": "AI field", "general": "General and culture", "journalism": "Journalism and politics", "religion": "Religion and spirituality"}
+
+# Engagement norms. A post is compared with the other newsletter and podcast posts of its publication in the window
+# (archive-meta crawl, stage 6). Restacked Notes are excluded: they carry the original's reaction count and would
+# inflate the norm of any publication that restacks a lot. A ratio needs at least MIN_NORM_POSTS other posts.
+NORM_TYPES = ("newsletter", "podcast")
+NORM_METRICS = {"reactions": "reaction_count", "comments": "comment_count", "restacks": "restack_count"}
+MIN_NORM_POSTS = 10
 
 
 def quarter(date: str | None) -> str | None:
@@ -46,6 +71,18 @@ def _final(ctx: Ctx, entity_type: str) -> dict[int, dict[str, str]]:
     return out
 
 
+def _evidence(ctx: Ctx, construct: str, entity_type: str = "post") -> dict[int, str]:
+    """Claude's latest evidence quote per item for one construct (the quote behind the coder-of-record value;
+    a human decision changes the value in code_final, not the quote)."""
+    out: dict[int, str] = {}
+    for eid, ev in ctx.conn.execute(
+        """SELECT c.entity_id, c.evidence FROM codes c JOIN code_runs r ON r.id=c.code_run_id
+           WHERE r.engine='claude' AND c.entity_type=? AND c.construct=? AND c.evidence IS NOT NULL AND c.evidence!='' ORDER BY c.coded_at""",
+        (entity_type, construct)):
+        out[int(eid)] = ev
+    return out
+
+
 def stance_item_names(cb: Codebook) -> list[str]:
     """The fourteen 0.1.0 stance items: retired from 0.2.0 but still exported as the raw view behind the axes."""
     return [c.name for c in cb.by_group("stance", retired=True)] or [c.name for c in cb.by_group("stance")]
@@ -56,19 +93,60 @@ def relevant_ids(ctx: Ctx) -> list[int]:
         "SELECT entity_id FROM code_final WHERE entity_type='post' AND construct='relevance' AND value IN ('central','substantial') ORDER BY entity_id")]
 
 
+def post_norm(own: dict[str, int], others: list[dict[str, int]]) -> dict:
+    """How one post compares with the other posts of its publication: for each metric the leave-one-out mean
+    (`baseline`), the post's rank among all of them (1 = highest, ties share the better rank) and the ratio of
+    the post to the baseline (None when there are fewer than MIN_NORM_POSTS other posts or the baseline is 0)."""
+    n = len(others)
+    out: dict = {"n": n}
+    for m in NORM_METRICS:
+        v = own.get(m) or 0
+        vals = [o.get(m) or 0 for o in others]
+        base = sum(vals) / n if n else None
+        rank = 1 + sum(1 for x in vals if x > v)
+        ratio = round(v / base, 2) if base and n >= MIN_NORM_POSTS else None
+        out[m] = {"baseline": round(base, 2) if base is not None else None, "rank": rank, "ratio": ratio}
+    return out
+
+
+def load_norms(ctx: Ctx, ids: list[int]) -> tuple[dict[int, dict], dict[int, dict]]:
+    """Per-post norms for `ids` and per-publication means over all of the publication's NORM_TYPES posts in the window."""
+    by_pub: dict[int, list[dict]] = defaultdict(list)
+    q = ",".join("?" * len(NORM_TYPES))
+    for r in ctx.conn.execute(
+            f"SELECT id, publication_id, reaction_count, comment_count, restack_count FROM posts WHERE post_date >= ? AND title IS NOT NULL AND type IN ({q})",
+            (ctx.cutoff, *NORM_TYPES)):
+        by_pub[int(r["publication_id"])].append({"id": int(r["id"]), **{m: r[col] for m, col in NORM_METRICS.items()}})
+    wanted = set(ids)
+    pub_of = {int(r[0]): int(r[1]) for r in ctx.conn.execute(f"SELECT id, publication_id FROM posts WHERE id IN ({','.join('?' * len(ids))})", ids)}
+    norms: dict[int, dict] = {}
+    for pid in ids:
+        rows = by_pub.get(pub_of[pid], [])
+        own = next((r for r in rows if r["id"] == pid), None)
+        if own is None:   # the post is not a newsletter/podcast or has no title: compare with all of them, rank unknown
+            norms[pid] = post_norm({}, rows)
+            norms[pid]["n"] = len(rows)
+            continue
+        norms[pid] = post_norm(own, [r for r in rows if r["id"] != pid])
+    pubs: dict[int, dict] = {}
+    for pub, rows in by_pub.items():
+        pubs[pub] = {"n": len(rows), **{m: round(sum((r[m] or 0) for r in rows) / len(rows), 2) for m in NORM_METRICS}}
+    return norms, pubs
+
+
 def load_posts(ctx: Ctx, cb: Codebook) -> list[dict]:
     ids = relevant_ids(ctx)
     codes = _final(ctx, "post")
     pub_codes = _final(ctx, "publication")
     stance_items = stance_item_names(cb)
     arg_items = [c.name for c in cb.by_group("argument")]
+    feat_items = [c.name for c in cb.by_group("feature")]
     q = ",".join("?" * len(ids))
     channels: dict[int, set[str]] = defaultdict(set)
     for pid, src in ctx.conn.execute(f"SELECT entity_id, source FROM discovery WHERE entity_type='post' AND entity_id IN ({q})", ids):
         channels[int(pid)].add(src)
-    # publication baselines over every known post in the window (corpus + archive context)
-    base = {int(r[0]): (r[1], r[2], r[3]) for r in ctx.conn.execute(
-        "SELECT publication_id, AVG(reaction_count), COUNT(*), AVG(restack_count) FROM posts WHERE post_date >= ? AND title IS NOT NULL GROUP BY publication_id", (ctx.cutoff,))}
+    norms, _ = load_norms(ctx, ids)
+    revision_quotes = _evidence(ctx, "view_revised")
     layout = {int(r[0]): r for r in ctx.conn.execute(f"SELECT post_id, x, y, cluster, cluster_prob FROM post_layout WHERE post_id IN ({q})", ids)}
     net = {int(r[0]): r for r in ctx.conn.execute(f"SELECT post_id, in_pubs, in_posts, pagerank, community FROM network_nodes WHERE post_id IN ({q})", ids)}
     labels = {int(r[0]): r[1] for r in ctx.conn.execute("SELECT cluster, label FROM topics")}
@@ -82,8 +160,7 @@ def load_posts(ctx: Ctx, cb: Codebook) -> list[dict]:
         c = codes.get(pid, {})
         pc = pub_codes.get(int(r["publication_id"]), {})
         community = pc.get("community")
-        b = base.get(int(r["publication_id"]))
-        baseline = b[0] if b else None
+        norm = norms[pid]
         lay = layout.get(pid)
         n = net.get(pid)
         out.append({
@@ -92,14 +169,20 @@ def load_posts(ctx: Ctx, cb: Codebook) -> list[dict]:
             "publication_id": int(r["publication_id"]), "host": r["host"], "publication": r["pub_name"], "author": r["author_name"], "subscribers": r["subs"],
             "community": community, "group": GROUPS.get(community or "", "general"),
             "relevance": c.get("relevance"), "genre": c.get("genre"), "claim_object": c.get("claim_object"), "reports_lab_view": c.get("reports_lab_view"),
+            "view_revised": c.get("view_revised"),
+            "view_revised_quote": revision_quotes.get(pid) if c.get("view_revised") not in (None, "none") else None,
             "stance": {k: c.get(k) for k in stance_items},
             "axes": axes_for(c, {k: c.get(k) for k in stance_items})[0],
             "axes_source": axes_for(c, {k: c.get(k) for k in stance_items})[1],
             "arguments": [k for k in arg_items if c.get(k) == "true"],
+            # feature -> direction for the features the post points to; `features_coded` separates a post with no
+            # features (all not_cited) from one the feature pass has not reached
+            "features": {k: c[k] for k in feat_items if c.get(k) not in (None, "not_cited")},
+            "features_coded": any(c.get(k) is not None for k in feat_items),
             "reactions": r["reaction_count"], "comments": r["comment_count"], "restacks": r["restack_count"],
-            "baseline_reactions": round(baseline, 2) if baseline is not None else None,
-            "over_performance": round((r["reaction_count"] or 0) / baseline, 2) if baseline else None,
-            "pub_posts_in_window": b[1] if b else None,
+            "norm": norm,
+            "baseline_reactions": norm["reactions"]["baseline"], "over_performance": norm["reactions"]["ratio"], "pub_rank": norm["reactions"]["rank"],
+            "pub_posts_in_window": norm["n"] + 1,
             "ai_flag": r["is_ai_generated_text"], "paywalled": 1 if r["audience"] == "only_paid" else 0, "post_type": r["type"],
             "channels": sorted(channels.get(pid, ())), "unbiased": bool(channels.get(pid, set()) & UNBIASED),
             "cluster": int(lay["cluster"]) if lay else None, "cluster_label": labels.get(int(lay["cluster"])) if lay else None,
@@ -172,6 +255,67 @@ def argument_tables(posts: list[dict], cb: Codebook) -> list[dict]:
             "axes_experience_now": _count(with_arg, lambda p: p["axes"]["experience_now"]),
         })
     return out
+
+
+def feature_tables(ctx: Ctx, posts: list[dict], cb: Codebook) -> dict:
+    """The thirteen `feat_*` questions: how often each feature of the systems is pointed to, in which direction,
+    by publication type, and by quarter on the recency-unbiased channels. Shares are of posts the feature pass has
+    coded, so a partial pass reports shares rather than undercounts. Example quotes are Claude's evidence for the
+    highest-reaction posts in each direction."""
+    coded = [p for p in posts if p["features_coded"]]
+    n = len(coded) or 1
+    unbiased = [p for p in coded if p["unbiased"] and p["quarter"]]
+    quarters = sorted({p["quarter"] for p in unbiased})
+    group_n = {g: sum(1 for p in coded if p["group"] == g) for g in GROUP_LABELS}
+    quarter_n = {qq: sum(1 for p in unbiased if p["quarter"] == qq) for qq in quarters}
+    family_of = {f: fam for fam, d in FEATURE_FAMILIES.items() for f in d["features"]}
+    out = []
+    for c in cb.by_group("feature"):
+        with_f = [p for p in coded if c.name in p["features"]]
+        over = [p["over_performance"] for p in with_f if p["over_performance"] is not None]
+        ev = _evidence(ctx, c.name)
+        examples = {}
+        for d in FEATURE_DIRECTIONS:
+            top = sorted((p for p in with_f if p["features"][c.name] == d and ev.get(p["id"])), key=lambda p: -(p["reactions"] or 0))[:4]
+            examples[d] = [{"id": p["id"], "title": p["title"], "publication": p["publication"] or p["host"], "url": p["url"], "date": p["date"], "quote": ev[p["id"]]} for p in top]
+        out.append({
+            "name": c.name, "label": FEATURE_LABELS.get(c.name, c.name), "family": family_of.get(c.name), "instructions": c.instructions,
+            "n": len(with_f), "share": round(len(with_f) / n, 4),
+            "direction": {d: sum(1 for p in with_f if p["features"][c.name] == d) for d in FEATURE_DIRECTIONS},
+            "by_group": {g: {d: sum(1 for p in with_f if p["group"] == g and p["features"][c.name] == d) for d in FEATURE_DIRECTIONS} for g in GROUP_LABELS},
+            "by_quarter_unbiased": {qq: {d: sum(1 for p in with_f if p["unbiased"] and p["quarter"] == qq and p["features"][c.name] == d) for d in FEATURE_DIRECTIONS} for qq in quarters},
+            "median_over_performance": round(statistics.median(over), 2) if over else None,
+            "examples": examples,
+        })
+    per_post = Counter(len(p["features"]) for p in coded)
+    # Co-citation: how often two features are pointed to in the same post (upper triangle, by name order).
+    names = [c.name for c in cb.by_group("feature")]
+    pairs = Counter()
+    for p in coded:
+        fs = sorted(p["features"])
+        for i, a in enumerate(fs):
+            for b in fs[i + 1:]:
+                pairs[(a, b)] += 1
+    # By side. A post affirms if it answers yes (or a qualified yes) on at least one of the six questions and no on
+    # none; it denies if the reverse. For each side: the features cited in the side's own direction, counted over
+    # the side's posts that cite at least one such feature, and how many such features each of those posts cites.
+    def side(p: dict) -> str | None:
+        ys = sum(1 for a in AXES if p["axes"][a] in ("yes", "yes_qualified"))
+        ns = sum(1 for a in AXES if p["axes"][a] == "no")
+        return "affirm" if ys and not ns else "deny" if ns and not ys else None
+    sides = {}
+    for s, d in (("affirm", "for"), ("deny", "against")):
+        ps = [p for p in coded if side(p) == s]
+        citing = [p for p in ps if any(v == d for v in p["features"].values())]
+        sides[s] = {"direction": d, "n": len(ps), "citing": len(citing),
+                    "features": {f: sum(1 for p in citing if p["features"].get(f) == d) for f in names},
+                    "per_post": {str(k): v for k, v in sorted(Counter(sum(1 for v in p["features"].values() if v == d) for p in citing).items())}}
+    return {"features": out, "directions": list(FEATURE_DIRECTIONS), "families": [{"key": k, **v} for k, v in FEATURE_FAMILIES.items()],
+            "labels": FEATURE_LABELS, "group_labels": GROUP_LABELS, "sides": sides,
+            "n_posts": len(posts), "n_coded": len(coded), "n_unbiased": len(unbiased), "group_n": group_n, "quarter_n_unbiased": quarter_n,
+            "features_per_post": {str(k): v for k, v in sorted(per_post.items())},
+            "any_feature": sum(1 for p in coded if p["features"]),
+            "co_citation": [{"a": a, "b": b, "n": v} for (a, b), v in pairs.items()], "names": names}
 
 
 def topic_tables(ctx: Ctx, posts: list[dict]) -> list[dict]:
@@ -392,8 +536,10 @@ def publication_tables(ctx: Ctx, posts: list[dict]) -> list[dict]:
     for p in posts:
         by_pub[p["publication_id"]].append(p)
     net = {int(r[0]): r for r in ctx.conn.execute("SELECT publication_id, in_pubs, out_pubs, pagerank, betweenness, community FROM pub_network")}
+    _, pub_norms = load_norms(ctx, [p["id"] for p in posts])
     out = []
     for pid, ps in by_pub.items():
+        pn = pub_norms.get(pid)
         u = ctx.conn.execute("SELECT host, name, author_name, free_subscriber_magnitude, hero_text, harvest_posts_in_window FROM publications WHERE id=?", (pid,)).fetchone()
         n = net.get(pid)
         community = (pub_codes.get(pid) or {}).get("community")
@@ -402,7 +548,8 @@ def publication_tables(ctx: Ctx, posts: list[dict]) -> list[dict]:
             "community": community, "group": GROUPS.get(community or "", "general"),
             "relevant_posts": len(ps), "posts_in_window": u["harvest_posts_in_window"],
             "relevant_share": round(len(ps) / u["harvest_posts_in_window"], 4) if u["harvest_posts_in_window"] else None,
-            "median_reactions": statistics.median([p["reactions"] or 0 for p in ps]), "baseline_reactions": ps[0]["baseline_reactions"],
+            "median_reactions": statistics.median([p["reactions"] or 0 for p in ps]),
+            "baseline_reactions": pn["reactions"] if pn else None, "norm_posts": pn["n"] if pn else 0,
             "in_pubs": int(n["in_pubs"]) if n else 0, "out_pubs": int(n["out_pubs"]) if n else 0, "pagerank": round(n["pagerank"], 6) if n else None,
             "betweenness": round(n["betweenness"], 2) if n else None, "network_community": int(n["community"]) if n else None,
             "stance_current_conscious": _count(ps, lambda p: p["stance"].get("current_conscious")),
@@ -558,6 +705,7 @@ def export(ctx: Ctx, out_dir: Path | None = None) -> Path:
         "stance.json": stance_tables(posts, cb),
         "stance_axes.json": axis_tables(posts),
         "arguments.json": argument_tables(posts, cb),
+        "features.json": feature_tables(ctx, posts, cb),
         "topics.json": topic_tables(ctx, posts),
         "network.json": network_tables(ctx, posts),
         "sources.json": source_tables(ctx, posts),

@@ -53,3 +53,29 @@ def test_merge_works_by_identifier_then_title():
     assert emotions["citing_posts"] == {4, 5, 6} and "https://transformer-circuits.pub/2026/emotions/index.html" in emotions["aliases"]
     assert "https://eleosai.org/" in out and "https://linkedin.com/company/eleos-ai-research" in out   # org names never merge
     assert "https://example.org/a" in out and len(out) == 5
+
+
+def test_post_norm_leave_one_out_rank_and_threshold():
+    from mcreview.export import MIN_NORM_POSTS, post_norm
+    others = [{"reactions": 2, "comments": 0, "restacks": 1}] * (MIN_NORM_POSTS - 1) + [{"reactions": 20, "comments": 0, "restacks": 0}]
+    n = post_norm({"reactions": 10, "comments": 3, "restacks": 1}, others)
+    assert n["n"] == MIN_NORM_POSTS
+    # baseline excludes the post itself: (9*2 + 20) / 10
+    assert n["reactions"]["baseline"] == 3.8 and n["reactions"]["ratio"] == round(10 / 3.8, 2)
+    assert n["reactions"]["rank"] == 2                       # one other post is higher
+    assert n["comments"]["ratio"] is None                    # baseline 0: no ratio
+    assert n["restacks"]["rank"] == 1                        # ties share the better rank
+    # too few other posts: baseline and rank still reported, no ratio
+    small = post_norm({"reactions": 10, "comments": 0, "restacks": 0}, others[:3])
+    assert small["reactions"]["baseline"] == 2 and small["reactions"]["ratio"] is None and small["reactions"]["rank"] == 1
+    empty = post_norm({"reactions": 10, "comments": 0, "restacks": 0}, [])
+    assert empty["reactions"]["baseline"] is None and empty["reactions"]["ratio"] is None
+
+
+def test_gold_allocation_fixed_and_proportional():
+    from mcreview.gold import _allocate
+
+    strata = {"a": list(range(100)), "b": list(range(30)), "c": list(range(5))}
+    assert _allocate(strata, 20, {"a": 8, "b": 8, "c": 8}) == {"a": 8, "b": 8, "c": 5}   # capped by availability
+    prop = _allocate(strata, 27)
+    assert sum(prop.values()) == 27 and prop["a"] == 20 and prop["b"] == 6 and prop["c"] == 1
