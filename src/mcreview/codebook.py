@@ -29,6 +29,9 @@ class Construct:
     since: str = ""                     # codebook version in which this definition was introduced; codes at any
                                         # version >= since are valid for it (unchanged constructs are not re-coded)
     retired_in: str | None = None       # first version without the construct (retired constructs only)
+    carries: dict[str, list[str]] = field(default_factory=dict)  # earlier version -> values coded there that stay
+                                        # valid under this definition (a tightened rubric that can only move
+                                        # codes to its abstain value keeps the earlier abstains)
 
     @property
     def values(self) -> list[str]:
@@ -36,7 +39,7 @@ class Construct:
 
     @property
     def abstain(self) -> str | None:
-        for cand in ("not_addressed", "not_applicable", "irrelevant", "other"):
+        for cand in ("not_addressed", "not_applicable", "irrelevant", "not_cited", "none", "other"):
             if cand in self.options:
                 return cand
         return None
@@ -60,15 +63,16 @@ class Codebook:
         group = c.get("group", "publication")
         since = str(c.get("since") or self.version)
         retired_in = str(c["retired_in"]) if c.get("retired_in") else None
+        carries = {str(k): [str(v) for v in vs] for k, vs in (c.get("carries") or {}).items()}
         if group == "stance":
             instr = c.get("instructions") or (
                 "What is the author's own position on this claim? Claim: " + c["claim"].strip()
             )
             # 0.1.0 items share `stance_options`; 0.2.0 questions carry their own.
-            return Construct(c["name"], group, prim, instr.strip(), options=dict(c.get("options") or self.stance_options), claim=c["claim"].strip(), since=since, retired_in=retired_in)
+            return Construct(c["name"], group, prim, instr.strip(), options=dict(c.get("options") or self.stance_options), claim=c["claim"].strip(), since=since, retired_in=retired_in, carries=carries)
         if prim == "choice":
-            return Construct(c["name"], group, prim, c["instructions"].strip(), options=c["options"], since=since, retired_in=retired_in)
-        return Construct(c["name"], group, prim, c["instructions"].strip(), criteria=c.get("criteria") or {}, since=since, retired_in=retired_in)
+            return Construct(c["name"], group, prim, c["instructions"].strip(), options=c["options"], since=since, retired_in=retired_in, carries=carries)
+        return Construct(c["name"], group, prim, c["instructions"].strip(), criteria=c.get("criteria") or {}, since=since, retired_in=retired_in, carries=carries)
 
     # -- versions -------------------------------------------------------------
     @staticmethod
@@ -76,10 +80,11 @@ class Codebook:
         """Comparable tuple of a post codebook version ('0.2.0'; a publication version '0.2.0/pub0.1.3' uses its base)."""
         return tuple(int(x) for x in version.split("/")[0].split("."))
 
-    def accepts(self, construct: str, version: str, entity_type: str = "post") -> bool:
+    def accepts(self, construct: str, version: str, entity_type: str = "post", value: str | None = None) -> bool:
         """Whether codes recorded at `version` are valid for `construct` under this codebook: for posts, the
-        construct is current (not retired) and `version` is at or after the construct's `since`, and before
-        `retired_in` for retired ones; for publications, the exact publication code version."""
+        construct is current (not retired) and `version` is at or after the construct's `since` (or `value` is
+        one the construct carries forward from `version`), and before `retired_in` for retired ones; for
+        publications, the exact publication code version."""
         if entity_type == "publication":
             return version == self.pub_code_version
         c = self._lookup(construct)
@@ -87,7 +92,7 @@ class Codebook:
             return False
         v = self._vt(version)
         if v < self._vt(c.since):
-            return False
+            return value is not None and value in c.carries.get(version.split("/")[0], ())
         return c.retired_in is None or v < self._vt(c.retired_in)
 
     @property
@@ -188,7 +193,7 @@ class Codebook:
     def render_markdown(self) -> str:
         out = [f"# Codebook v{self.version}", "", "Generated from `config/codebook.yaml` by `mcreview codebook render`. Edit the YAML, not this file.", "",
                "## Domain", "", self.domain, ""]
-        groups = [("relevance", "A. Relevance gate"), ("structure", "C. Genre and object"), ("stance", "B. Stance questions"), ("argument", "E. Arguments")]
+        groups = [("relevance", "A. Relevance gate"), ("structure", "C. Genre and object"), ("stance", "B. Stance questions"), ("revision", "D. Change of view"), ("argument", "E. Arguments"), ("feature", "F. Features of AI systems pointed to")]
         for g, title in groups:
             out += [f"## {title}", ""]
             for c in self.by_group(g):

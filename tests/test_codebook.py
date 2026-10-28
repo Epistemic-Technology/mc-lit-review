@@ -18,7 +18,7 @@ def test_stance_questions_carry_claims_and_uniform_levels():
     assert len(stance) == 6
     allowed = {"yes", "yes_qualified", "no", "unsure", "discussed", "reports_only", "not_addressed"}
     for c in stance:
-        assert c.claim and c.instructions and c.since == cb.version
+        assert c.claim and c.instructions and c.since == "0.2.0"
         assert set(c.options) <= allowed and {"yes", "no", "discussed", "reports_only", "not_addressed"} <= set(c.options)
     retired = cb.by_group("stance", retired=True)
     assert len(retired) == 14 and all(list(c.options) == list(cb.stance_options) and c.retired_in == "0.2.0" for c in retired)
@@ -27,7 +27,11 @@ def test_stance_questions_carry_claims_and_uniform_levels():
 def test_versions_accept_unchanged_constructs_from_earlier_codebooks():
     cb = Codebook()
     assert cb.get("relevance").since == "0.1.0" and cb.accepts("relevance", "0.1.0") and cb.accepts("relevance", "0.2.0")
-    assert cb.get("experience_now").since == "0.2.0" and not cb.accepts("experience_now", "0.1.0") and cb.accepts("experience_now", "0.2.0")
+    assert cb.get("experience_now").since == "0.2.0" and not cb.accepts("experience_now", "0.1.0") and cb.accepts("experience_now", "0.2.0") and cb.accepts("experience_now", "0.3.0")
+    # 0.3.1 tightened view_revised: 0.3.0 codes are stale except `none`, which the stricter rule carries forward.
+    assert cb.get("view_revised").since == "0.3.1" and not cb.accepts("view_revised", "0.2.0") and cb.accepts("view_revised", "0.3.1")
+    assert not cb.accepts("view_revised", "0.3.0") and not cb.accepts("view_revised", "0.3.0", value="toward_minds")
+    assert cb.accepts("view_revised", "0.3.0", value="none") and not cb.accepts("view_revised", "0.2.0", value="none")
     assert cb.accepts("current_conscious", "0.1.0") and not cb.accepts("current_conscious", "0.2.0")   # retired
     assert not cb.accepts("no_such_construct", "0.2.0")
     assert cb.accepts("community", cb.pub_code_version, "publication") and not cb.accepts("community", "0.1.0/pub0.1.2", "publication")
@@ -68,3 +72,11 @@ def test_system_prompt_and_markdown_mention_every_construct():
     for c in cb.constructs:
         assert c.name in sys_prompt and c.name in md
     assert cb.version in md
+
+
+def test_view_revised_is_a_choice_with_direction_and_abstain():
+    cb = Codebook()
+    c = cb.get("view_revised")
+    assert c.group == "revision" and c.primitive == "choice"
+    assert list(c.options) == ["toward_minds", "away_from_minds", "none"] and c.abstain == "none"
+    assert "view_revised" in cb.render_markdown() and "D. Change of view" in cb.render_markdown()

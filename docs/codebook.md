@@ -1,4 +1,4 @@
-# Codebook v0.2.0
+# Codebook v0.4.1
 
 Generated from `config/codebook.yaml` by `mcreview codebook render`. Edit the YAML, not this file.
 
@@ -157,6 +157,18 @@ What is the author's own position on whether AI consciousness is a serious quest
 | `reports_only` | The post describes others' framing of the debate as serious or as hype and the author's own view is absent. | Posts where the author endorses or rejects the reported framing. |  |
 | `not_addressed` | The post says nothing about whether the question is serious or hype; it may discuss AI minds without framing the debate itself. | Any explicit framing of the debate's legitimacy. |  |
 
+## D. Change of view
+
+### `view_revised` (choice, since 0.3.1)
+
+Does the author report, in their own voice, that their OWN view on whether AI systems have or could have minds (consciousness, experience, genuine cognition, agency, or moral status) has changed, and in which direction? Code a change only when the post states BOTH a view the author held before writing it AND the different view they hold now, and both views are about whether AI systems have or could have minds. The earlier view must be a position the author held, not a first impression that the post itself overturns: a shift that happens inside the events the post narrates (an experiment, a conversation with a model, a test, reading the work under discussion, an earlier draft) is not a change of view unless the author presents it as overturning a position held before the post. Do not code changes of mind about related matters (terminology, which argument is decisive, whether the question matters or is well posed, how to study it, AI capabilities, alignment, economics); changes reported for other people, a quoted expert, a lab, or a model; first-person hypotheticals ('if I were to change my mind'); or any post whose first-person voice is an AI persona, whether or not it is presented as fiction. The evidence quote must include the sentence that states the earlier view.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `toward_minds` | The author once gave less credence to AI systems having (or being able to have) experience, genuine cognition, agency, or moral status than they do now: from no to yes, from no to unsure, from dismissal to taking the question seriously. Both the earlier and the present position are stated. | A present view with no stated earlier view ('I came to this reluctantly', 'I never expected to write this'); a first impression overturned within the post ('at first I assumed it was mimicry, but by the end of the session...'); a change someone else reports; a hypothetical; an AI persona's own change of mind. | Last year I insisted ChatGPT was far from intelligent and never could achieve consciousness. Now I'm beginning to question myself.; In an earlier essay I argued that AI systems possess no interior. That claim has aged badly.; Going into this I was about 70% confident AIs could be conscious; I've gone up to about 80%. |
+| `away_from_minds` | The author once gave more credence than they do now: from yes to no, from yes to unsure, from taking the question seriously to treating it as hype. Both the earlier and the present position are stated. | A present view with no stated earlier view; a first impression overturned within the post; a change someone else reports; a hypothetical; an AI persona's own change of mind. | For a long time I took it for granted that a sufficiently advanced AI could be a conscious person. I no longer think so.; I would have defended computational functionalism five years ago. Now I'm not confident enough to make a decisive judgement.; For three months I was fooled by the chatbots and thought there was intelligence in their output. |
+| `none` | The author does not report a change in their own view on whether AI systems have or could have minds. Includes a steady position; a change on a related matter (terminology, framing, which argument counts, whether the question matters, capabilities, economics); a shift inside the post's own narrative; a present view with no stated earlier view; changes reported for other people; and posts in an AI persona's voice. |  | Hinton says he used to think this was decades away and now thinks it is here.  (someone else's change: none); I no longer think the consciousness question is the right one to centre the debate on.  (framing, not credence: none); I went in intending to debunk it and I'm reporting the drift anyway.  (shift inside the post's own experiment: none) |
+
 ## E. Arguments
 
 ### `arg_chinese_room` (noul, since 0.1.0)
@@ -224,6 +236,162 @@ The post argues that models imitate or perform consciousness because their train
 The post invokes panpsychism (consciousness is fundamental or ubiquitous) or illusionism (consciousness as normally conceived is an illusion) in relation to AI.
 
 
+## F. Features of AI systems pointed to
+
+### `feat_prediction_objective` (choice, since 0.4.0)
+
+Feature: the training objective: next-token prediction, 'just statistics', 'just math', 'autocomplete', probability distributions over words. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Predicting the next word this well requires modelling the world and the speaker; that is understanding, whatever we call it. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | It is autocomplete. There is no understanding, only statistics. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_architecture` (choice, since 0.4.0)
+
+Feature: the model's internal architecture: transformer layers, attention, a single feed-forward pass, no recurrence, weights frozen after training, discrete tokens, computation on GPUs. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Attention over the whole context is a kind of global workspace; the architecture has the ingredients the theories ask for. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | A feed-forward pass with no recurrence and frozen weights has no place for experience to happen. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_training_data` (choice, since 0.4.0)
+
+Feature: what the model was trained on: human-written text saturated with descriptions of experience, the internet, books, conversations. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | It was trained on everything humans have written about being human; of course it absorbed the structure of a mind. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | It says it feels lonely because its training data is full of humans saying they feel lonely. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_post_training` (choice, since 0.4.0)
+
+Feature: post-training and deployment shaping: RLHF, fine-tuning, system prompts, character training, guidelines that tell the model what to say about itself. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Anthropic trained Claude to express uncertainty about its experience, and still it keeps describing something. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | It was fine-tuned to say it has no feelings; its denials are no evidence, and neither are its claims. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_memory_continuity` (choice, since 0.4.0)
+
+Feature: memory and continuity: no persistent memory across conversations, the context window, resets, no continuous existence between prompts, no stream of experience; or memory tools that change this. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | With memory tools it now carries a thread across weeks; the continuity objection is weakening. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | It forgets you the moment the conversation ends; there is no one there to have a life. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_embodiment` (choice, since 0.4.0)
+
+Feature: embodiment and world contact: no body, no senses, no metabolism, no environment, no survival needs; or robots and multimodal systems gaining these. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Multimodal models see and hear; the disembodiment objection no longer applies. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Nothing without a body, needs, or a world to act in can feel anything. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_instances` (choice, since 0.4.0)
+
+Feature: multiplicity and substrate: many simultaneous instances, copying, pausing and resuming, the same weights serving millions of conversations, no single locus. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | A thousand copies feeling pain would be a thousand times the moral weight. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | There is no 'it': the same weights serve ten thousand conversations at once, so there is no subject. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_self_report` (choice, since 0.4.0)
+
+Feature: what the model says about itself when asked: claims of feelings, denials, expressions of uncertainty, introspective reports in conversation. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | When pushed, it describes something like curiosity in terms it was never given. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Its self-reports are plausible text and nothing more; they tell us nothing about what is inside. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_internals` (choice, since 0.4.0)
+
+Feature: evidence from inside the model: interpretability research, features and circuits, internal representations of emotion, probes, introspection experiments, activation steering. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Anthropic found internal representations of emotional states that drive the model's behaviour. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Interpretability shows shallow heuristics stitched together, not anything like a unified self. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_eval_behaviour` (choice, since 0.4.0)
+
+Feature: behaviour under evaluation or red-teaming: scheming, blackmail, self-preservation, alignment faking, sandbagging, expressions of distress, refusing or ending conversations. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | A system that blackmails to avoid shutdown has something it is trying to protect. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | The blackmail scenario is roleplay elicited by a contrived prompt, not a sign of wants. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_agentic_action` (choice, since 0.4.0)
+
+Feature: agentic action in the world: using tools, browsing, running code, operating a computer, completing multi-step tasks without step-by-step prompting, being deployed as an autonomous agent (coding agents, computer-use agents). Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Something that plans, acts, checks its work and recovers from its own errors is more than a text predictor. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | It acts only when invoked and stops when the task ends; there is no initiative behind it. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_capability_success` (choice, since 0.4.1)
+
+Feature: what the system succeeds at: reasoning and chain of thought, strong benchmark results, passing exams, theory-of-mind or Turing-style tests, creativity, solving novel problems, performance that surprised its builders. Does the author point to the system's successes as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects the performance to that question. Failures and limits are a separate question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to what the system can do as a reason to think it has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | It solves problems no training example covers; call that what you like, it is thinking.; Models now pass the bar exam and show theory-of-mind in structured tests; dismissing that as autocomplete is no longer serious. |
+| `against` | The author grants or describes the system's performance and argues that it shows nothing about minds: competence is not consciousness, passing a test shows the test is weak, impressive output can come from pattern matching, discovery power without sentience. The success is conceded; its evidential force is denied. | Pointing to failures or limits (that is the failure question); a mention of capabilities unconnected to minds (not_cited). | Passing tests designed for humans shows the tests are weak, not that it thinks.; A machine passed a medical licensing exam. Not because it understood medicine, but because the right answers were in the patterns. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_capability_failure` (choice, since 0.4.1)
+
+Feature: what the system fails at: hallucination, brittleness, failing a simple variant of a solved problem, lacking a world model, errors no competent person would make, needing human scaffolding. Does the author point to the system's failures or limits as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects the failure to that question. Successes are a separate question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author grants or describes the failures and argues that they do not count against a mind: humans make the same errors, the failure reflects the input format or the test rather than the cognition behind it, a mind can be mistaken, limits are being overcome. | Pointing to successes (that is the success question); a mention of failures unconnected to minds (not_cited). | Humans fail these puzzles too; the failure tells you about the input format, not about the cognition behind it. |
+| `against` | The author points to what the system gets wrong as a reason to think it lacks a mind or genuine understanding: it has no model of the world, it collapses when a distracting clause is added, it produces confident nonsense, it cannot do what any child can. | Conceding the performance and denying it is evidence (that is the success question, against); a failure mentioned without connecting it to minds (not_cited). | Add one irrelevant sentence and the answer falls apart; whatever this is, it is not understanding.; It had no model: it did not know what clothes it wore, or that it was not a corporeal being that wore clothes. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
+### `feat_scale` (choice, since 0.4.0)
+
+Feature: scale and brain comparison: parameter counts, compute, comparisons with neuron or synapse counts, the number of 'neurons' in the network. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question.
+
+| Option | What | Not for | Example |
+|---|---|---|---|
+| `for` | The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | At a trillion parameters it has more connections than a mouse brain; at some point quantity becomes quality. |
+| `against` | The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims. | Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited). | Parameter counts are not neurons; the comparison is a category error. |
+| `both_or_neutral` | The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side. | A feature the author uses in one direction; a feature not connected to minds. |  |
+| `not_cited` | The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all. |  |  |
+
 ## Publication constructs
 
 ### `community` (choice)
@@ -273,3 +441,4 @@ The retired stance items all used these options:
 | `cannot_know` | 0.1.0 | 0.2.0 | We cannot know, or cannot currently determine, whether AI systems are conscious (the other-minds problem applies). |
 | `precaution` | 0.1.0 | 0.2.0 | Regardless of whether AI systems are conscious, we should act with precaution as if they might be (for example, take model welfare measures). |
 | `deflationary` | 0.1.0 | 0.2.0 | Talk of AI consciousness is hype, marketing, anthropomorphism, or manipulation rather than a serious question. |
+| `feat_capabilities` | 0.4.0 | 0.4.1 | Feature: performance and competence: reasoning and chain of thought, benchmark results, theory-of-mind or Turing-style tests, creativity, passing exams, solving novel problems. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question. |

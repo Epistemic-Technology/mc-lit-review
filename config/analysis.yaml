@@ -83,6 +83,35 @@ gold:
       population: axes_shift
       shift: {axis: cognition_now, derived: ["no"], coded: [yes_qualified]}
       constructs: [cognition_now]
+    # Codebook 0.3.1 (2026-10-20): the change-of-mind construct. Two targeted checks, not population estimates
+    # (`targeted: true` keeps them out of the engine-versus-human table). `revision` verifies the non-none codes,
+    # stratified by coded value with counts per value; `revision_missed` is the false-negative check: posts coded
+    # none whose body contains a first-person change-of-mind phrase. Both were redrawn after the 0.3.1 re-code
+    # (the 0.3.0 samples were never verified).
+    revision:
+      n: 55
+      population: coded
+      coded: {construct: view_revised, values: [toward_minds, away_from_minds]}
+      allocation: {toward_minds: 34, away_from_minds: 21}
+      constructs: [view_revised]
+      targeted: true
+    revision_missed:
+      n: 15
+      population: coded
+      coded: {construct: view_revised, values: [none]}
+      body_like: ["%I used to think%", "%I used to believe%", "%I was wrong%", "%changed my mind%", "%I have come around%",
+                  "%I've come around%", "%I’ve come around%", "%I no longer think%", "%I no longer believe%"]
+      constructs: [view_revised]
+      targeted: true
+    # Codebook 0.4.0 (2026-10-22): the feature questions (which features of the systems the author points to, and in
+    # which direction), verified against Claude's quotes on a random sample of relevant posts. 0.4.1 (2026-10-23)
+    # split capabilities into success and failure; the sample is the same 40 posts.
+    features:
+      n: 40
+      population: relevant
+      constructs: [feat_prediction_objective, feat_architecture, feat_training_data, feat_post_training, feat_memory_continuity,
+                   feat_embodiment, feat_instances, feat_self_report, feat_internals, feat_eval_behaviour, feat_agentic_action,
+                   feat_capability_success, feat_capability_failure, feat_scale]
     publications:
       n: 30
       population: publications_relevant

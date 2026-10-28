@@ -55,6 +55,39 @@ def _axes_shift_population(ctx: Ctx, cb: Codebook, shift: dict) -> list[int]:
     return sorted(pid for pid, c in coded.items() if c in want_c and derive(old.get(pid, {}))[axis] in want_d)
 
 
+def _coded_population(ctx: Ctx, spec: dict) -> dict[str, list[int]]:
+    """Relevant posts whose coder-of-record value on `coded.construct` is one of `coded.values`, keyed by that value
+    (the stratum). `body_like`, if given, keeps only posts whose body matches at least one SQL LIKE pattern: used for
+    a false-negative check (coded none, but the text has the phrases the construct is about)."""
+    c = spec["coded"]
+    q = ",".join("?" * len(c["values"]))
+    sql = f"""SELECT f.value, f.entity_id FROM code_final f JOIN code_final r ON r.entity_type='post' AND r.entity_id=f.entity_id AND r.construct='relevance'
+              JOIN posts p ON p.id=f.entity_id
+              WHERE f.entity_type='post' AND f.construct=? AND f.value IN ({q}) AND r.value IN ('central','substantial')"""
+    args: list = [c["construct"], *c["values"]]
+    likes = spec.get("body_like") or []
+    if likes:
+        sql += " AND (" + " OR ".join("p.body_text LIKE ?" for _ in likes) + ")"
+        args += list(likes)
+    out: dict[str, list[int]] = defaultdict(list)
+    for val, eid in ctx.conn.execute(sql + " ORDER BY f.entity_id", args):
+        out[val].append(int(eid))
+    return out
+
+
+def _allocate(strata: dict[str, list[int]], n: int, fixed: dict[str, int] | None = None) -> dict[str, int]:
+    """How many to draw per stratum: the configured counts, capped by availability, else proportional allocation
+    with largest-remainder rounding."""
+    if fixed:
+        return {k: min(int(fixed.get(k, 0)), len(v)) for k, v in strata.items()}
+    total = sum(len(v) for v in strata.values())
+    alloc = {k: n * len(v) / total for k, v in strata.items()}
+    take = {k: int(a) for k, a in alloc.items()}
+    for k in sorted(alloc, key=lambda k: alloc[k] - take[k], reverse=True)[: n - sum(take.values())]:
+        take[k] += 1
+    return take
+
+
 def sample(ctx: Ctx, name: str) -> int:
     cfg = ctx.settings.analysis["gold"]
     spec = cfg["samples"][name]
@@ -74,6 +107,9 @@ def sample(ctx: Ctx, name: str) -> int:
                WHERE f.entity_type='post' AND f.construct='relevance' AND f.value IN ('central','substantial') ORDER BY 1""")]
     elif pop == "axes_shift":
         et, ids = "post", _axes_shift_population(ctx, cb, spec["shift"])
+    elif pop == "coded":
+        coded = _coded_population(ctx, spec)
+        et, ids = "post", [pid for v in coded.values() for pid in v]
     else:
         raise ValueError(pop)
     if not ids:
@@ -86,16 +122,19 @@ def sample(ctx: Ctx, name: str) -> int:
         s = spec["shift"]
         rng.shuffle(ids)
         rows = [(pid, f"{s['axis']}:{'/'.join(s['derived'])}>{'/'.join(s['coded'])}") for pid in ids[:n]]
+    elif pop == "coded":
+        # A targeted check of the codes, not a population estimate: stratum is the coded value, counts per value
+        # from `allocation` when given.
+        take = _allocate(coded, n, spec.get("allocation"))
+        for k, v in coded.items():
+            rng.shuffle(v)
+            rows += [(pid, f"{spec['coded']['construct']}={k}") for pid in v[: take[k]]]
     elif et == "post":
         cache: dict = {}
         strata: dict[str, list[int]] = defaultdict(list)
         for pid in ids:
             strata[_stratum(ctx, pid, cfg["strata"]["channel"], list(cfg["strata"]["engagement_bands"]), cache)].append(pid)
-        # proportional allocation with largest-remainder rounding
-        alloc = {k: n * len(v) / len(ids) for k, v in strata.items()}
-        take = {k: int(a) for k, a in alloc.items()}
-        for k in sorted(alloc, key=lambda k: alloc[k] - take[k], reverse=True)[: n - sum(take.values())]:
-            take[k] += 1
+        take = _allocate(strata, n)
         for k, v in strata.items():
             rng.shuffle(v)
             rows += [(pid, k) for pid in v[: take[k]]]
@@ -130,6 +169,9 @@ def export(ctx: Ctx, name: str, out: Path, lead_chars: int = 1500) -> Path:
             p = ctx.conn.execute("SELECT title, subtitle, canonical_url, post_date, body_text FROM posts WHERE id=?", (eid,)).fetchone()
             item.update({"title": p["title"], "subtitle": p["subtitle"], "url": p["canonical_url"], "date": p["post_date"],
                          "lead": (p["body_text"] or "")[:lead_chars], "body": p["body_text"] or ""})
+            if spec.get("body_like"):   # the phrases that put the post in the sample, for the coder tool to highlight
+                body_l = (p["body_text"] or "").lower()
+                item["hits"] = [ph for ph in (x.strip("%") for x in spec["body_like"]) if ph.lower() in body_l]
         else:
             from .code import state_for_publication
 
@@ -141,7 +183,7 @@ def export(ctx: Ctx, name: str, out: Path, lead_chars: int = 1500) -> Path:
             """SELECT c.construct, c.value, c.evidence, r.codebook_version FROM codes c JOIN code_runs r ON r.id=c.code_run_id
                WHERE r.engine='claude' AND c.entity_type=? AND c.entity_id=? ORDER BY c.coded_at""",
             (s["entity_type"], eid)):
-            if cb.accepts(con, ver, s["entity_type"]) and (not cons or con in cons):
+            if cb.accepts(con, ver, s["entity_type"], val) and (not cons or con in cons):
                 codes[con] = {"value": val, "evidence": ev, "source": "claude"}
         if not codes:
             for (e, con), (val, p, conf, _) in jev_mean.items():
@@ -181,17 +223,21 @@ def import_codes(ctx: Ctx, path: Path) -> int:
 
 def human_agreement(ctx: Ctx) -> list[dict]:
     """Engine vs human on the verified items, per construct and per engine, over the random samples only.
-    Targeted samples (names starting `shift_`, drawn from specific cells of the derived-versus-coded matrix)
-    are excluded: they are checks on those cells, not population estimates. Reads the engines' own codes
+    Targeted samples (`targeted: true` in the config, or names starting `shift_`: drawn from specific cells of the
+    derived-versus-coded matrix, or from the non-none codes of one construct) are excluded: they are checks on
+    those cells, not population estimates. Reads the engines' own codes
     (not code_final, where human decisions replace engine values once materialised)."""
     from .code import _claude_codes, _jev_mean
 
     cb = Codebook()
+    targeted = {n for n, sp in ctx.settings.analysis["gold"]["samples"].items() if sp.get("targeted") or n.startswith("shift_")}
     per: dict[tuple[str, str], list[bool]] = defaultdict(list)
     for et in ("post", "publication"):
         engines = {"jev": {k: v[0] for k, v in _jev_mean(ctx, cb, et).items()}, "claude": {k: v[0] for k, v in _claude_codes(ctx, cb, et).items()}}
-        for eid, con, hv in ctx.conn.execute(
-            "SELECT s.entity_id, g.construct, g.value FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL AND s.sample_name NOT LIKE 'shift\\_%' ESCAPE '\\'", (et,)):
+        for eid, con, hv, sname in ctx.conn.execute(
+            "SELECT s.entity_id, g.construct, g.value, s.sample_name FROM gold_codes g JOIN gold_samples s ON s.id=g.sample_id WHERE s.entity_type=? AND g.value IS NOT NULL", (et,)):
+            if sname in targeted:
+                continue
             key = (int(eid), con)
             for name, codes in engines.items():
                 if key in codes:

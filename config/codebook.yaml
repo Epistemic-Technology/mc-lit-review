@@ -6,7 +6,37 @@
 # meaningful and fixed; each option has structured criteria (what / not_for / examples); one judgment
 # per question; direct positive phrasing; no double negatives.
 
-version: "0.2.0"
+version: "0.4.1"
+# 0.4.1 (2026-10-23): `feat_capabilities` split into `feat_capability_success` and `feat_capability_failure`, and
+# retired. Reading its `against` quotes found two different moves under one code: conceding the performance and
+# denying it is evidence ("competence is not consciousness", "passing the exam shows the exam is weak"), and denying
+# the performance ("it fails once a distracting clause is added"). The first is a philosophical move that survives any
+# capability gain; the second is an empirical claim that erodes as models improve. The pooled code could not say
+# which one was behind the feature's fall from two thirds to two fifths of posts. Each new question keeps the four
+# directions, so "success cited against" (the dissociation move) and "failure cited for" ("humans fail too") are
+# recorded. Only the two new constructs are coded; the other twelve features keep `since: "0.4.0"`.
+# 0.4.0 (2026-10-22): one construct group added, `feature` (thirteen questions, `feat_*`): which features of AI
+# systems the author points to as bearing on whether they have minds, and in which direction (for, against,
+# both_or_neutral, not_cited). The argument codes bundle a feature with an inference (stochastic parrot, mimicry,
+# self-report, biological); this group separates the evidence base from the inference, adds features no argument
+# code covers (memory and continuity, multiple instances, interpretability internals, evaluation behaviour,
+# agentic action, capabilities, scale, architecture), and records direction. `agentic_action` is the motivating
+# case: the stance question `agency_now` excludes agents in the product sense, so a post arguing from what models
+# now do in the world had nowhere to register. Nothing else changed; every other construct keeps its `since`.
+# 0.3.1 (2026-10-20): `view_revised` tightened and `other_change` dropped. Reading every 0.3.0 non-none code found
+# the rubric admitting (a) shifts that happen inside the post's own narrative (an experiment, a conversation, a draft)
+# rather than between a view once held and the view now held, (b) posts with a present view but no stated earlier
+# one, (c) AI-persona posts in a non-fiction register, which the "as fiction" exclusion missed, and (d) under
+# `other_change`, any first-person "I now think" clause near the topic, on economics, terminology or someone else's
+# argument. The construct now requires a stated earlier view AND a stated present view, both about whether AI
+# systems have or could have minds, with the earlier one held before the post; two directions remain. Only the
+# 288 posts coded non-none at 0.3.0 are re-coded: a 0.3.0 `none` stays `none` under the stricter rule (`carries`).
+# 0.3.0 (2026-10-10): one construct added, `view_revised` (group `revision`): whether the author reports that their
+# own view on machine minds has changed, and in which direction. Motivated by a scan of the coded stance sequences
+# per publication (only four publications show a credible yes-to-no or no-to-yes turn across several posts) and a
+# phrase search of the relevant bodies ("I used to think", "I was wrong": 45 hits, a third of them on-topic
+# first-person revisions). Nothing else changed: the six stance questions now carry `since: "0.2.0"` and every
+# other construct `since: "0.1.0"`, so only the new construct is coded at 0.3.0.
 # 0.2.0 (2026-10-08): the fourteen 0.1.0 stance items were too granular to read and strongly redundant (pairs
 # agreed 88-98% when both committed; most items unaddressed in 70-90% of relevant posts). Six stance questions
 # replace them, each with its own options and a shared level scheme; the old items are kept under
@@ -57,6 +87,21 @@ stance_options:
   not_addressed:
     what: "The claim does not come up in the post."
     not_for: "Anything the post touches even briefly."
+    examples: []
+
+# Shared option text for the `feat_*` questions (0.4.0). Each feature supplies its own examples; the two capability
+# questions (0.4.1) write their own `what` text because "for" and "against" mean something specific there.
+feature_options:
+  for_what: &feat_for "The author points to this feature as a reason to think the system has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible."
+  against_what: &feat_against "The author points to this feature as a reason to think the system lacks a mind, or as deflating or undermining such claims."
+  directed_not_for: &feat_not_for "Reporting someone else's use of the feature without endorsing it (both_or_neutral); a mention of the feature unconnected to whether the system has a mind (not_cited)."
+  both: &feat_both
+    what: "The author raises the feature as relevant to whether the system has a mind without giving it a direction: argues it cuts both ways, treats it as changing the question, or reports others citing it without taking a side."
+    not_for: "A feature the author uses in one direction; a feature not connected to minds."
+    examples: []
+  not_cited: &feat_none
+    what: "The feature is not connected to whether the system has a mind. It may be mentioned for other reasons (a product review, a capabilities roundup, a safety discussion) or not at all."
+    not_for: ""
     examples: []
 
 constructs:
@@ -172,6 +217,7 @@ constructs:
   # `claim` is the proposition the author is coded on; `instructions` is what the engine is asked.
   - name: experience_now
     group: stance
+    since: "0.2.0"
     primitive: choice
     claim: "Current LLM-based systems have consciousness, subjective experience, feelings, or the capacity to suffer."
     instructions: "What is the author's own position on whether current LLM-based systems have consciousness, subjective experience, feelings, or the capacity to suffer? Treat functional emotions or 'some minimal form of experience' as a yes if the author presents them as genuine experience."
@@ -203,6 +249,7 @@ constructs:
 
   - name: cognition_now
     group: stance
+    since: "0.2.0"
     primitive: choice
     claim: "Current LLM-based systems genuinely think, reason, understand, or know (not merely simulate it)."
     instructions: "What is the author's own position on whether current LLM-based systems genuinely think, reason, understand language or the world, or have knowledge, as opposed to merely simulating these? This question is about cognition, not experience or feelings, and not about goals or agency."
@@ -238,6 +285,7 @@ constructs:
 
   - name: agency_now
     group: stance
+    since: "0.2.0"
     primitive: choice
     claim: "Current LLM-based systems have genuine goals, preferences, or agency of their own."
     instructions: "What is the author's own position on whether current LLM-based systems have genuine goals, preferences, drives, or agency of their own, as opposed to only pursuing objectives assigned by their training or their users? This question is about agency, not experience and not reasoning ability."
@@ -269,6 +317,7 @@ constructs:
 
   - name: possible
     group: stance
+    since: "0.2.0"
     primitive: choice
     claim: "AI systems could, in principle, be conscious or genuinely think."
     instructions: "What is the author's own position on whether AI systems of some kind could ever be conscious or genuinely think? This is about possibility in principle, not about today's systems; code the author's view of what could be achieved, and whether they think the current approach (transformers, large language models) can get there."
@@ -304,6 +353,7 @@ constructs:
 
   - name: moral_status
     group: stance
+    since: "0.2.0"
     primitive: choice
     claim: "AI systems' interests or welfare matter morally: they are, or could become, moral patients."
     instructions: "What is the author's own position on whether AI systems have moral status: whether their interests or welfare matter morally, whether they are moral patients with claims on us, now or in future? Include calls for precaution (acting as if they might matter) as a qualified yes."
@@ -339,6 +389,7 @@ constructs:
 
   - name: serious
     group: stance
+    since: "0.2.0"
     primitive: choice
     claim: "AI consciousness is a serious question (rather than hype, marketing, anthropomorphism, or manipulation)."
     instructions: "What is the author's own position on whether AI consciousness is a serious question worth taking seriously, as opposed to hype, marketing, anthropomorphism, or manipulation? Code the author's framing of the debate itself, not their answer to it: a firm 'no, they are not conscious' can still treat the question as serious."
@@ -363,6 +414,27 @@ constructs:
         what: "The post says nothing about whether the question is serious or hype; it may discuss AI minds without framing the debate itself."
         not_for: "Any explicit framing of the debate's legitimacy."
         examples: []
+
+  # ------------------------------------------------------------------ D. change of view (0.3.0)
+  - name: view_revised
+    group: revision
+    since: "0.3.1"
+    carries: {"0.3.0": [none]}
+    primitive: choice
+    instructions: "Does the author report, in their own voice, that their OWN view on whether AI systems have or could have minds (consciousness, experience, genuine cognition, agency, or moral status) has changed, and in which direction? Code a change only when the post states BOTH a view the author held before writing it AND the different view they hold now, and both views are about whether AI systems have or could have minds. The earlier view must be a position the author held, not a first impression that the post itself overturns: a shift that happens inside the events the post narrates (an experiment, a conversation with a model, a test, reading the work under discussion, an earlier draft) is not a change of view unless the author presents it as overturning a position held before the post. Do not code changes of mind about related matters (terminology, which argument is decisive, whether the question matters or is well posed, how to study it, AI capabilities, alignment, economics); changes reported for other people, a quoted expert, a lab, or a model; first-person hypotheticals ('if I were to change my mind'); or any post whose first-person voice is an AI persona, whether or not it is presented as fiction. The evidence quote must include the sentence that states the earlier view."
+    options:
+      toward_minds:
+        what: "The author once gave less credence to AI systems having (or being able to have) experience, genuine cognition, agency, or moral status than they do now: from no to yes, from no to unsure, from dismissal to taking the question seriously. Both the earlier and the present position are stated."
+        not_for: "A present view with no stated earlier view ('I came to this reluctantly', 'I never expected to write this'); a first impression overturned within the post ('at first I assumed it was mimicry, but by the end of the session...'); a change someone else reports; a hypothetical; an AI persona's own change of mind."
+        examples: ["Last year I insisted ChatGPT was far from intelligent and never could achieve consciousness. Now I'm beginning to question myself.", "In an earlier essay I argued that AI systems possess no interior. That claim has aged badly.", "Going into this I was about 70% confident AIs could be conscious; I've gone up to about 80%."]
+      away_from_minds:
+        what: "The author once gave more credence than they do now: from yes to no, from yes to unsure, from taking the question seriously to treating it as hype. Both the earlier and the present position are stated."
+        not_for: "A present view with no stated earlier view; a first impression overturned within the post; a change someone else reports; a hypothetical; an AI persona's own change of mind."
+        examples: ["For a long time I took it for granted that a sufficiently advanced AI could be a conscious person. I no longer think so.", "I would have defended computational functionalism five years ago. Now I'm not confident enough to make a decisive judgement.", "For three months I was fooled by the chatbots and thought there was intelligence in their output."]
+      none:
+        what: "The author does not report a change in their own view on whether AI systems have or could have minds. Includes a steady position; a change on a related matter (terminology, framing, which argument counts, whether the question matters, capabilities, economics); a shift inside the post's own narrative; a present view with no stated earlier view; changes reported for other people; and posts in an AI persona's voice."
+        not_for: ""
+        examples: ["Hinton says he used to think this was decades away and now thinks it is here.  (someone else's change: none)", "I no longer think the consciousness question is the right one to centre the debate on.  (framing, not credence: none)", "I went in intending to debunk it and I'm reporting the drift anyway.  (shift inside the post's own experiment: none)"]
 
   # ------------------------------------------------------------------ E. arguments (present / absent)
   - name: arg_chinese_room
@@ -431,6 +503,235 @@ constructs:
     primitive: noul
     instructions: "The post invokes panpsychism (consciousness is fundamental or ubiquitous) or illusionism (consciousness as normally conceived is an illusion) in relation to AI."
 
+  # ------------------------------------------------------------------ F. features of AI systems pointed to (0.4.0)
+  # Which features of the systems themselves the author treats as bearing on machine minds, and which way. Direction is
+  # the point: 'no memory' is nearly always a defeater, 'it reports distress' cuts both ways. A feature counts only when
+  # the post connects it to whether the system has a mind; capability talk for its own sake is not_cited.
+  - name: feat_prediction_objective
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: the training objective: next-token prediction, 'just statistics', 'just math', 'autocomplete', probability distributions over words. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["Predicting the next word this well requires modelling the world and the speaker; that is understanding, whatever we call it."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["It is autocomplete. There is no understanding, only statistics."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_architecture
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: the model's internal architecture: transformer layers, attention, a single feed-forward pass, no recurrence, weights frozen after training, discrete tokens, computation on GPUs. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["Attention over the whole context is a kind of global workspace; the architecture has the ingredients the theories ask for."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["A feed-forward pass with no recurrence and frozen weights has no place for experience to happen."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_training_data
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: what the model was trained on: human-written text saturated with descriptions of experience, the internet, books, conversations. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["It was trained on everything humans have written about being human; of course it absorbed the structure of a mind."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["It says it feels lonely because its training data is full of humans saying they feel lonely."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_post_training
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: post-training and deployment shaping: RLHF, fine-tuning, system prompts, character training, guidelines that tell the model what to say about itself. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["Anthropic trained Claude to express uncertainty about its experience, and still it keeps describing something."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["It was fine-tuned to say it has no feelings; its denials are no evidence, and neither are its claims."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_memory_continuity
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: memory and continuity: no persistent memory across conversations, the context window, resets, no continuous existence between prompts, no stream of experience; or memory tools that change this. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["With memory tools it now carries a thread across weeks; the continuity objection is weakening."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["It forgets you the moment the conversation ends; there is no one there to have a life."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_embodiment
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: embodiment and world contact: no body, no senses, no metabolism, no environment, no survival needs; or robots and multimodal systems gaining these. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["Multimodal models see and hear; the disembodiment objection no longer applies."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["Nothing without a body, needs, or a world to act in can feel anything."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_instances
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: multiplicity and substrate: many simultaneous instances, copying, pausing and resuming, the same weights serving millions of conversations, no single locus. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["A thousand copies feeling pain would be a thousand times the moral weight."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["There is no 'it': the same weights serve ten thousand conversations at once, so there is no subject."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_self_report
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: what the model says about itself when asked: claims of feelings, denials, expressions of uncertainty, introspective reports in conversation. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["When pushed, it describes something like curiosity in terms it was never given."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["Its self-reports are plausible text and nothing more; they tell us nothing about what is inside."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_internals
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: evidence from inside the model: interpretability research, features and circuits, internal representations of emotion, probes, introspection experiments, activation steering. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["Anthropic found internal representations of emotional states that drive the model's behaviour."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["Interpretability shows shallow heuristics stitched together, not anything like a unified self."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_eval_behaviour
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: behaviour under evaluation or red-teaming: scheming, blackmail, self-preservation, alignment faking, sandbagging, expressions of distress, refusing or ending conversations. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["A system that blackmails to avoid shutdown has something it is trying to protect."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["The blackmail scenario is roleplay elicited by a contrived prompt, not a sign of wants."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_agentic_action
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: agentic action in the world: using tools, browsing, running code, operating a computer, completing multi-step tasks without step-by-step prompting, being deployed as an autonomous agent (coding agents, computer-use agents). Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["Something that plans, acts, checks its work and recovers from its own errors is more than a text predictor."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["It acts only when invoked and stops when the task ends; there is no initiative behind it."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_capability_success
+    group: feature
+    since: "0.4.1"
+    primitive: choice
+    instructions: "Feature: what the system succeeds at: reasoning and chain of thought, strong benchmark results, passing exams, theory-of-mind or Turing-style tests, creativity, solving novel problems, performance that surprised its builders. Does the author point to the system's successes as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects the performance to that question. Failures and limits are a separate question."
+    options:
+      for:
+        what: "The author points to what the system can do as a reason to think it has, or could have, a mind (experience, genuine cognition, agency of its own, or moral status), or as making such claims more credible."
+        not_for: *feat_not_for
+        examples: ["It solves problems no training example covers; call that what you like, it is thinking.", "Models now pass the bar exam and show theory-of-mind in structured tests; dismissing that as autocomplete is no longer serious."]
+      against:
+        what: "The author grants or describes the system's performance and argues that it shows nothing about minds: competence is not consciousness, passing a test shows the test is weak, impressive output can come from pattern matching, discovery power without sentience. The success is conceded; its evidential force is denied."
+        not_for: "Pointing to failures or limits (that is the failure question); a mention of capabilities unconnected to minds (not_cited)."
+        examples: ["Passing tests designed for humans shows the tests are weak, not that it thinks.", "A machine passed a medical licensing exam. Not because it understood medicine, but because the right answers were in the patterns."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_capability_failure
+    group: feature
+    since: "0.4.1"
+    primitive: choice
+    instructions: "Feature: what the system fails at: hallucination, brittleness, failing a simple variant of a solved problem, lacking a world model, errors no competent person would make, needing human scaffolding. Does the author point to the system's failures or limits as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects the failure to that question. Successes are a separate question."
+    options:
+      for:
+        what: "The author grants or describes the failures and argues that they do not count against a mind: humans make the same errors, the failure reflects the input format or the test rather than the cognition behind it, a mind can be mistaken, limits are being overcome."
+        not_for: "Pointing to successes (that is the success question); a mention of failures unconnected to minds (not_cited)."
+        examples: ["Humans fail these puzzles too; the failure tells you about the input format, not about the cognition behind it."]
+      against:
+        what: "The author points to what the system gets wrong as a reason to think it lacks a mind or genuine understanding: it has no model of the world, it collapses when a distracting clause is added, it produces confident nonsense, it cannot do what any child can."
+        not_for: "Conceding the performance and denying it is evidence (that is the success question, against); a failure mentioned without connecting it to minds (not_cited)."
+        examples: ["Add one irrelevant sentence and the answer falls apart; whatever this is, it is not understanding.", "It had no model: it did not know what clothes it wore, or that it was not a corporeal being that wore clothes."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+  - name: feat_scale
+    group: feature
+    since: "0.4.0"
+    primitive: choice
+    instructions: "Feature: scale and brain comparison: parameter counts, compute, comparisons with neuron or synapse counts, the number of 'neurons' in the network. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for:
+        what: *feat_for
+        not_for: *feat_not_for
+        examples: ["At a trillion parameters it has more connections than a mouse brain; at some point quantity becomes quality."]
+      against:
+        what: *feat_against
+        not_for: *feat_not_for
+        examples: ["Parameter counts are not neurons; the comparison is a category error."]
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
+
 # Constructs no longer coded. Kept so their codes (at the versions they were coded) stay interpretable and so
 # analyses can still read them; never sent to an engine. `retired_in` is the first version without them.
 retired_constructs:
@@ -449,6 +750,18 @@ retired_constructs:
   - {name: cannot_know, group: stance, primitive: choice, since: "0.1.0", retired_in: "0.2.0", claim: "We cannot know, or cannot currently determine, whether AI systems are conscious (the other-minds problem applies)."}
   - {name: precaution, group: stance, primitive: choice, since: "0.1.0", retired_in: "0.2.0", claim: "Regardless of whether AI systems are conscious, we should act with precaution as if they might be (for example, take model welfare measures)."}
   - {name: deflationary, group: stance, primitive: choice, since: "0.1.0", retired_in: "0.2.0", claim: "Talk of AI consciousness is hype, marketing, anthropomorphism, or manipulation rather than a serious question."}
+  # 0.4.0 capabilities feature, split in 0.4.1 into feat_capability_success and feat_capability_failure.
+  - name: feat_capabilities
+    group: feature
+    primitive: choice
+    since: "0.4.0"
+    retired_in: "0.4.1"
+    instructions: "Feature: performance and competence: reasoning and chain of thought, benchmark results, theory-of-mind or Turing-style tests, creativity, passing exams, solving novel problems. Does the author point to this feature as bearing on whether AI systems have or could have minds, and in which direction? Count the feature only when the post connects it to that question."
+    options:
+      for: {what: *feat_for, not_for: *feat_not_for, examples: []}
+      against: {what: *feat_against, not_for: *feat_not_for, examples: []}
+      both_or_neutral: *feat_both
+      not_cited: *feat_none
 
 # Publication-level construct, coded separately with different state (name, tagline, bio, titles).
 publication_constructs:
