@@ -26,11 +26,34 @@ const viewState = {transform: null};
 ```
 
 ```js
+// Cluster colours, assigned like a map: fourteen hues for 33 clusters, so some repeat, but never on clusters whose
+// centroids are Delaunay neighbours, and each repeat goes to the cluster farthest from the colour's other uses.
+// Largest clusters are coloured first. Deterministic, so a cluster keeps its colour across redraws and filters.
+const palette = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948",
+                 "#0e9aa7", "#8c5a2b", "#7c8a16", "#62b3e8", "#b33fb0", "#5f7a99"];
+const clusterColorIndex = (() => {
+  const cents = topics.filter((t) => t.centroid).sort((a, b) => b.size - a.size);
+  const del = d3.Delaunay.from(cents, (c) => c.centroid[0], (c) => c.centroid[1]);
+  const idx = new Map();
+  cents.forEach((c, i) => {
+    const taken = new Set([...del.neighbors(i)].map((j) => idx.get(cents[j].cluster)).filter((v) => v != null));
+    let best = -1, bestScore = -1;
+    palette.forEach((_, ci) => {
+      if (taken.has(ci)) return;
+      const score = Math.min(Infinity, ...cents.filter((o) => idx.get(o.cluster) === ci).map((o) => Math.hypot(o.centroid[0] - c.centroid[0], o.centroid[1] - c.centroid[1])));
+      if (score > bestScore) { bestScore = score; best = ci; }
+    });
+    idx.set(c.cluster, best < 0 ? i % palette.length : best);
+  });
+  return idx;
+})();
+```
+
+```js
 const laid = posts.filter((p) => p.x != null && (!onlyCore || p.cluster_core));
 const labelOf = new Map(topics.map((t) => [t.cluster, t.label]));
 const gc = groupColors(), sc = axisColors();
-const palette = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"];
-const clusterColor = (c) => palette[((c % palette.length) + palette.length) % palette.length];
+const clusterColor = (c) => (clusterColorIndex.has(c) ? palette[clusterColorIndex.get(c)] : "var(--theme-foreground-faintest)");
 let fill, legend = null;
 if (colorBy === "group") { fill = (d) => gc[d.group]; legend = GROUP_ORDER.map((g) => [GROUP_LABELS[g], gc[g]]); }
 else if (colorBy.endsWith("_now")) { fill = (d) => sc[d.axes[colorBy]] || "var(--theme-foreground-faintest)"; legend = ["yes", "yes_qualified", "unsure", "discussed", "no"].map((k) => [LEVEL_LABELS[k], sc[k]]); }
@@ -149,7 +172,7 @@ display(html`<p class="caption">Scroll or pinch to zoom, drag to pan, double-cli
 if (legend) display(html`<div class="caption">${legend.map(([l, c]) => html`<span class="pill"><span class="swatch" style="background:${c}"></span>${l}</span>`)}</div>`);
 ```
 
-<div class="caption">Colouring by cluster cycles eight hues across 33 clusters, so neighbouring clusters can share a colour; use the highlight control or hover to disambiguate. Peripheral posts are those HDBSCAN did not assign and were attached to the nearest cluster.</div>
+<div class="caption">Colouring by cluster uses fourteen hues across 33 clusters, assigned so that neighbouring clusters never share one; a repeated hue marks clusters far apart on the map. Use the highlight control or hover to confirm a cluster. Peripheral posts are those HDBSCAN did not assign and were attached to the nearest cluster.</div>
 
 ## The clusters
 

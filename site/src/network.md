@@ -15,7 +15,7 @@ const net = await FileAttachment("./data/network.json").json();
 ```js
 const minIn = view(Inputs.range([0, 20], {label: "Minimum citing publications", step: 1, value: 2}));
 const onlyTyped = view(Inputs.toggle({label: "Only publications with relevant posts", value: true}));
-const labelTop = view(Inputs.range([0, 80], {label: "Labels in view (top N by citations)", step: 5, value: 20}));
+const labelTop = view(Inputs.range([0, 80], {label: "Labels at full view (top N by citations)", step: 5, value: 20}));
 const minWeight = view(Inputs.range([1, 10], {label: "Minimum links per edge", step: 1, value: 1}));
 const backboneOnly = view(Inputs.toggle({label: "Backbone edges only", value: false}));
 const colorBy = view(Inputs.select(new Map([["Publication type", "group"], ...Object.entries(AXIS_LABELS).map(([k, v]) => [`Position: ${v}`, k])]), {label: "Colour nodes by", value: "group"}));
@@ -100,7 +100,7 @@ circles.append("title").text((n) => {
   return `${n.name || n.host}\n${GROUP_LABELS[n.group] || "untyped"}\ncited by ${n.in_pubs} publications · cites ${n.out_pubs}\n${n.relevant_posts} relevant posts${pos}\nClick to focus; click the name to open its page`;
 });
 // Labels are links to the publication page, in the site's link colour with an underline on hover.
-// They are ranked by citations: at zoom k the top N*k^2 are shown, so zooming in reveals smaller nodes' names.
+// They are ranked by citations; relabel() decides which are shown at each zoom level.
 const labels = root.append("g").attr("stroke", "var(--theme-background)").attr("paint-order", "stroke")
   .selectAll("a").data(ranked).join("a").attr("href", (n) => `./publication/${n.id}`).attr("class", "netlabel")
   .append("text").attr("fill", "var(--theme-foreground-focus)").attr("x", (n) => n.px + r(n.in_pubs) + 3).attr("y", (n) => n.py + 4)
@@ -135,14 +135,28 @@ function relabel(k, ids = focused, t = currentT) {
   currentK = k; currentT = t;
   const set = new Set(ids || []);
   const isF = (n) => set.has(n.id);
-  // Label the top N by citations among the nodes currently inside the viewport, so zooming into a region
-  // labels that region. With a focus, the focused nodes' neighbours in view are labelled first.
+  // Label by citations among the nodes currently inside the viewport, with a budget that grows with zoom
+  // (N at full view, N*k at zoom k), so zooming into a region reveals more of its names without crowding it.
+  // A label is placed only where it leaves clear space around those already placed, in screen space. Focused
+  // nodes are always labelled; with a focus, only the focused nodes and their neighbours are candidates.
   const keep = (n) => !set.size || isF(n) || [...set].some((id) => neighbours.get(id)?.has(n.id));
   const inView = (n) => { const x = t.applyX(n.px), y = t.applyY(n.py); return x >= -20 && x <= W + 20 && y >= -20 && y <= H + 20; };
-  const candidates = ranked.filter((n) => inView(n) && keep(n));
-  const chosen = new Set(candidates.slice(0, labelTop).map((n) => n.id));
-  for (const id of set) chosen.add(id);
-  labels.attr("display", (n) => (chosen.has(n.id) ? null : "none")).attr("font-size", (n) => (isF(n) ? 13 : 11) / k).attr("stroke-width", (n) => (isF(n) ? 4 : 3) / k);
+  const budget = Math.round(labelTop * k);
+  const placed = [];
+  const fits = (b) => !placed.some((o) => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+  const chosen = new Set();
+  let n_placed = 0;
+  for (const n of [...ranked.filter(isF), ...ranked.filter((m) => !isF(m) && keep(m))]) {
+    if (!isF(n) && n_placed >= budget) break;
+    if (!inView(n)) continue;
+    const vx = t.applyX(n.px) + r(n.in_pubs) * (isF(n) ? 1.6 : 1) * k + 3, vy = t.applyY(n.py);
+    const box = [vx - 8, vy - 12, vx + 6 * Math.min((n.name || n.host).length, 34) + 8, vy + 12];
+    if (isF(n) || fits(box)) { placed.push(box); chosen.add(n.id); if (!isF(n)) n_placed++; }
+  }
+  // Text size and its gap from the dot are fixed on screen (divided by k), so names neither shrink nor drift
+  // away from their nodes as the map zooms.
+  labels.attr("display", (n) => (chosen.has(n.id) ? null : "none")).attr("font-size", (n) => (isF(n) ? 13 : 11) / k).attr("stroke-width", (n) => (isF(n) ? 4 : 3) / k)
+    .attr("x", (n) => n.px + r(n.in_pubs) * (isF(n) ? 1.6 : 1) + 3 / k).attr("y", (n) => n.py + 4 / k);
 }
 relabel(1);
 svg.on("click", () => setFocus(null));
@@ -153,7 +167,7 @@ svg.call(zoom).on("dblclick.zoom", () => svg.transition().duration(300).call(zoo
 if (viewState.transform) svg.call(zoom.transform, viewState.transform);
 if (viewState.focused) setFocus(viewState.focused);
 display(svg.node());
-display(html`<p class="caption">Scroll or pinch to zoom, drag to pan, double-click to reset. About twenty labels are shown for whatever is in view, so zooming into a region labels it. Click a node to focus on it and its neighbours; click the name to open the publication page.</p>`);
+display(html`<p class="caption">Scroll or pinch to zoom, drag to pan, double-click to reset. About twenty of the most-cited publications in view are labelled at full view, and more appear as you zoom in, so zooming into a region names its smaller members. Click a node to focus on it and its neighbours; click the name to open the publication page.</p>`);
 const legend = colorBy === "group"
   ? GROUP_ORDER.map((k) => html`<span class="pill"><span class="swatch" style="background:${gc[k]}"></span>${GROUP_LABELS[k]}</span>`)
   : html`<span class="pill"><span class="swatch" style="background:${leanColor(-1)}"></span>No</span><span class="pill"><span class="swatch" style="background:linear-gradient(90deg, ${leanColor(-1)}, ${leanColor(0)}, ${leanColor(1)}); width:60px"></span>lean</span><span class="pill"><span class="swatch" style="background:${leanColor(1)}"></span>Yes</span><span class="pill"><span class="swatch" style="background:${d3.interpolateRgb(surface, leanColor(0))(0.3)}"></span>pale: mostly unsure or non-committal</span><span class="pill"><span class="swatch" style="background:${d3.interpolateRgb(surface, "#b4b3ac")(0.45)}"></span>no position taken</span>`;
