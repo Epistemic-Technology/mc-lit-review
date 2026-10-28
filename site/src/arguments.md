@@ -7,18 +7,18 @@ title: Arguments and sources
 ```js
 import {vlChart} from "./components/charts.js";
 const sources = await FileAttachment("./data/sources.json").json();
-const argSpec = await FileAttachment("./charts/arguments_traction.vl.json").json();
+const argSpec = await FileAttachment("./charts/arguments_frequency.vl.json").json();
 const citedSpec = await FileAttachment("./charts/top_cited_works.vl.json").json();
 const peopleSpec = await FileAttachment("./charts/people_named.vl.json").json();
 ```
 
-## Which arguments appear, and which get traction
+## Which arguments appear
 
 ```js
 display(await vlChart(argSpec));
 ```
 
-<div class="caption">Thirteen argument types coded present or absent per post. Traction is the median of each post's reactions divided by its publication's average reactions over the period, so a value of 1.0 means a typical post for that publication.</div>
+<div class="caption">Thirteen argument types coded present or absent per post. A post can use several, so shares do not sum to 100%.</div>
 
 ## What the discourse cites
 

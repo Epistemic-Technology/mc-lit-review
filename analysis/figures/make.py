@@ -6,6 +6,7 @@ Run: uv run python analysis/figures/make.py [name ...]
 from __future__ import annotations
 
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -94,6 +95,8 @@ AXIS_SCHEME = {"colors": T.AXIS_COLORS, "labels": T.AXIS_LABELS, "pos": "yes", "
 
 def _stance_chart(rows: list[dict], title: str, subtitle: str, height_per_row: int = 26, facet_col: str | None = None, columns: int = 1, scheme: dict | None = None) -> alt.Chart:
     sc = scheme or {"colors": T.STANCE_COLORS, "labels": T.STANCE_LABELS, "pos": "asserts", "neg": "denies", "x_title": "Share of posts addressing the claim"}
+    lim = sc.get("limit", 1.0)
+    ticks = [v for v in (-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1) if abs(v) <= lim] if lim == 1.0 else sorted({round(v * lim / 2, 3) for v in (-2, -1, 0, 1, 2)})
     df = pd.DataFrame(rows)
     order = (df[df.option == sc["pos"]].groupby("item")["asserts_share"].mean().sort_values(ascending=False).index.tolist())
     # In facet mode every layer must be data-less so the facet partition applies; the data goes on the facet.
@@ -102,7 +105,7 @@ def _stance_chart(rows: list[dict], title: str, subtitle: str, height_per_row: i
         y=alt.Y("item:N", sort=order, title=None, axis=alt.Axis(labelLimit=260)),
     )
     bars = base.mark_bar(height=18, cornerRadiusEnd=0).encode(
-        x=alt.X("x0:Q", title=sc["x_title"], axis=alt.Axis(format="%", values=[-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1], labelExpr="abs(datum.value) == 1 ? format(abs(datum.value), '.0%') : format(abs(datum.value), '.0%')", grid=True), scale=alt.Scale(domain=[-1, 1])),
+        x=alt.X("x0:Q", title=sc["x_title"], axis=alt.Axis(format="%", values=ticks, labelExpr="format(abs(datum.value), '.0%')", grid=True), scale=alt.Scale(domain=[-lim, lim])),
         x2="x1:Q",
         color=alt.Color("option:N", scale=alt.Scale(domain=list(sc["colors"]), range=list(sc["colors"].values())),
                         legend=alt.Legend(title="Author's position", labelExpr=json.dumps(sc["labels"]) + "[datum.label]")),
@@ -118,6 +121,8 @@ def _stance_chart(rows: list[dict], title: str, subtitle: str, height_per_row: i
     if facet_col is None:
         n_lab = src.transform_filter(alt.datum.option == sc["pos"]).mark_text(align="left", color=T.MUTED, fontSize=10).encode(
             y=alt.Y("item:N", sort=order), x=alt.value(WIDTH + 44), text=alt.Text("addressing:Q", format=",d"))
+        if sc.get("legend_title"):
+            bars = bars.encode(color=alt.Color("option:N", scale=alt.Scale(domain=list(sc["colors"]), range=list(sc["colors"].values())), legend=alt.Legend(title=sc["legend_title"], labelExpr=json.dumps(sc["labels"]) + "[datum.label]")))
         chart = alt.layer(bars, zero, lab_l, lab_r, n_lab).properties(width=WIDTH, height=height_per_row * len(order), title=alt.Title(title, subtitle=subtitle))
     else:
         chart = alt.layer(bars, zero, lab_l, lab_r).properties(width=WIDTH // columns - 40, height=height_per_row * len(order)).facet(
@@ -250,7 +255,7 @@ def axes_profile_agency():
                    ["Posts with a position on both questions ({total}). Granting goals while unsure about experience", "is the AI-safety framing; the reverse corner is nearly empty."], "axes_profile_agency")
 
 
-# ---------------------------------------------------------------- arguments: frequency x traction
+# ---------------------------------------------------------------- arguments: frequency
 
 ARG_LABELS = {
     "arg_chinese_room": "Chinese room", "arg_stochastic_parrot": "Stochastic parrot / next-token", "arg_hard_problem": "Hard problem",
@@ -261,27 +266,128 @@ ARG_LABELS = {
 }
 
 
-def arguments_scatter():
-    """Two aligned panels on one argument order: how often each argument appears, and how posts using it
-    perform against their publication's baseline. Two measures of different scale -> two charts, one axis each."""
+def arguments_frequency():
+    """How often each argument type appears across relevant posts, most common first."""
     args = load("arguments")
-    df = pd.DataFrame([{"label": ARG_LABELS.get(a["name"], a["name"]), "share": a["share"], "traction": a["median_over_performance"] or 0, "n": a["n"], "cited": a["share_cited"]} for a in args])
+    df = pd.DataFrame([{"label": ARG_LABELS.get(a["name"], a["name"]), "share": a["share"], "n": a["n"], "cited": a["share_cited"]} for a in args])
     order = df.sort_values("share", ascending=False)["label"].tolist()
-    tips = [alt.Tooltip("label:N", title="Argument"), alt.Tooltip("n:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share"), alt.Tooltip("traction:Q", format=".2f", title="Median over-performance"), alt.Tooltip("cited:Q", format=".0%", title="Share cited by another publication")]
+    tips = [alt.Tooltip("label:N", title="Argument"), alt.Tooltip("n:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share"), alt.Tooltip("cited:Q", format=".0%", title="Share cited by another publication")]
     y = alt.Y("label:N", sort=order, title=None, axis=alt.Axis(labelLimit=280))
     freq = alt.Chart(df).mark_bar(height=14, color=T.BLUE).encode(y=y, x=alt.X("share:Q", title="Share of relevant posts", axis=alt.Axis(format="%", grid=True, tickCount=4)), tooltip=tips)
     freq_lab = alt.Chart(df).mark_text(align="left", dx=5, fontSize=11, color=T.INK2).encode(y=y, x="share:Q", text=alt.Text("share:Q", format=".0%"))
-    left = alt.layer(freq, freq_lab).properties(width=250, height=18 * len(df), title=alt.Title("How often it appears", fontSize=13, fontWeight=600, color=T.INK2))
-    ref = alt.Chart(pd.DataFrame({"x": [1.0]})).mark_rule(color=T.AXIS, strokeWidth=1).encode(x="x:Q")
-    dots = alt.Chart(df).mark_point(size=80, color=T.BLUE, stroke=T.SURFACE, strokeWidth=2).encode(
-        y=alt.Y("label:N", sort=order, title=None, axis=None), x=alt.X("traction:Q", title="Median reactions vs the publication's typical post", axis=alt.Axis(grid=True, format=".2f", tickCount=4), scale=alt.Scale(domain=[0.7, 1.1], zero=False)), tooltip=tips)
-    dot_lab = alt.Chart(df).mark_text(align="left", dx=9, fontSize=11, color=T.INK2).encode(y=alt.Y("label:N", sort=order, axis=None), x="traction:Q", text=alt.Text("traction:Q", format=".2f"))
-    ref_txt = alt.Chart(pd.DataFrame({"x": [1.0]})).mark_text(align="left", dx=4, fontSize=10, color=T.MUTED, baseline="top").encode(x="x:Q", y=alt.value(-2), text=alt.value("typical post = 1.0"))
-    right = alt.layer(ref, dots, dot_lab, ref_txt).properties(width=220, height=18 * len(df), title=alt.Title("How it performs", fontSize=13, fontWeight=600, color=T.INK2))
-    chart = alt.hconcat(left, right, spacing=24).properties(title=alt.Title("Which arguments are common, and which get traction",
-                        subtitle="Argument types coded per post. Right: median reactions of posts using the argument, relative to each publication's own posts in the period (1.0 = a typical post)."))
-    chart = chart.configure_concat(spacing=24)
-    save(chart, "arguments_traction")
+    chart = alt.layer(freq, freq_lab).properties(width=WIDTH - 180, height=18 * len(df), title=alt.Title("Which arguments are common",
+                      subtitle="Thirteen argument types coded present or absent per relevant post; a post can use several."))
+    save(chart, "arguments_frequency")
+
+
+# ---------------------------------------------------------------- features of the systems (codebook 0.4.0)
+
+FEATURE_COLORS = {"against": T.RED, "both_or_neutral": T.GRAY_LIGHT, "for": T.BLUE}
+FEATURE_DIR_LABELS = {"against": "Against a mind", "both_or_neutral": "Both ways or no direction", "for": "Toward a mind"}
+
+
+def features_landscape():
+    """Diverging bar per feature: share of coded relevant posts pointing to it, split by direction. Unlike the stance
+    charts the shares are of all coded posts, so bar length is frequency and the split is direction."""
+    ft = load("features")
+    n = ft["n_coded"] or 1
+    rows = []
+    for f in ft["features"]:
+        sh = {d: f["direction"][d] / n for d in ("against", "both_or_neutral", "for")}
+        x = -(sh["against"] + sh["both_or_neutral"] / 2)
+        for d in ("against", "both_or_neutral", "for"):
+            rows.append({"item": f["label"], "option": d, "x0": x, "x1": x + sh[d], "share": sh[d], "n": n, "count": f["direction"][d],
+                         "addressing": f["n"], "facet": None, "asserts_share": sh["for"], "denies_share": sh["against"]})
+            x += sh[d]
+    # Axis limit: the widest bar plus room for its percentage label, rounded up to the next 5%.
+    lim = max(0.1, math.ceil((max(max(abs(r["x0"]), abs(r["x1"])) for r in rows) + 0.08) / 0.05) * 0.05)
+    scheme = {"colors": FEATURE_COLORS, "labels": FEATURE_DIR_LABELS, "pos": "for", "neg": "against", "x_title": "Share of relevant posts pointing to the feature", "limit": lim, "legend_title": "Cited as"}
+    chart = _stance_chart(rows, "Which features of the systems get pointed to, and which way",
+                          f"Share of {n:,} coded relevant posts citing each feature as bearing on machine minds. Right: as reason to think the system has or could have a mind; left: as reason it lacks one. Count of citing posts at right.",
+                          scheme=scheme)
+    save(chart, "features_landscape")
+
+
+def features_over_time(min_n: int = 15):
+    """Share of recency-unbiased relevant posts per quarter that point to each feature, faceted by family. Quarters
+    before the first run of quarters with at least `min_n` coded posts are dropped so every series is unbroken."""
+    ft = load("features")
+    qn = ft["quarter_n_unbiased"]
+    qs = sorted(qn)
+    ok = [qn[q] >= min_n for q in qs]
+    start = next((i for i in range(len(qs)) if all(ok[i:])), len(qs) - 1)
+    fam_label = {f["key"]: f["label"] for f in ft["families"]}
+    rows = []
+    for f in ft["features"]:
+        for q in qs[start:]:
+            c = f["by_quarter_unbiased"].get(q, {})
+            cited = sum(c.values())
+            rows.append({"quarter": q, "family": fam_label[f["family"]], "feature": f["label"], "share": cited / qn[q], "count": cited, "n": qn[q], "for": c.get("for", 0), "against": c.get("against", 0)})
+    df = pd.DataFrame(rows)
+    df["date"] = pd.to_datetime(df["quarter"].str[:4] + "-" + ((df["quarter"].str[5].astype(int) - 1) * 3 + 2).astype(str).str.zfill(2) + "-15")
+    ymax = max(0.1, float(df.share.max()) * 1.05)
+    panels = []
+    # One panel per family with its own colour scale and legend: thirteen series on one legend is unreadable, and a
+    # shared scale would recycle the eight slots. Colours therefore mean different features in different panels.
+    for i, fam in enumerate(ft["families"]):
+        feats = [ft["labels"][n] for n in fam["features"]]
+        sub = df[df.family == fam["label"]]
+        last = i == len(ft["families"]) - 1
+        line = alt.Chart(sub).mark_line(interpolate="monotone", point=alt.OverlayMarkDef(size=30)).encode(
+            x=alt.X("date:T", title=None, axis=alt.Axis(format="%b %Y", grid=False, labelAngle=0, labelPadding=18, labels=last, ticks=last)),
+            y=alt.Y("share:Q", title="Share of posts", axis=alt.Axis(format="%", grid=True, tickCount=4), scale=alt.Scale(domain=[0, ymax])),
+            color=alt.Color("feature:N", scale=alt.Scale(domain=feats, range=T.SLOTS[:len(feats)]), legend=alt.Legend(title=fam["label"], orient="right", direction="vertical", symbolType="stroke", labelLimit=220, titleOrient="top")),
+            tooltip=[alt.Tooltip("feature:N", title="Feature"), alt.Tooltip("quarter:N", title="Quarter"), alt.Tooltip("count:Q", title="Posts citing"), alt.Tooltip("share:Q", format=".0%", title="Share"), alt.Tooltip("for:Q", title="For"), alt.Tooltip("against:Q", title="Against"), alt.Tooltip("n:Q", title="Posts in quarter")])
+        panels.append(line.properties(width=WIDTH - 60, height=140))
+    first_q, last_q = df.quarter.min(), df.quarter.max()
+    chart = alt.vconcat(*panels, spacing=16).resolve_scale(color="independent").properties(
+        title=alt.Title("Features pointed to, over time", subtitle=[f"Share of relevant posts per quarter citing each feature, {first_q} to {last_q}, among the {ft['n_unbiased']:,} coded posts found through web search or citation.",
+                                                                     f"Substack's own search is recency-skewed and excluded; quarters with fewer than {min_n} posts are omitted. One panel per family, each with its own colours."]))
+    save(chart, "features_over_time")
+
+
+SIDE_COLORS = {"deny": T.RED, "affirm": T.BLUE}
+SIDE_LABELS = {"deny": "Denying posts: features cited against a mind", "affirm": "Affirming posts: features cited toward a mind"}
+
+
+def features_sides():
+    """For each feature, the share of denying posts that cite it against a mind (left) and of affirming posts that
+    cite it toward one (right), among the side's posts citing at least one feature their own way, sorted by the
+    denying side. A post's side comes from the six questions: yes on at least one and no on none affirms; the
+    reverse denies (see export.feature_tables)."""
+    ft = load("features")
+    S = ft["sides"]
+    rows = []
+    for s in ("deny", "affirm"):
+        d = S[s]
+        c = d["citing"] or 1
+        for f, cnt in d["features"].items():
+            sh = cnt / c
+            rows.append({"feature": ft["labels"][f], "side": s, "share": sh, "x": -sh if s == "deny" else sh, "count": cnt, "n": d["citing"]})
+    df = pd.DataFrame(rows)
+    order = df[df.side == "deny"].sort_values("share", ascending=False).feature.tolist()
+    lim = math.ceil((df.share.max() + 0.08) / 0.1) * 0.1
+    ticks = [round(v, 1) for v in (-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8) if abs(v) <= lim]
+    color = alt.Color("side:N", scale=alt.Scale(domain=list(SIDE_COLORS), range=list(SIDE_COLORS.values())),
+                      legend=alt.Legend(title=None, labelExpr=json.dumps(SIDE_LABELS) + "[datum.label]", orient="top", direction="vertical", labelLimit=400))
+    tip = [alt.Tooltip("feature:N", title="Feature"), alt.Tooltip("side:N", title="Side"), alt.Tooltip("count:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share"), alt.Tooltip("n:Q", title="Posts on the side citing a feature")]
+    bars = alt.Chart(df).mark_bar(height=16).encode(
+        y=alt.Y("feature:N", sort=order, title=None, axis=alt.Axis(labelLimit=260)),
+        x=alt.X("x:Q", title="Share of the side's feature-citing posts that point to the feature",
+                axis=alt.Axis(format="%", values=ticks, labelExpr="format(abs(datum.value), '.0%')", grid=True), scale=alt.Scale(domain=[-lim, lim])),
+        color=color, tooltip=tip)
+    zero = alt.Chart(df).mark_rule(color=T.AXIS, strokeWidth=1).encode(x=alt.datum(0))
+    lab_l = alt.Chart(df).transform_filter(alt.datum.side == "deny").mark_text(align="right", dx=-5, fontSize=11, color=T.INK2).encode(
+        y=alt.Y("feature:N", sort=order), x="x:Q", text=alt.Text("share:Q", format=".0%"))
+    lab_r = alt.Chart(df).transform_filter(alt.datum.side == "affirm").mark_text(align="left", dx=5, fontSize=11, color=T.INK2).encode(
+        y=alt.Y("feature:N", sort=order), x="x:Q", text=alt.Text("share:Q", format=".0%"))
+    profile = alt.layer(bars, zero, lab_l, lab_r).properties(width=WIDTH, height=24 * len(order))
+    na, nd = S["affirm"], S["deny"]
+    chart = profile.properties(title=alt.Title(
+        "Where each side finds its evidence",
+        subtitle=[f"Posts that commit to a side across the six questions: {nd['n']:,} deny, {na['n']:,} affirm. Of those citing at least one feature in their own direction",
+                  f"({nd['citing']:,} and {na['citing']:,}), the share citing each feature, sorted by the denying side."]))
+    save(chart, "features_sides")
 
 
 # ---------------------------------------------------------------- composition over time
@@ -396,9 +502,10 @@ def topics():
     save(chart, "topics_top")
 
 
-ALL = {"stance_landscape": stance_landscape, "stance_by_group": stance_by_group, "arguments_traction": arguments_scatter, "stance_over_time": stance_over_time,
+ALL = {"stance_landscape": stance_landscape, "stance_by_group": stance_by_group, "arguments_frequency": arguments_frequency, "stance_over_time": stance_over_time,
        "axes_landscape": axes_landscape, "axes_by_group": axes_by_group, "axes_over_time": axes_over_time, "axes_profile": axes_profile, "axes_profile_agency": axes_profile_agency,
-       "top_cited_works": top_cited, "who_writes": who_writes, "people_named": people, "topics_top": topics}
+       "top_cited_works": top_cited, "who_writes": who_writes, "people_named": people, "topics_top": topics,
+       "features_landscape": features_landscape, "features_over_time": features_over_time, "features_sides": features_sides}
 
 if __name__ == "__main__":
     names = sys.argv[1:] or list(ALL)

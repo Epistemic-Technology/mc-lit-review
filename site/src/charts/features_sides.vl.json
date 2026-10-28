@@ -1,0 +1,544 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "data": {
+    "name": "data-0273223365f2c745562c59d5d053a600"
+  },
+  "datasets": {
+    "data-0273223365f2c745562c59d5d053a600": [
+      {
+        "count": 401,
+        "feature": "Next-token prediction objective",
+        "n": 833,
+        "share": 0.48139255702280914,
+        "side": "deny",
+        "x": -0.48139255702280914
+      },
+      {
+        "count": 185,
+        "feature": "Architecture (transformer, no recurrence)",
+        "n": 833,
+        "share": 0.22208883553421369,
+        "side": "deny",
+        "x": -0.22208883553421369
+      },
+      {
+        "count": 324,
+        "feature": "Trained on human text",
+        "n": 833,
+        "share": 0.38895558223289317,
+        "side": "deny",
+        "x": -0.38895558223289317
+      },
+      {
+        "count": 165,
+        "feature": "Post-training shapes what it says",
+        "n": 833,
+        "share": 0.19807923169267708,
+        "side": "deny",
+        "x": -0.19807923169267708
+      },
+      {
+        "count": 78,
+        "feature": "Memory and continuity",
+        "n": 833,
+        "share": 0.0936374549819928,
+        "side": "deny",
+        "x": -0.0936374549819928
+      },
+      {
+        "count": 248,
+        "feature": "Body, senses, world contact",
+        "n": 833,
+        "share": 0.297719087635054,
+        "side": "deny",
+        "x": -0.297719087635054
+      },
+      {
+        "count": 19,
+        "feature": "Many instances, copyable",
+        "n": 833,
+        "share": 0.022809123649459785,
+        "side": "deny",
+        "x": -0.022809123649459785
+      },
+      {
+        "count": 191,
+        "feature": "What it says about itself",
+        "n": 833,
+        "share": 0.22929171668667467,
+        "side": "deny",
+        "x": -0.22929171668667467
+      },
+      {
+        "count": 43,
+        "feature": "Interpretability findings",
+        "n": 833,
+        "share": 0.05162064825930372,
+        "side": "deny",
+        "x": -0.05162064825930372
+      },
+      {
+        "count": 140,
+        "feature": "Behaviour under evaluation",
+        "n": 833,
+        "share": 0.16806722689075632,
+        "side": "deny",
+        "x": -0.16806722689075632
+      },
+      {
+        "count": 153,
+        "feature": "Agentic action in the world",
+        "n": 833,
+        "share": 0.1836734693877551,
+        "side": "deny",
+        "x": -0.1836734693877551
+      },
+      {
+        "count": 651,
+        "feature": "What it succeeds at",
+        "n": 833,
+        "share": 0.7815126050420168,
+        "side": "deny",
+        "x": -0.7815126050420168
+      },
+      {
+        "count": 237,
+        "feature": "What it fails at",
+        "n": 833,
+        "share": 0.2845138055222089,
+        "side": "deny",
+        "x": -0.2845138055222089
+      },
+      {
+        "count": 117,
+        "feature": "Scale and brain comparison",
+        "n": 833,
+        "share": 0.1404561824729892,
+        "side": "deny",
+        "x": -0.1404561824729892
+      },
+      {
+        "count": 180,
+        "feature": "Next-token prediction objective",
+        "n": 1137,
+        "share": 0.158311345646438,
+        "side": "affirm",
+        "x": 0.158311345646438
+      },
+      {
+        "count": 242,
+        "feature": "Architecture (transformer, no recurrence)",
+        "n": 1137,
+        "share": 0.21284080914687775,
+        "side": "affirm",
+        "x": 0.21284080914687775
+      },
+      {
+        "count": 158,
+        "feature": "Trained on human text",
+        "n": 1137,
+        "share": 0.13896218117854,
+        "side": "affirm",
+        "x": 0.13896218117854
+      },
+      {
+        "count": 297,
+        "feature": "Post-training shapes what it says",
+        "n": 1137,
+        "share": 0.2612137203166227,
+        "side": "affirm",
+        "x": 0.2612137203166227
+      },
+      {
+        "count": 299,
+        "feature": "Memory and continuity",
+        "n": 1137,
+        "share": 0.26297273526824977,
+        "side": "affirm",
+        "x": 0.26297273526824977
+      },
+      {
+        "count": 178,
+        "feature": "Body, senses, world contact",
+        "n": 1137,
+        "share": 0.1565523306948109,
+        "side": "affirm",
+        "x": 0.1565523306948109
+      },
+      {
+        "count": 84,
+        "feature": "Many instances, copyable",
+        "n": 1137,
+        "share": 0.07387862796833773,
+        "side": "affirm",
+        "x": 0.07387862796833773
+      },
+      {
+        "count": 375,
+        "feature": "What it says about itself",
+        "n": 1137,
+        "share": 0.32981530343007914,
+        "side": "affirm",
+        "x": 0.32981530343007914
+      },
+      {
+        "count": 316,
+        "feature": "Interpretability findings",
+        "n": 1137,
+        "share": 0.27792436235708,
+        "side": "affirm",
+        "x": 0.27792436235708
+      },
+      {
+        "count": 269,
+        "feature": "Behaviour under evaluation",
+        "n": 1137,
+        "share": 0.23658751099384345,
+        "side": "affirm",
+        "x": 0.23658751099384345
+      },
+      {
+        "count": 209,
+        "feature": "Agentic action in the world",
+        "n": 1137,
+        "share": 0.1838170624450308,
+        "side": "affirm",
+        "x": 0.1838170624450308
+      },
+      {
+        "count": 484,
+        "feature": "What it succeeds at",
+        "n": 1137,
+        "share": 0.4256816182937555,
+        "side": "affirm",
+        "x": 0.4256816182937555
+      },
+      {
+        "count": 207,
+        "feature": "What it fails at",
+        "n": 1137,
+        "share": 0.1820580474934037,
+        "side": "affirm",
+        "x": 0.1820580474934037
+      },
+      {
+        "count": 77,
+        "feature": "Scale and brain comparison",
+        "n": 1137,
+        "share": 0.06772207563764292,
+        "side": "affirm",
+        "x": 0.06772207563764292
+      }
+    ]
+  },
+  "height": 336,
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "field": "side",
+          "legend": {
+            "direction": "vertical",
+            "labelExpr": "{\"deny\": \"Denying posts: features cited against a mind\", \"affirm\": \"Affirming posts: features cited toward a mind\"}[datum.label]",
+            "labelLimit": 400,
+            "orient": "top",
+            "title": null
+          },
+          "scale": {
+            "domain": [
+              "deny",
+              "affirm"
+            ],
+            "range": [
+              "#e34948",
+              "#2a78d6"
+            ]
+          },
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "feature",
+            "title": "Feature",
+            "type": "nominal"
+          },
+          {
+            "field": "side",
+            "title": "Side",
+            "type": "nominal"
+          },
+          {
+            "field": "count",
+            "title": "Posts",
+            "type": "quantitative"
+          },
+          {
+            "field": "share",
+            "format": ".0%",
+            "title": "Share",
+            "type": "quantitative"
+          },
+          {
+            "field": "n",
+            "title": "Posts on the side citing a feature",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "format": "%",
+            "grid": true,
+            "labelExpr": "format(abs(datum.value), '.0%')",
+            "values": [
+              -0.8,
+              -0.6,
+              -0.4,
+              -0.2,
+              0,
+              0.2,
+              0.4,
+              0.6,
+              0.8
+            ]
+          },
+          "field": "x",
+          "scale": {
+            "domain": [
+              -0.9,
+              0.9
+            ]
+          },
+          "title": "Share of the side's feature-citing posts that point to the feature",
+          "type": "quantitative"
+        },
+        "y": {
+          "axis": {
+            "labelLimit": 260
+          },
+          "field": "feature",
+          "sort": [
+            "What it succeeds at",
+            "Next-token prediction objective",
+            "Trained on human text",
+            "Body, senses, world contact",
+            "What it fails at",
+            "What it says about itself",
+            "Architecture (transformer, no recurrence)",
+            "Post-training shapes what it says",
+            "Agentic action in the world",
+            "Behaviour under evaluation",
+            "Scale and brain comparison",
+            "Memory and continuity",
+            "Interpretability findings",
+            "Many instances, copyable"
+          ],
+          "title": null,
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "height": 16,
+        "type": "bar"
+      }
+    },
+    {
+      "encoding": {
+        "x": {
+          "datum": 0
+        }
+      },
+      "mark": {
+        "color": "#c3c2b7",
+        "strokeWidth": 1,
+        "type": "rule"
+      }
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "share",
+          "format": ".0%",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "feature",
+          "sort": [
+            "What it succeeds at",
+            "Next-token prediction objective",
+            "Trained on human text",
+            "Body, senses, world contact",
+            "What it fails at",
+            "What it says about itself",
+            "Architecture (transformer, no recurrence)",
+            "Post-training shapes what it says",
+            "Agentic action in the world",
+            "Behaviour under evaluation",
+            "Scale and brain comparison",
+            "Memory and continuity",
+            "Interpretability findings",
+            "Many instances, copyable"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "right",
+        "color": "#52514e",
+        "dx": -5,
+        "fontSize": 11,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.side === 'deny')"
+        }
+      ]
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "share",
+          "format": ".0%",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "feature",
+          "sort": [
+            "What it succeeds at",
+            "Next-token prediction objective",
+            "Trained on human text",
+            "Body, senses, world contact",
+            "What it fails at",
+            "What it says about itself",
+            "Architecture (transformer, no recurrence)",
+            "Post-training shapes what it says",
+            "Agentic action in the world",
+            "Behaviour under evaluation",
+            "Scale and brain comparison",
+            "Memory and continuity",
+            "Interpretability findings",
+            "Many instances, copyable"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "left",
+        "color": "#52514e",
+        "dx": 5,
+        "fontSize": 11,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.side === 'affirm')"
+        }
+      ]
+    }
+  ],
+  "title": {
+    "subtitle": [
+      "Posts that commit to a side across the six questions: 921 deny, 1,852 affirm. Of those citing at least one feature in their own direction",
+      "(833 and 1,137), the share citing each feature, sorted by the denying side."
+    ],
+    "text": "Where each side finds its evidence"
+  },
+  "width": 600
+}

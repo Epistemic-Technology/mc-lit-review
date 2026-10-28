@@ -1,0 +1,911 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "config": {
+    "axis": {
+      "domainColor": "#c3c2b7",
+      "gridColor": "#e1e0d9",
+      "gridWidth": 1,
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "labelPadding": 6,
+      "tickColor": "#c3c2b7",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleFontWeight": 400
+    },
+    "axisX": {
+      "grid": false
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false
+    },
+    "background": "#fcfcfb",
+    "bar": {
+      "cornerRadiusEnd": 4
+    },
+    "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    "header": {
+      "labelColor": "#0b0b0b",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    },
+    "legend": {
+      "direction": "horizontal",
+      "labelColor": "#52514e",
+      "labelFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "labelFontSize": 12,
+      "orient": "top",
+      "symbolSize": 80,
+      "symbolType": "square",
+      "titleColor": "#898781",
+      "titleFont": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "titleFontSize": 12,
+      "titleOrient": "left"
+    },
+    "line": {
+      "strokeCap": "round",
+      "strokeJoin": "round",
+      "strokeWidth": 2
+    },
+    "point": {
+      "filled": true,
+      "size": 64
+    },
+    "range": {
+      "category": [
+        "#2a78d6",
+        "#eb6834",
+        "#1baf7a",
+        "#eda100",
+        "#e87ba4",
+        "#008300",
+        "#4a3aa7",
+        "#e34948"
+      ]
+    },
+    "text": {
+      "color": "#52514e",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 12
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#0b0b0b",
+      "font": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "fontSize": 18,
+      "fontWeight": 600,
+      "offset": 14,
+      "subtitleColor": "#52514e",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6
+    },
+    "view": {
+      "stroke": null
+    }
+  },
+  "data": {
+    "name": "data-7cdf164564943798fbe25e5539b8941f"
+  },
+  "datasets": {
+    "data-7cdf164564943798fbe25e5539b8941f": [
+      {
+        "addressing": 1316,
+        "asserts_share": 0.05344827586206897,
+        "count": 649,
+        "denies_share": 0.15985221674876848,
+        "facet": null,
+        "item": "Next-token prediction objective",
+        "n": 4060,
+        "option": "against",
+        "share": 0.15985221674876848,
+        "x0": -0.21527093596059116,
+        "x1": -0.055418719211822676
+      },
+      {
+        "addressing": 1316,
+        "asserts_share": 0.05344827586206897,
+        "count": 450,
+        "denies_share": 0.15985221674876848,
+        "facet": null,
+        "item": "Next-token prediction objective",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.11083743842364532,
+        "x0": -0.055418719211822676,
+        "x1": 0.05541871921182265
+      },
+      {
+        "addressing": 1316,
+        "asserts_share": 0.05344827586206897,
+        "count": 217,
+        "denies_share": 0.15985221674876848,
+        "facet": null,
+        "item": "Next-token prediction objective",
+        "n": 4060,
+        "option": "for",
+        "share": 0.05344827586206897,
+        "x0": 0.05541871921182265,
+        "x1": 0.10886699507389161
+      },
+      {
+        "addressing": 1151,
+        "asserts_share": 0.07364532019704434,
+        "count": 401,
+        "denies_share": 0.09876847290640393,
+        "facet": null,
+        "item": "Architecture (transformer, no recurrence)",
+        "n": 4060,
+        "option": "against",
+        "share": 0.09876847290640393,
+        "x0": -0.1543103448275862,
+        "x1": -0.055541871921182276
+      },
+      {
+        "addressing": 1151,
+        "asserts_share": 0.07364532019704434,
+        "count": 451,
+        "denies_share": 0.09876847290640393,
+        "facet": null,
+        "item": "Architecture (transformer, no recurrence)",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.11108374384236454,
+        "x0": -0.055541871921182276,
+        "x1": 0.05554187192118226
+      },
+      {
+        "addressing": 1151,
+        "asserts_share": 0.07364532019704434,
+        "count": 299,
+        "denies_share": 0.09876847290640393,
+        "facet": null,
+        "item": "Architecture (transformer, no recurrence)",
+        "n": 4060,
+        "option": "for",
+        "share": 0.07364532019704434,
+        "x0": 0.05554187192118226,
+        "x1": 0.1291871921182266
+      },
+      {
+        "addressing": 1128,
+        "asserts_share": 0.04556650246305419,
+        "count": 635,
+        "denies_share": 0.1564039408866995,
+        "facet": null,
+        "item": "Trained on human text",
+        "n": 4060,
+        "option": "against",
+        "share": 0.1564039408866995,
+        "x0": -0.19433497536945812,
+        "x1": -0.03793103448275861
+      },
+      {
+        "addressing": 1128,
+        "asserts_share": 0.04556650246305419,
+        "count": 308,
+        "denies_share": 0.1564039408866995,
+        "facet": null,
+        "item": "Trained on human text",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.07586206896551724,
+        "x0": -0.03793103448275861,
+        "x1": 0.03793103448275863
+      },
+      {
+        "addressing": 1128,
+        "asserts_share": 0.04556650246305419,
+        "count": 185,
+        "denies_share": 0.1564039408866995,
+        "facet": null,
+        "item": "Trained on human text",
+        "n": 4060,
+        "option": "for",
+        "share": 0.04556650246305419,
+        "x0": 0.03793103448275863,
+        "x1": 0.08349753694581281
+      },
+      {
+        "addressing": 1011,
+        "asserts_share": 0.08201970443349754,
+        "count": 344,
+        "denies_share": 0.08472906403940887,
+        "facet": null,
+        "item": "Post-training shapes what it says",
+        "n": 4060,
+        "option": "against",
+        "share": 0.08472906403940887,
+        "x0": -0.12586206896551724,
+        "x1": -0.04113300492610837
+      },
+      {
+        "addressing": 1011,
+        "asserts_share": 0.08201970443349754,
+        "count": 334,
+        "denies_share": 0.08472906403940887,
+        "facet": null,
+        "item": "Post-training shapes what it says",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.08226600985221674,
+        "x0": -0.04113300492610837,
+        "x1": 0.04113300492610837
+      },
+      {
+        "addressing": 1011,
+        "asserts_share": 0.08201970443349754,
+        "count": 333,
+        "denies_share": 0.08472906403940887,
+        "facet": null,
+        "item": "Post-training shapes what it says",
+        "n": 4060,
+        "option": "for",
+        "share": 0.08201970443349754,
+        "x0": 0.04113300492610837,
+        "x1": 0.12315270935960591
+      },
+      {
+        "addressing": 877,
+        "asserts_share": 0.08522167487684729,
+        "count": 230,
+        "denies_share": 0.05665024630541872,
+        "facet": null,
+        "item": "Memory and continuity",
+        "n": 4060,
+        "option": "against",
+        "share": 0.05665024630541872,
+        "x0": -0.0937192118226601,
+        "x1": -0.037068965517241384
+      },
+      {
+        "addressing": 877,
+        "asserts_share": 0.08522167487684729,
+        "count": 301,
+        "denies_share": 0.05665024630541872,
+        "facet": null,
+        "item": "Memory and continuity",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.07413793103448275,
+        "x0": -0.037068965517241384,
+        "x1": 0.03706896551724137
+      },
+      {
+        "addressing": 877,
+        "asserts_share": 0.08522167487684729,
+        "count": 346,
+        "denies_share": 0.05665024630541872,
+        "facet": null,
+        "item": "Memory and continuity",
+        "n": 4060,
+        "option": "for",
+        "share": 0.08522167487684729,
+        "x0": 0.03706896551724137,
+        "x1": 0.12229064039408866
+      },
+      {
+        "addressing": 1201,
+        "asserts_share": 0.05443349753694581,
+        "count": 518,
+        "denies_share": 0.12758620689655173,
+        "facet": null,
+        "item": "Body, senses, world contact",
+        "n": 4060,
+        "option": "against",
+        "share": 0.12758620689655173,
+        "x0": -0.18448275862068966,
+        "x1": -0.056896551724137934
+      },
+      {
+        "addressing": 1201,
+        "asserts_share": 0.05443349753694581,
+        "count": 462,
+        "denies_share": 0.12758620689655173,
+        "facet": null,
+        "item": "Body, senses, world contact",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.11379310344827587,
+        "x0": -0.056896551724137934,
+        "x1": 0.056896551724137934
+      },
+      {
+        "addressing": 1201,
+        "asserts_share": 0.05443349753694581,
+        "count": 221,
+        "denies_share": 0.12758620689655173,
+        "facet": null,
+        "item": "Body, senses, world contact",
+        "n": 4060,
+        "option": "for",
+        "share": 0.05443349753694581,
+        "x0": 0.056896551724137934,
+        "x1": 0.11133004926108375
+      },
+      {
+        "addressing": 385,
+        "asserts_share": 0.02857142857142857,
+        "count": 58,
+        "denies_share": 0.014285714285714285,
+        "facet": null,
+        "item": "Many instances, copyable",
+        "n": 4060,
+        "option": "against",
+        "share": 0.014285714285714285,
+        "x0": -0.040270935960591135,
+        "x1": -0.02598522167487685
+      },
+      {
+        "addressing": 385,
+        "asserts_share": 0.02857142857142857,
+        "count": 211,
+        "denies_share": 0.014285714285714285,
+        "facet": null,
+        "item": "Many instances, copyable",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.051970443349753696,
+        "x0": -0.02598522167487685,
+        "x1": 0.025985221674876845
+      },
+      {
+        "addressing": 385,
+        "asserts_share": 0.02857142857142857,
+        "count": 116,
+        "denies_share": 0.014285714285714285,
+        "facet": null,
+        "item": "Many instances, copyable",
+        "n": 4060,
+        "option": "for",
+        "share": 0.02857142857142857,
+        "x0": 0.025985221674876845,
+        "x1": 0.05455665024630542
+      },
+      {
+        "addressing": 1475,
+        "asserts_share": 0.09876847290640393,
+        "count": 543,
+        "denies_share": 0.13374384236453202,
+        "facet": null,
+        "item": "What it says about itself",
+        "n": 4060,
+        "option": "against",
+        "share": 0.13374384236453202,
+        "x0": -0.19913793103448274,
+        "x1": -0.06539408866995072
+      },
+      {
+        "addressing": 1475,
+        "asserts_share": 0.09876847290640393,
+        "count": 531,
+        "denies_share": 0.13374384236453202,
+        "facet": null,
+        "item": "What it says about itself",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.13078817733990147,
+        "x0": -0.06539408866995072,
+        "x1": 0.06539408866995075
+      },
+      {
+        "addressing": 1475,
+        "asserts_share": 0.09876847290640393,
+        "count": 401,
+        "denies_share": 0.13374384236453202,
+        "facet": null,
+        "item": "What it says about itself",
+        "n": 4060,
+        "option": "for",
+        "share": 0.09876847290640393,
+        "x0": 0.06539408866995075,
+        "x1": 0.16416256157635467
+      },
+      {
+        "addressing": 809,
+        "asserts_share": 0.08940886699507389,
+        "count": 87,
+        "denies_share": 0.02142857142857143,
+        "facet": null,
+        "item": "Interpretability findings",
+        "n": 4060,
+        "option": "against",
+        "share": 0.02142857142857143,
+        "x0": -0.06564039408866995,
+        "x1": -0.04421182266009852
+      },
+      {
+        "addressing": 809,
+        "asserts_share": 0.08940886699507389,
+        "count": 359,
+        "denies_share": 0.02142857142857143,
+        "facet": null,
+        "item": "Interpretability findings",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.08842364532019704,
+        "x0": -0.04421182266009852,
+        "x1": 0.04421182266009852
+      },
+      {
+        "addressing": 809,
+        "asserts_share": 0.08940886699507389,
+        "count": 363,
+        "denies_share": 0.02142857142857143,
+        "facet": null,
+        "item": "Interpretability findings",
+        "n": 4060,
+        "option": "for",
+        "share": 0.08940886699507389,
+        "x0": 0.04421182266009852,
+        "x1": 0.1336206896551724
+      },
+      {
+        "addressing": 782,
+        "asserts_share": 0.07561576354679803,
+        "count": 259,
+        "denies_share": 0.06379310344827586,
+        "facet": null,
+        "item": "Behaviour under evaluation",
+        "n": 4060,
+        "option": "against",
+        "share": 0.06379310344827586,
+        "x0": -0.09039408866995075,
+        "x1": -0.02660098522167488
+      },
+      {
+        "addressing": 782,
+        "asserts_share": 0.07561576354679803,
+        "count": 216,
+        "denies_share": 0.06379310344827586,
+        "facet": null,
+        "item": "Behaviour under evaluation",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.053201970443349754,
+        "x0": -0.02660098522167488,
+        "x1": 0.026600985221674874
+      },
+      {
+        "addressing": 782,
+        "asserts_share": 0.07561576354679803,
+        "count": 307,
+        "denies_share": 0.06379310344827586,
+        "facet": null,
+        "item": "Behaviour under evaluation",
+        "n": 4060,
+        "option": "for",
+        "share": 0.07561576354679803,
+        "x0": 0.026600985221674874,
+        "x1": 0.10221674876847289
+      },
+      {
+        "addressing": 696,
+        "asserts_share": 0.06748768472906404,
+        "count": 278,
+        "denies_share": 0.06847290640394088,
+        "facet": null,
+        "item": "Agentic action in the world",
+        "n": 4060,
+        "option": "against",
+        "share": 0.06847290640394088,
+        "x0": -0.08620689655172413,
+        "x1": -0.01773399014778325
+      },
+      {
+        "addressing": 696,
+        "asserts_share": 0.06748768472906404,
+        "count": 144,
+        "denies_share": 0.06847290640394088,
+        "facet": null,
+        "item": "Agentic action in the world",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.035467980295566505,
+        "x0": -0.01773399014778325,
+        "x1": 0.017733990147783256
+      },
+      {
+        "addressing": 696,
+        "asserts_share": 0.06748768472906404,
+        "count": 274,
+        "denies_share": 0.06847290640394088,
+        "facet": null,
+        "item": "Agentic action in the world",
+        "n": 4060,
+        "option": "for",
+        "share": 0.06748768472906404,
+        "x0": 0.017733990147783256,
+        "x1": 0.08522167487684729
+      },
+      {
+        "addressing": 2376,
+        "asserts_share": 0.14532019704433496,
+        "count": 1319,
+        "denies_share": 0.32487684729064037,
+        "facet": null,
+        "item": "What it succeeds at",
+        "n": 4060,
+        "option": "against",
+        "share": 0.32487684729064037,
+        "x0": -0.38238916256157635,
+        "x1": -0.057512315270935976
+      },
+      {
+        "addressing": 2376,
+        "asserts_share": 0.14532019704433496,
+        "count": 467,
+        "denies_share": 0.32487684729064037,
+        "facet": null,
+        "item": "What it succeeds at",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.11502463054187193,
+        "x0": -0.057512315270935976,
+        "x1": 0.05751231527093595
+      },
+      {
+        "addressing": 2376,
+        "asserts_share": 0.14532019704433496,
+        "count": 590,
+        "denies_share": 0.32487684729064037,
+        "facet": null,
+        "item": "What it succeeds at",
+        "n": 4060,
+        "option": "for",
+        "share": 0.14532019704433496,
+        "x0": 0.05751231527093595,
+        "x1": 0.2028325123152709
+      },
+      {
+        "addressing": 847,
+        "asserts_share": 0.061822660098522164,
+        "count": 480,
+        "denies_share": 0.11822660098522167,
+        "facet": null,
+        "item": "What it fails at",
+        "n": 4060,
+        "option": "against",
+        "share": 0.11822660098522167,
+        "x0": -0.13251231527093596,
+        "x1": -0.01428571428571429
+      },
+      {
+        "addressing": 847,
+        "asserts_share": 0.061822660098522164,
+        "count": 116,
+        "denies_share": 0.11822660098522167,
+        "facet": null,
+        "item": "What it fails at",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.02857142857142857,
+        "x0": -0.01428571428571429,
+        "x1": 0.01428571428571428
+      },
+      {
+        "addressing": 847,
+        "asserts_share": 0.061822660098522164,
+        "count": 251,
+        "denies_share": 0.11822660098522167,
+        "facet": null,
+        "item": "What it fails at",
+        "n": 4060,
+        "option": "for",
+        "share": 0.061822660098522164,
+        "x0": 0.01428571428571428,
+        "x1": 0.07610837438423644
+      },
+      {
+        "addressing": 409,
+        "asserts_share": 0.022660098522167486,
+        "count": 249,
+        "denies_share": 0.06133004926108374,
+        "facet": null,
+        "item": "Scale and brain comparison",
+        "n": 4060,
+        "option": "against",
+        "share": 0.06133004926108374,
+        "x0": -0.06970443349753694,
+        "x1": -0.008374384236453196
+      },
+      {
+        "addressing": 409,
+        "asserts_share": 0.022660098522167486,
+        "count": 68,
+        "denies_share": 0.06133004926108374,
+        "facet": null,
+        "item": "Scale and brain comparison",
+        "n": 4060,
+        "option": "both_or_neutral",
+        "share": 0.016748768472906402,
+        "x0": -0.008374384236453196,
+        "x1": 0.008374384236453206
+      },
+      {
+        "addressing": 409,
+        "asserts_share": 0.022660098522167486,
+        "count": 92,
+        "denies_share": 0.06133004926108374,
+        "facet": null,
+        "item": "Scale and brain comparison",
+        "n": 4060,
+        "option": "for",
+        "share": 0.022660098522167486,
+        "x0": 0.008374384236453206,
+        "x1": 0.031034482758620693
+      }
+    ]
+  },
+  "height": 364,
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "field": "option",
+          "legend": {
+            "labelExpr": "{\"against\": \"Against a mind\", \"both_or_neutral\": \"Both ways or no direction\", \"for\": \"Toward a mind\"}[datum.label]",
+            "title": "Cited as"
+          },
+          "scale": {
+            "domain": [
+              "against",
+              "both_or_neutral",
+              "for"
+            ],
+            "range": [
+              "#e34948",
+              "#c3c2b7",
+              "#2a78d6"
+            ]
+          },
+          "type": "nominal"
+        },
+        "stroke": {
+          "value": "#fcfcfb"
+        },
+        "strokeWidth": {
+          "value": 2
+        },
+        "tooltip": [
+          {
+            "field": "item",
+            "title": "Claim",
+            "type": "nominal"
+          },
+          {
+            "field": "option",
+            "title": "Position",
+            "type": "nominal"
+          },
+          {
+            "field": "count",
+            "title": "Posts",
+            "type": "quantitative"
+          },
+          {
+            "field": "share",
+            "format": ".0%",
+            "title": "Share",
+            "type": "quantitative"
+          },
+          {
+            "field": "addressing",
+            "title": "Posts addressing",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "format": "%",
+            "grid": true,
+            "labelExpr": "format(abs(datum.value), '.0%')",
+            "values": [
+              -0.5,
+              -0.25,
+              0.0,
+              0.25,
+              0.5
+            ]
+          },
+          "field": "x0",
+          "scale": {
+            "domain": [
+              -0.5,
+              0.5
+            ]
+          },
+          "title": "Share of relevant posts pointing to the feature",
+          "type": "quantitative"
+        },
+        "x2": {
+          "field": "x1"
+        },
+        "y": {
+          "axis": {
+            "labelLimit": 260
+          },
+          "field": "item",
+          "sort": [
+            "What it succeeds at",
+            "What it says about itself",
+            "Interpretability findings",
+            "Memory and continuity",
+            "Post-training shapes what it says",
+            "Behaviour under evaluation",
+            "Architecture (transformer, no recurrence)",
+            "Agentic action in the world",
+            "What it fails at",
+            "Body, senses, world contact",
+            "Next-token prediction objective",
+            "Trained on human text",
+            "Many instances, copyable",
+            "Scale and brain comparison"
+          ],
+          "title": null,
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "cornerRadiusEnd": 0,
+        "height": 18,
+        "type": "bar"
+      }
+    },
+    {
+      "encoding": {
+        "x": {
+          "datum": 0
+        }
+      },
+      "mark": {
+        "color": "#c3c2b7",
+        "strokeWidth": 1,
+        "type": "rule"
+      }
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "denies_share",
+          "format": ".0%",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "x0",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "item",
+          "sort": [
+            "What it succeeds at",
+            "What it says about itself",
+            "Interpretability findings",
+            "Memory and continuity",
+            "Post-training shapes what it says",
+            "Behaviour under evaluation",
+            "Architecture (transformer, no recurrence)",
+            "Agentic action in the world",
+            "What it fails at",
+            "Body, senses, world contact",
+            "Next-token prediction objective",
+            "Trained on human text",
+            "Many instances, copyable",
+            "Scale and brain comparison"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "right",
+        "color": "#52514e",
+        "dx": -6,
+        "fontSize": 11,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.option === 'against')"
+        }
+      ]
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "asserts_share",
+          "format": ".0%",
+          "type": "quantitative"
+        },
+        "x": {
+          "field": "x1",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "item",
+          "sort": [
+            "What it succeeds at",
+            "What it says about itself",
+            "Interpretability findings",
+            "Memory and continuity",
+            "Post-training shapes what it says",
+            "Behaviour under evaluation",
+            "Architecture (transformer, no recurrence)",
+            "Agentic action in the world",
+            "What it fails at",
+            "Body, senses, world contact",
+            "Next-token prediction objective",
+            "Trained on human text",
+            "Many instances, copyable",
+            "Scale and brain comparison"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "left",
+        "color": "#52514e",
+        "dx": 6,
+        "fontSize": 11,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.option === 'for')"
+        }
+      ]
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "addressing",
+          "format": ",d",
+          "type": "quantitative"
+        },
+        "x": {
+          "value": 644
+        },
+        "y": {
+          "field": "item",
+          "sort": [
+            "What it succeeds at",
+            "What it says about itself",
+            "Interpretability findings",
+            "Memory and continuity",
+            "Post-training shapes what it says",
+            "Behaviour under evaluation",
+            "Architecture (transformer, no recurrence)",
+            "Agentic action in the world",
+            "What it fails at",
+            "Body, senses, world contact",
+            "Next-token prediction objective",
+            "Trained on human text",
+            "Many instances, copyable",
+            "Scale and brain comparison"
+          ],
+          "type": "nominal"
+        }
+      },
+      "mark": {
+        "align": "left",
+        "color": "#898781",
+        "fontSize": 10,
+        "type": "text"
+      },
+      "transform": [
+        {
+          "filter": "(datum.option === 'for')"
+        }
+      ]
+    }
+  ],
+  "title": {
+    "subtitle": "Share of 4,060 coded relevant posts citing each feature as bearing on machine minds. Right: as reason to think the system has or could have a mind; left: as reason it lacks one. Count of citing posts at right.",
+    "text": "Which features of the systems get pointed to, and which way"
+  },
+  "width": 600
+}
