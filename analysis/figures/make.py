@@ -179,17 +179,18 @@ def axes_by_group():
     save(chart, "axes_by_group")
 
 
-def axes_over_time():
-    """Composition by quarter for the two 'now' axes, on the recency-unbiased channels."""
+def axes_over_time(min_n: int = 5):
+    """Composition by quarter for the three 'now' axes, on the recency-unbiased channels. No event markers."""
     st, axes = _axes_meta()
-    events = __import__("yaml").safe_load((ROOT / "config" / "events.yaml").read_text())["events"]
     keys = ["no", "unsure", "discussed", "yes_qualified", "yes"]
     label_of = {a["name"]: a["label"] for a in axes}
     axes_shown = ("experience_now", "cognition_now", "agency_now")
     # Start at the first quarter from which every shown axis stays at or above the threshold, so the series is
-    # unbroken: an omitted quarter in the middle would make the area interpolate across a gap.
+    # unbroken: an omitted quarter in the middle would make the area interpolate across a gap. The threshold is low
+    # enough that the series runs from the start of the corpus (2024Q1); the early quarters are small, and the
+    # tooltip shows the count behind each share.
     qs = sorted(st["by_quarter_unbiased"])
-    ok = [all(sum(st["by_quarter_unbiased"][q][ax][k] for k in keys) >= 15 for ax in axes_shown) for q in qs]
+    ok = [all(sum(st["by_quarter_unbiased"][q][ax][k] for k in keys) >= min_n for ax in axes_shown) for q in qs]
     start = next(i for i in range(len(qs)) if all(ok[i:]))
     rows = []
     for q in qs[start:]:
@@ -200,26 +201,18 @@ def axes_over_time():
                 rows.append({"quarter": q, "axis": label_of[ax], "option": k, "share": c[k] / n, "count": c[k], "n": n})
     df = pd.DataFrame(rows)
     df["date"] = pd.to_datetime(df["quarter"].str[:4] + "-" + ((df["quarter"].str[5].astype(int) - 1) * 3 + 2).astype(str).str.zfill(2) + "-15")
-    ev = pd.DataFrame(events)
-    ev["date"] = pd.to_datetime(ev["date"])
-    ev = ev[(ev.date >= df.date.min()) & (ev.date <= df.date.max() + pd.Timedelta(days=45))].reset_index(drop=True)
-    ev["ty"] = 6 + 14 * (ev.index % 2)   # stagger neighbouring labels
-    ev["late"] = ev.date > df.date.min() + 0.8 * (df.date.max() - df.date.min())   # right-align labels near the end
-    area = alt.Chart().mark_area(interpolate="monotone", opacity=0.85, stroke=T.SURFACE, strokeWidth=1.5).encode(
+    area = alt.Chart(df).mark_area(interpolate="monotone", opacity=0.85, stroke=T.SURFACE, strokeWidth=1.5).encode(
         x=alt.X("date:T", title=None, axis=alt.Axis(format="%b %Y", grid=False, labelAngle=0, labelPadding=18)),
         y=alt.Y("share:Q", stack="normalize", title="Share of posts", axis=alt.Axis(format="%", grid=True)),
         color=alt.Color("option:N", scale=alt.Scale(domain=keys, range=[T.AXIS_COLORS[k] for k in keys]), sort=keys,
                         legend=alt.Legend(title="Author's position", labelExpr=json.dumps(T.AXIS_LABELS) + "[datum.label]")),
         order=alt.Order("option:N", sort="ascending"),
         tooltip=[alt.Tooltip("axis:N", title="Question"), alt.Tooltip("quarter:N", title="Quarter"), alt.Tooltip("option:N", title="Position"), alt.Tooltip("count:Q", title="Posts"), alt.Tooltip("share:Q", format=".0%", title="Share"), alt.Tooltip("n:Q", title="Posts addressing")])
-    rules = alt.Chart(ev).mark_rule(color=T.INK, strokeWidth=1, opacity=0.5).encode(x="date:T")
-    txt = [alt.Chart(ev[(ev.ty == v) & (ev.late == late)]).mark_text(align="right" if late else "left", dx=-5 if late else 5, fontSize=10, color=T.INK, baseline="top").encode(x="date:T", y=alt.value(v), text="short:N")
-           for v in sorted(ev.ty.unique()) for late in (False, True) if len(ev[(ev.ty == v) & (ev.late == late)])]
     first_q, last_q = df.quarter.min(), df.quarter.max()
-    chart = alt.layer(area, rules, *txt, data=df).properties(width=WIDTH, height=170).facet(
+    chart = area.properties(width=WIDTH, height=170).facet(
         row=alt.Row("axis:N", title=None, sort=[label_of[a] for a in axes_shown], header=alt.Header(labelAngle=0, labelAlign="left", labelOrient="top")),
         title=alt.Title("Positions over time", subtitle=[f"Quarterly composition, {first_q} to {last_q}, among the {st['n_unbiased']:,} relevant posts found through web search or citation.",
-                                                         "Substack's own search is recency-skewed and excluded; quarters with fewer than 15 posts are omitted."]))
+                                                         f"Substack's own search is recency-skewed and excluded. The first three quarters have fewer than 20 posts per question."]))
     save(chart, "axes_over_time")
 
 

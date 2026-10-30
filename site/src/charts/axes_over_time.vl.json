@@ -90,19 +90,415 @@
     }
   },
   "data": {
-    "name": "data-a9faab6e4e5458b5f46bb50e1c1bdd71"
+    "name": "data-8712ce51ef5db3a110d49a90a54ee7be"
   },
   "datasets": {
-    "data-62c7bf963bc9662a0503c422b4183a3e": [
+    "data-8712ce51ef5db3a110d49a90a54ee7be": [
       {
-        "date": "2026-05-15T00:00:00",
-        "late": false,
-        "note": "Pope Leo XIV's encyclical on AI and human dignity",
-        "short": "Encyclical Magnifica Humanitas",
-        "ty": 20
-      }
-    ],
-    "data-a9faab6e4e5458b5f46bb50e1c1bdd71": [
+        "axis": "Current LLMs have experience",
+        "count": 12,
+        "date": "2024-02-15T00:00:00",
+        "n": 15,
+        "option": "no",
+        "quarter": "2024Q1",
+        "share": 0.8
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 2,
+        "date": "2024-02-15T00:00:00",
+        "n": 15,
+        "option": "unsure",
+        "quarter": "2024Q1",
+        "share": 0.13333333333333333
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 1,
+        "date": "2024-02-15T00:00:00",
+        "n": 15,
+        "option": "discussed",
+        "quarter": "2024Q1",
+        "share": 0.06666666666666667
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 0,
+        "date": "2024-02-15T00:00:00",
+        "n": 15,
+        "option": "yes_qualified",
+        "quarter": "2024Q1",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 0,
+        "date": "2024-02-15T00:00:00",
+        "n": 15,
+        "option": "yes",
+        "quarter": "2024Q1",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 7,
+        "date": "2024-02-15T00:00:00",
+        "n": 14,
+        "option": "no",
+        "quarter": "2024Q1",
+        "share": 0.5
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 1,
+        "date": "2024-02-15T00:00:00",
+        "n": 14,
+        "option": "unsure",
+        "quarter": "2024Q1",
+        "share": 0.07142857142857142
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 4,
+        "date": "2024-02-15T00:00:00",
+        "n": 14,
+        "option": "discussed",
+        "quarter": "2024Q1",
+        "share": 0.2857142857142857
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 0,
+        "date": "2024-02-15T00:00:00",
+        "n": 14,
+        "option": "yes_qualified",
+        "quarter": "2024Q1",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 2,
+        "date": "2024-02-15T00:00:00",
+        "n": 14,
+        "option": "yes",
+        "quarter": "2024Q1",
+        "share": 0.14285714285714285
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 4,
+        "date": "2024-02-15T00:00:00",
+        "n": 7,
+        "option": "no",
+        "quarter": "2024Q1",
+        "share": 0.5714285714285714
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 1,
+        "date": "2024-02-15T00:00:00",
+        "n": 7,
+        "option": "unsure",
+        "quarter": "2024Q1",
+        "share": 0.14285714285714285
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 2,
+        "date": "2024-02-15T00:00:00",
+        "n": 7,
+        "option": "discussed",
+        "quarter": "2024Q1",
+        "share": 0.2857142857142857
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 0,
+        "date": "2024-02-15T00:00:00",
+        "n": 7,
+        "option": "yes_qualified",
+        "quarter": "2024Q1",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 0,
+        "date": "2024-02-15T00:00:00",
+        "n": 7,
+        "option": "yes",
+        "quarter": "2024Q1",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 11,
+        "date": "2024-05-15T00:00:00",
+        "n": 12,
+        "option": "no",
+        "quarter": "2024Q2",
+        "share": 0.9166666666666666
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 1,
+        "date": "2024-05-15T00:00:00",
+        "n": 12,
+        "option": "unsure",
+        "quarter": "2024Q2",
+        "share": 0.08333333333333333
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 0,
+        "date": "2024-05-15T00:00:00",
+        "n": 12,
+        "option": "discussed",
+        "quarter": "2024Q2",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 0,
+        "date": "2024-05-15T00:00:00",
+        "n": 12,
+        "option": "yes_qualified",
+        "quarter": "2024Q2",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 0,
+        "date": "2024-05-15T00:00:00",
+        "n": 12,
+        "option": "yes",
+        "quarter": "2024Q2",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 9,
+        "date": "2024-05-15T00:00:00",
+        "n": 17,
+        "option": "no",
+        "quarter": "2024Q2",
+        "share": 0.5294117647058824
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 0,
+        "date": "2024-05-15T00:00:00",
+        "n": 17,
+        "option": "unsure",
+        "quarter": "2024Q2",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 2,
+        "date": "2024-05-15T00:00:00",
+        "n": 17,
+        "option": "discussed",
+        "quarter": "2024Q2",
+        "share": 0.11764705882352941
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 5,
+        "date": "2024-05-15T00:00:00",
+        "n": 17,
+        "option": "yes_qualified",
+        "quarter": "2024Q2",
+        "share": 0.29411764705882354
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 1,
+        "date": "2024-05-15T00:00:00",
+        "n": 17,
+        "option": "yes",
+        "quarter": "2024Q2",
+        "share": 0.058823529411764705
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 8,
+        "date": "2024-05-15T00:00:00",
+        "n": 9,
+        "option": "no",
+        "quarter": "2024Q2",
+        "share": 0.8888888888888888
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 0,
+        "date": "2024-05-15T00:00:00",
+        "n": 9,
+        "option": "unsure",
+        "quarter": "2024Q2",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 1,
+        "date": "2024-05-15T00:00:00",
+        "n": 9,
+        "option": "discussed",
+        "quarter": "2024Q2",
+        "share": 0.1111111111111111
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 0,
+        "date": "2024-05-15T00:00:00",
+        "n": 9,
+        "option": "yes_qualified",
+        "quarter": "2024Q2",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 0,
+        "date": "2024-05-15T00:00:00",
+        "n": 9,
+        "option": "yes",
+        "quarter": "2024Q2",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 7,
+        "date": "2024-08-15T00:00:00",
+        "n": 11,
+        "option": "no",
+        "quarter": "2024Q3",
+        "share": 0.6363636363636364
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 2,
+        "date": "2024-08-15T00:00:00",
+        "n": 11,
+        "option": "unsure",
+        "quarter": "2024Q3",
+        "share": 0.18181818181818182
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 1,
+        "date": "2024-08-15T00:00:00",
+        "n": 11,
+        "option": "discussed",
+        "quarter": "2024Q3",
+        "share": 0.09090909090909091
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 0,
+        "date": "2024-08-15T00:00:00",
+        "n": 11,
+        "option": "yes_qualified",
+        "quarter": "2024Q3",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have experience",
+        "count": 1,
+        "date": "2024-08-15T00:00:00",
+        "n": 11,
+        "option": "yes",
+        "quarter": "2024Q3",
+        "share": 0.09090909090909091
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 4,
+        "date": "2024-08-15T00:00:00",
+        "n": 9,
+        "option": "no",
+        "quarter": "2024Q3",
+        "share": 0.4444444444444444
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 0,
+        "date": "2024-08-15T00:00:00",
+        "n": 9,
+        "option": "unsure",
+        "quarter": "2024Q3",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 3,
+        "date": "2024-08-15T00:00:00",
+        "n": 9,
+        "option": "discussed",
+        "quarter": "2024Q3",
+        "share": 0.3333333333333333
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 0,
+        "date": "2024-08-15T00:00:00",
+        "n": 9,
+        "option": "yes_qualified",
+        "quarter": "2024Q3",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs genuinely think",
+        "count": 2,
+        "date": "2024-08-15T00:00:00",
+        "n": 9,
+        "option": "yes",
+        "quarter": "2024Q3",
+        "share": 0.2222222222222222
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 5,
+        "date": "2024-08-15T00:00:00",
+        "n": 7,
+        "option": "no",
+        "quarter": "2024Q3",
+        "share": 0.7142857142857143
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 0,
+        "date": "2024-08-15T00:00:00",
+        "n": 7,
+        "option": "unsure",
+        "quarter": "2024Q3",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 1,
+        "date": "2024-08-15T00:00:00",
+        "n": 7,
+        "option": "discussed",
+        "quarter": "2024Q3",
+        "share": 0.14285714285714285
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 0,
+        "date": "2024-08-15T00:00:00",
+        "n": 7,
+        "option": "yes_qualified",
+        "quarter": "2024Q3",
+        "share": 0.0
+      },
+      {
+        "axis": "Current LLMs have goals of their own",
+        "count": 1,
+        "date": "2024-08-15T00:00:00",
+        "n": 7,
+        "option": "yes",
+        "quarter": "2024Q3",
+        "share": 0.14285714285714285
+      },
       {
         "axis": "Current LLMs have experience",
         "count": 7,
@@ -1318,31 +1714,6 @@
         "quarter": "2026Q4",
         "share": 0.30864197530864196
       }
-    ],
-    "data-dd4a099426ccd9949c62d3584316c3fb": [
-      {
-        "date": "2025-04-24T00:00:00",
-        "late": false,
-        "note": "Anthropic announces a research programme on model welfare",
-        "short": "Anthropic model welfare programme",
-        "ty": 6
-      },
-      {
-        "date": "2026-05-15T00:00:00",
-        "late": false,
-        "note": "Pope Leo XIV's encyclical on AI and human dignity",
-        "short": "Encyclical Magnifica Humanitas",
-        "ty": 20
-      }
-    ],
-    "data-f155ff9a72cb33697bbab6c4b59b4edf": [
-      {
-        "date": "2025-04-24T00:00:00",
-        "late": false,
-        "note": "Anthropic announces a research programme on model welfare",
-        "short": "Anthropic model welfare programme",
-        "ty": 6
-      }
     ]
   },
   "facet": {
@@ -1363,185 +1734,112 @@
     }
   },
   "spec": {
-    "height": 170,
-    "layer": [
-      {
-        "encoding": {
-          "color": {
-            "field": "option",
-            "legend": {
-              "labelExpr": "{\"no\": \"No\", \"unsure\": \"Unsure\", \"discussed\": \"Discussed, no position\", \"yes_qualified\": \"Yes, qualified\", \"yes\": \"Yes\"}[datum.label]",
-              "title": "Author's position"
-            },
-            "scale": {
-              "domain": [
-                "no",
-                "unsure",
-                "discussed",
-                "yes_qualified",
-                "yes"
-              ],
-              "range": [
-                "#e34948",
-                "#898781",
-                "#c3c2b7",
-                "#1baf7a",
-                "#2a78d6"
-              ]
-            },
-            "sort": [
-              "no",
-              "unsure",
-              "discussed",
-              "yes_qualified",
-              "yes"
-            ],
-            "type": "nominal"
-          },
-          "order": {
-            "field": "option",
-            "sort": "ascending",
-            "type": "nominal"
-          },
-          "tooltip": [
-            {
-              "field": "axis",
-              "title": "Question",
-              "type": "nominal"
-            },
-            {
-              "field": "quarter",
-              "title": "Quarter",
-              "type": "nominal"
-            },
-            {
-              "field": "option",
-              "title": "Position",
-              "type": "nominal"
-            },
-            {
-              "field": "count",
-              "title": "Posts",
-              "type": "quantitative"
-            },
-            {
-              "field": "share",
-              "format": ".0%",
-              "title": "Share",
-              "type": "quantitative"
-            },
-            {
-              "field": "n",
-              "title": "Posts addressing",
-              "type": "quantitative"
-            }
+    "encoding": {
+      "color": {
+        "field": "option",
+        "legend": {
+          "labelExpr": "{\"no\": \"No\", \"unsure\": \"Unsure\", \"discussed\": \"Discussed, no position\", \"yes_qualified\": \"Yes, qualified\", \"yes\": \"Yes\"}[datum.label]",
+          "title": "Author's position"
+        },
+        "scale": {
+          "domain": [
+            "no",
+            "unsure",
+            "discussed",
+            "yes_qualified",
+            "yes"
           ],
-          "x": {
-            "axis": {
-              "format": "%b %Y",
-              "grid": false,
-              "labelAngle": 0,
-              "labelPadding": 18
-            },
-            "field": "date",
-            "title": null,
-            "type": "temporal"
-          },
-          "y": {
-            "axis": {
-              "format": "%",
-              "grid": true
-            },
-            "field": "share",
-            "stack": "normalize",
-            "title": "Share of posts",
-            "type": "quantitative"
-          }
+          "range": [
+            "#e34948",
+            "#898781",
+            "#c3c2b7",
+            "#1baf7a",
+            "#2a78d6"
+          ]
         },
-        "mark": {
-          "interpolate": "monotone",
-          "opacity": 0.85,
-          "stroke": "#fcfcfb",
-          "strokeWidth": 1.5,
-          "type": "area"
-        }
+        "sort": [
+          "no",
+          "unsure",
+          "discussed",
+          "yes_qualified",
+          "yes"
+        ],
+        "type": "nominal"
       },
-      {
-        "data": {
-          "name": "data-dd4a099426ccd9949c62d3584316c3fb"
-        },
-        "encoding": {
-          "x": {
-            "field": "date",
-            "type": "temporal"
-          }
-        },
-        "mark": {
-          "color": "#0b0b0b",
-          "opacity": 0.5,
-          "strokeWidth": 1,
-          "type": "rule"
-        }
+      "order": {
+        "field": "option",
+        "sort": "ascending",
+        "type": "nominal"
       },
-      {
-        "data": {
-          "name": "data-f155ff9a72cb33697bbab6c4b59b4edf"
+      "tooltip": [
+        {
+          "field": "axis",
+          "title": "Question",
+          "type": "nominal"
         },
-        "encoding": {
-          "text": {
-            "field": "short",
-            "type": "nominal"
-          },
-          "x": {
-            "field": "date",
-            "type": "temporal"
-          },
-          "y": {
-            "value": 6.0
-          }
+        {
+          "field": "quarter",
+          "title": "Quarter",
+          "type": "nominal"
         },
-        "mark": {
-          "align": "left",
-          "baseline": "top",
-          "color": "#0b0b0b",
-          "dx": 5,
-          "fontSize": 10,
-          "type": "text"
+        {
+          "field": "option",
+          "title": "Position",
+          "type": "nominal"
+        },
+        {
+          "field": "count",
+          "title": "Posts",
+          "type": "quantitative"
+        },
+        {
+          "field": "share",
+          "format": ".0%",
+          "title": "Share",
+          "type": "quantitative"
+        },
+        {
+          "field": "n",
+          "title": "Posts addressing",
+          "type": "quantitative"
         }
+      ],
+      "x": {
+        "axis": {
+          "format": "%b %Y",
+          "grid": false,
+          "labelAngle": 0,
+          "labelPadding": 18
+        },
+        "field": "date",
+        "title": null,
+        "type": "temporal"
       },
-      {
-        "data": {
-          "name": "data-62c7bf963bc9662a0503c422b4183a3e"
+      "y": {
+        "axis": {
+          "format": "%",
+          "grid": true
         },
-        "encoding": {
-          "text": {
-            "field": "short",
-            "type": "nominal"
-          },
-          "x": {
-            "field": "date",
-            "type": "temporal"
-          },
-          "y": {
-            "value": 20.0
-          }
-        },
-        "mark": {
-          "align": "left",
-          "baseline": "top",
-          "color": "#0b0b0b",
-          "dx": 5,
-          "fontSize": 10,
-          "type": "text"
-        }
+        "field": "share",
+        "stack": "normalize",
+        "title": "Share of posts",
+        "type": "quantitative"
       }
-    ],
+    },
+    "height": 170,
+    "mark": {
+      "interpolate": "monotone",
+      "opacity": 0.85,
+      "stroke": "#fcfcfb",
+      "strokeWidth": 1.5,
+      "type": "area"
+    },
     "width": 600
   },
   "title": {
     "subtitle": [
-      "Quarterly composition, 2024Q4 to 2026Q4, among the 2,101 relevant posts found through web search or citation.",
-      "Substack's own search is recency-skewed and excluded; quarters with fewer than 15 posts are omitted."
+      "Quarterly composition, 2024Q1 to 2026Q4, among the 2,101 relevant posts found through web search or citation.",
+      "Substack's own search is recency-skewed and excluded. The first three quarters have fewer than 20 posts per question."
     ],
     "text": "Positions over time"
   }
