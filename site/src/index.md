@@ -6,6 +6,8 @@ title: Overview
 
 What Substack writers say about whether AI systems think, feel, or matter morally. A systematic reading of the platform: every post we could find on the topic from January 2024 onward, coded by machine with human spot checks. Posts are linked, never reproduced.
 
+<div class="note" label="">This is the companion site to <a href="https://mikethicke.substack.com/p/i-analyzed-four-thousand-substack"><strong>I analyzed four thousand Substack posts about machine minds</strong></a>, the Substack post that presents the main findings. Everything here is the data and method behind that post, with filters, charts and the full list of posts used in the study.</div>
+
 ```js
 import {statRow, vlChart, GROUP_LABELS} from "./components/charts.js";
 const summary = await FileAttachment("./data/summary.json").json();
