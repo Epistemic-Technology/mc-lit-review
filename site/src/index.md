@@ -22,6 +22,8 @@ display(statRow([
 ]));
 ```
 
+<p class="cite">Cite as: Mike Thicke, "Machine Minds on Substack," 2026, <a href="https://machine.epistemic.technology/">https://machine.epistemic.technology/</a>.</p>
+
 ## What writers say
 
 ```js
