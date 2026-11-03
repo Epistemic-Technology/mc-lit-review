@@ -50,3 +50,9 @@ counts are not refreshed), titles, embeddings, topic assignment (`topics --assig
 cluster of its nearest laid-out neighbours, as a peripheral member, so cluster numbers and hand-checked labels
 survive), network, export. Then `uv run python analysis/figures/make.py` and the site build. Every stage is
 idempotent, so an interrupted update is resumed by running the same command again.
+
+## License
+
+Code is released under the [MIT License](LICENSE). The text, figures and exported data of the companion site
+([machine.epistemic.technology](https://machine.epistemic.technology/)) are licensed under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

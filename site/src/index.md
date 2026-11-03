@@ -26,6 +26,8 @@ display(statRow([
 
 <p class="cite">Cite as: Mike Thicke, "Machine Minds on Substack," 2026, <a href="https://machine.epistemic.technology/">https://machine.epistemic.technology/</a>.</p>
 
+<p class="cite license">The text, figures and data on this site are licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>. The code is <a href="https://github.com/Epistemic-Technology/mc-lit-review">open source</a> under the MIT license.</p>
+
 ## What writers say
 
 ```js

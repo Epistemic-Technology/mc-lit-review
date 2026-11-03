@@ -3,6 +3,9 @@ name = "mcreview"
 version = "0.1.0"
 description = "Wide-net corpus builder for machine cognition / machine consciousness writing on Substack"
 requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Mike Thicke", email = "mike@epistemic.technology" }]
 dependencies = [
     "requests>=2.32",
     "pyyaml>=6.0",

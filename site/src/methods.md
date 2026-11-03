@@ -191,3 +191,10 @@ I spent approximately 10 hours reading and coding publications and individual po
 
 This is purely exploratory research. I'm not pretending to test any hypotheses with this data, and so there are no error bars, confidence intervals, and so on. While I hope the visualizations are interesting and the classifications are informative, they aren't meant to make statistically-valid claims.
 
+## License and citation
+
+The text, figures and data on this site are licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0). You may share and adapt them for any purpose, including commercially, provided you give appropriate credit. The posts themselves are linked, not reproduced, and remain the property of their authors.
+
+The code that built the corpus, ran the analysis and generates this site is in the [mc-lit-review repository](https://github.com/Epistemic-Technology/mc-lit-review) under the MIT license.
+
+Cite as: Mike Thicke, "Machine Minds on Substack," 2026, [https://machine.epistemic.technology/](https://machine.epistemic.technology/).
