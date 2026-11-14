@@ -6,7 +6,7 @@ title: Methods
 
 ## Division of labor
 
-This project made significant use of [Claude Code](https://claude.com/claude-code) running Claude Fable 5.1 for study design, writing code, and analysis. In addition, [Jev](https://typesafe.ai) and Claude Opus 5.5 were used for coding (categorization).
+This project made significant use of [Claude Code](https://claude.com/claude-code) running Claude Fable 5.1 for study design, writing code, and analysis. In addition, [Jev](https://typesafe.ai) (TypeSafe's typed decision model, pinned to version 1.13.0) and Claude Opus 5.5 did the coding (categorization): Jev as a cheap first pass over every candidate post, Claude as the coder of record.
 
 Mike:
 
@@ -29,16 +29,20 @@ Claude:
 
 Jev:
 
-- Initial triage of posts.
+- Relevance screen of every eligible post: the 38,052 posts of the first run and the new posts of the October update. Each post was coded three times with the answer options in a different order and the probabilities averaged. Posts whose summed probability of being centrally or substantially about machine minds reached 0.05 went on to Claude. The threshold started at 0.25 and was lowered after the human relevance sample found relevant posts the higher cut had excluded.
+- A first pass at the categorical codes (genre, target of discussion, reported lab view, the thirteen argument codes) and at publication type, plus the original fourteen stance items. Claude's codes replace Jev's on every item Claude coded, which is every publication and every relevant post but two (relevance misses I caught by hand that Claude never saw). Jev's codes therefore stand only for the posts it screened out, and for those two.
+- Not used for the six stance questions, the change-of-view question or the feature questions, which were introduced after the first run and coded by Claude alone.
+
+On the posts both engines coded, Jev agreed with Claude on 63% of four-level relevance codes and 95% of genre codes. Against my own coding its stance items agreed only 40% to 68% of the time, which is why stance coding went to Claude outright rather than through a confidence-gated cascade.
 
 ## Costs
 
 - Brave Search API: $49.71 for 11,790 search requests
 - Jev: $48.11 for 122,864 requests
-- Claude Opus 5.5: $1,805.78 in API costs (covered by $200 Claude Max plan)
+- Claude Opus 5.5: $2,670.54 list-price equivalent for 28,281 items, as reported by the Claude Code CLI; run on a $200 Claude Max subscription, so never charged
 - Human coding time (classification): 594 minutes
 
-Total: $1,903.60 ($97.82 out of pocket)
+Total: $2,768.36 ($97.82 out of pocket). The Claude figure covers every coding run through codebook 0.4.1 (23 October 2026), including the re-codes for the six stance questions, the change-of-view question and the feature questions.
 
 ## Building the corpus
 
@@ -97,7 +101,7 @@ Initial posts were gathered by querying Substack's public API and through Brave 
 
 There were 91 search terms in all, covering a wide range of concepts, arguments, and thinkers related to machine cognition.
 
-That gave us ${fmt(SEARCH_POSTS)} initial posts. From those, I expanded in two ways: following links in those posts, and searching for other posts with the same citations as those posts (bibliographic coupling). This resulted in a collection of ${fmt(p.corpus)} posts. Some of those were excluded (outside of our date range, less than 400 characters, or not in English, for example), which narrowed the collection down to ${fmt(p.after_exclusions)} posts. Jev, a classifier service aimed at just this sort of task, was then used to judge the relevance of posts and do initial categorization (though in nearly every case the categorization was overridden by Claude or me. Jev-codings only survived in a couple of rare misses in the other coding methods). Jev's pass reduced the collection to ${fmt(p.claude_coded)} posts. Claude further reduced that to ${fmt(p.relevant)} posts. That is our final corpus.
+That gave us ${fmt(SEARCH_POSTS)} initial posts. From those, I expanded in two ways: following links in those posts, and searching for other posts with the same citations as those posts (bibliographic coupling). This resulted in a collection of ${fmt(p.corpus)} posts. Some of those were excluded (outside of our date range, less than 400 characters, or not in English, for example), which narrowed the collection down to ${fmt(p.after_exclusions)} posts. Jev, a typed decision model aimed at just this sort of task, then screened every one of those posts for relevance (three passes per post, probabilities averaged) and took a first pass at the categorical codes. Any post Jev gave at least a 5% chance of being centrally or substantially about machine minds went on to Claude: ${fmt(p.claude_coded)} posts. Claude's coding reduced that to ${fmt(p.relevant)} posts. That is our final corpus. Claude's codes replace Jev's on every post it coded, so Jev's categorizations survive only for the posts it screened out and for two posts whose relevance I caught by hand but that Claude never coded.
 
 For every post, the following was collected:
 
@@ -138,7 +142,11 @@ Type:
 
 - Genre (essay, roundup, fiction, model transcript, interview or podcast, other)
 - Target of discussion (LLMs, AI in general, a named model or lab)
-- Substantially author's own view (vs. reporting that of others)? (yes/no)
+- Does a substantial part of the post describe an AI lab's, company's, or named researcher's position on machine minds? (yes/no)
+
+Arguments:
+
+- Thirteen yes/no codes, one per recurring argument or move: the Chinese room; the stochastic-parrot deflation (LLMs are just next-token prediction); the hard problem of consciousness; the problem of other minds; the unreliability of model self-reports; functionalism and substrate independence; biological requirements for consciousness; applying a scientific theory of consciousness to AI; emergence from scale; anthropomorphism as the explanation for belief in AI minds; precaution and the expanding moral circle; mimicry of human descriptions of experience; and panpsychism or illusionism. The results are on the [Arguments](./arguments) page.
 
 Stances:
 
@@ -182,6 +190,10 @@ Each was a claim the author could assert, deny, be agnostic about, discuss witho
 14. Talk of AI consciousness is hype, marketing, anthropomorphism, or manipulation rather than a serious question. (Serious question, inverted)
 
 These questions proved to be too detailed: they made it hard to see patterns and contrasts in positions between different posts. Initially the questions were narrowed by programmatically combining the 14 original questions, and then they were fully recoded by Claude, with human sanity-checking.
+
+Publications:
+
+- Every publication with a relevant post was typed by community, judging from its name, tagline, author bio and post titles: AI industry, academic philosophy, academic science, rationalist or effective altruism, religion and spirituality, general culture, journalism and politics, business and finance, or other.
 
 ## Human role in coding
 
